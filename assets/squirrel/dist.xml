@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<opencv_storage>
+<dist_coeff type_id="opencv-matrix">
+  <rows>1</rows>
+  <cols>4</cols>
+  <dt>d</dt>
+  <data>
+    0.0056255110539495945 0.065214268863201141
+    0.00051045691361650825 0.00029296849970705807</data></dist_coeff>
+</opencv_storage>

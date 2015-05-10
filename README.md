@@ -1,2 +1,2 @@
-# Restore
-Shape-from-Silhouette with texture-based mesh object refinement
+# Muster
+Shape-from-Silhouette with texture-based mesh refinement
