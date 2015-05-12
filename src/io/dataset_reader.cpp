@@ -40,16 +40,16 @@ DataSet DataSetReader::load(const std::size_t numImages) const {
     auto projMats = loadProjectionMatrices(numImages, "/viff.xml");
     DataSet ds;
     fs::path dir(directory_);
-    fs::directory_iterator iter(dir);
+    fs::directory_iterator end;
     std::size_t camIdx = 0;
-    for (const auto& item : iter) {
-        if (fs::is_regular_file(item)) {
-            if (item.path().extension() == ".png") {
+    for (fs::directory_iterator iter(dir); iter != end; ++iter) {
+        if (fs::is_regular_file(*iter)) {
+            if (iter->path().extension() == ".png") {
                 cv::Mat P = projMats[camIdx++];
                 cv::Mat R, K2, t;
                 cv::decomposeProjectionMatrix(P, K2, R, t);
 
-                Camera cam(cv::imread(item.path().string()));
+                Camera cam(cv::imread(iter->path().string()));
                 cam.setCalibrationMatrix(K);
                 cam.setDistortionCoeffs(dist);
                 cam.setProjectionMatrix(P);
