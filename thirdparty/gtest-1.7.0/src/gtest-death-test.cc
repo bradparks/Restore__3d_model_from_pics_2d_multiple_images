@@ -822,7 +822,7 @@ class NoExecDeathTest : public ForkingDeathTest {
 DeathTest::TestRole NoExecDeathTest::AssumeRole() {
   const size_t thread_count = GetThreadCount();
   if (thread_count != 1) {
-    GTEST_LOG_(WARNING) << DeathTestThreadWarning(thread_count);
+    //GTEST_LOG_(WARNING) << DeathTestThreadWarning(thread_count);
   }
 
   int pipe_fd[2];

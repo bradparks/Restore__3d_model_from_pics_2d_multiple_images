@@ -304,7 +304,7 @@ TEST(FormatCompilerIndependentFileLocationTest, FormatsUknownFileAndLine) {
   EXPECT_EQ("unknown file", FormatCompilerIndependentFileLocation(NULL, -1));
 }
 
-#if GTEST_OS_MAC || GTEST_OS_QNX
+#if GTEST_OS_MAC || GTEST_OS_QNX || GTEST_OS_LINUX
 void* ThreadFunc(void* data) {
   pthread_mutex_t* mutex = static_cast<pthread_mutex_t*>(data);
   pthread_mutex_lock(mutex);
@@ -334,9 +334,9 @@ TEST(GetThreadCountTest, ReturnsCorrectValue) {
   void* dummy;
   ASSERT_EQ(0, pthread_join(thread_id, &dummy));
 
-# if GTEST_OS_MAC
+# if GTEST_OS_MAC || GTEST_OS_LINUX
 
-  // MacOS X may not immediately report the updated thread count after
+  // MacOS X and Linux may not immediately report the updated thread count after
   // joining a thread, causing flakiness in this test. To counter that, we
   // wait for up to .5 seconds for the OS to report the correct value.
   for (int i = 0; i < 5; ++i) {
@@ -346,7 +346,7 @@ TEST(GetThreadCountTest, ReturnsCorrectValue) {
     SleepMilliseconds(100);
   }
 
-# endif  // GTEST_OS_MAC
+# endif  // GTEST_OS_MAC || GTEST_OS_LINUX
 
   EXPECT_EQ(1U, GetThreadCount());
   pthread_mutex_destroy(&mutex);
@@ -355,7 +355,7 @@ TEST(GetThreadCountTest, ReturnsCorrectValue) {
 TEST(GetThreadCountTest, ReturnsZeroWhenUnableToCountThreads) {
   EXPECT_EQ(0U, GetThreadCount());
 }
-#endif  // GTEST_OS_MAC || GTEST_OS_QNX
+#endif  // GTEST_OS_MAC || GTEST_OS_QNX || GTEST_OS_LINUX
 
 TEST(GtestCheckDeathTest, DiesWithCorrectOutputOnFailure) {
   const bool a_false_condition = false;

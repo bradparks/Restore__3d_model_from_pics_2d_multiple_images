@@ -22,6 +22,7 @@
 #ifndef RESTORE_MATH_UTILS_HPP
 #define RESTORE_MATH_UTILS_HPP
 
+#include <limits>
 #include <opencv2/core/core.hpp>
 
 namespace ret {
@@ -71,6 +72,11 @@ namespace ret {
             // clang-format on
 
             return r;
+        }
+
+        template <typename T>
+        bool equals(T x, T y) {
+            return fabs(x - y) < std::numeric_limits<T>::epsilon();
         }
     }
 }

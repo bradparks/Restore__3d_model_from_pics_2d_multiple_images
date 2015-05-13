@@ -18,12 +18,3 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE. */
-
-#ifndef RESTORE_MATH_HPP
-#define RESTORE_MATH_HPP
-
-#include "../../src/math/utils.hpp"
-#include "../../src/math/quaternion.hpp"
-
-#endif
-

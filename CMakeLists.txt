@@ -12,7 +12,8 @@ INCLUDE_DIRECTORIES("${INCLUDE_DIR}")
 # Source and test files
 FILE(GLOB_RECURSE PROJECT_SOURCES
     ${PROJECT_SOURCE_DIR}/src/*.cpp
-    ${PROJECT_SOURCE_DIR}/src/*.hpp)
+    ${PROJECT_SOURCE_DIR}/src/*.hpp
+    ${PROJECT_SOURCE_DIR}/src/*.tpp)
 FILE(GLOB_RECURSE TEST_SOURCES
     ${PROJECT_SOURCE_DIR}/test/*.cpp
     ${PROJECT_SOURCE_DIR}/test/*.hpp)
