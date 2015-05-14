@@ -24,6 +24,7 @@
 
 #include "../../src/math/utils.hpp"
 #include "../../src/math/quaternion.hpp"
+#include "../../src/math/dual_quaternion.hpp"
 
 #endif
 
