@@ -22,7 +22,7 @@
 #ifndef RESTORE_MATH_HPP
 #define RESTORE_MATH_HPP
 
-#include "../../src/math/utils.hpp"
+#include "../../src/math/math_utils.hpp"
 #include "../../src/math/quaternion.hpp"
 #include "../../src/math/dual_quaternion.hpp"
 

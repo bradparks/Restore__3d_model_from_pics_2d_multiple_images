@@ -20,7 +20,7 @@
  * SOFTWARE. */
 
 #include "dual_quaternion.hpp"
-#include "utils.hpp"
+#include "math_utils.hpp"
 
 using namespace ret::math;
 
