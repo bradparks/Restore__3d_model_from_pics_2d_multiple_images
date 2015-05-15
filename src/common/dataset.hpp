@@ -44,17 +44,17 @@ namespace ret {
         template <typename T>
         void setCamera(T&& camera, const std::size_t camIdx) {
             assert(camIdx < cameras_.size());
-            cameras_[camIdx] = camera;
+            cameras_[camIdx] = std::forward<T>(camera);
         }
 
-        Camera getCamera(const std::size_t camIdx) {
+        Camera& getCamera(const std::size_t camIdx) {
             assert(camIdx < cameras_.size());
             return cameras_[camIdx];
         }
 
         template <typename T>
         void addCamera(T&& camera) {
-            cameras_.push_back(camera);
+            cameras_.push_back(std::forward<T>(camera));
         }
 
         std::size_t size() const {

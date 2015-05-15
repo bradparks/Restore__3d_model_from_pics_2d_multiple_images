@@ -65,7 +65,7 @@ namespace ret {
         template <typename T>
         CameraExtrinsics& setRotationMatrix(T&& R) {
             assert(R.size() == cv::Size(3, 3) && R.type() == CV_32F);
-            this->R_ = R;
+            this->R_ = std::forward<T>(R);
             return *this;
         }
 
@@ -76,7 +76,7 @@ namespace ret {
         template <typename T>
         CameraExtrinsics& setTranslationVector(T&& t) {
             assert(t.size() == cv::Size(1, 4) && t.type() == CV_32F);
-            this->t_ = t;
+            this->t_ = std::forward<T>(t);
             return *this;
         }
 

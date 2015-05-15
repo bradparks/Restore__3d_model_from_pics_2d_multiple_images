@@ -40,7 +40,7 @@ namespace ret {
         template <typename T>
         Camera& setProjectionMatrix(T&& P) {
             assert(P.size() == cv::Size(4, 3) && P.type() == CV_32F);
-            this->P_ = P;
+            this->P_ = std::forward<T>(P);
             return *this;
         }
 
@@ -72,22 +72,22 @@ namespace ret {
 
         template <typename T>
         Camera& setImage(T&& Image) {
-            this->Image_ = Image;
+            this->Image_ = std::forward<T>(Image);
             return *this;
         }
 
         cv::Mat getImage() const {
-            return this->Image_;
+            return Image_;
         }
 
         template <typename T>
         Camera& setMask(T&& Mask) {
-            this->Mask_ = Mask;
+            this->Mask_ = std::forward<T>(Mask);
             return *this;
         }
 
         cv::Mat getMask() const {
-            return this->Mask_;
+            return Mask_;
         }
 
       private:

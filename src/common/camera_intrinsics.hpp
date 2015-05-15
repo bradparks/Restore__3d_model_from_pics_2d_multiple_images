@@ -66,7 +66,7 @@ namespace ret {
         template <typename T>
         CameraIntrinsics& setCalibrationMatrix(T&& K) {
             assert(K.size() == cv::Size(3, 3) && K.type() == CV_32F);
-            this->K_ = K;
+            this->K_ = std::forward<T>(K);
             return *this;
         }
 
@@ -77,7 +77,7 @@ namespace ret {
         template <typename T>
         CameraIntrinsics& setDistortionCoeffs(T&& dist) {
             assert(dist.size() == cv::Size(4, 1) && dist.type() == CV_64F);
-            this->dist_ = dist;
+            this->dist_ = std::forward<T>(dist);
             return *this;
         }
 

@@ -61,6 +61,7 @@ DataSet DataSetReader::load(const std::size_t numImages) const {
         }
     }
 
+    assert(ds.size() == numImages);
     return ds;
 }
 
