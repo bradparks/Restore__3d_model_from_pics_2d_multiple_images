@@ -21,28 +21,31 @@
 
 #include "voxel_carving.hpp"
 #include "cv_utils.hpp"
+#include "mc/marching_cubes.hpp"
 #include "../common/utils.hpp"
+#include <cstdlib>
 #include <opencv2/imgproc/imgproc.hpp>
 
 using namespace ret::rendering;
 
-VoxelCarving::VoxelCarving(const std::size_t voxel_grid_dim,
-                           const cv::Size& img_size)
-    : img_size_(img_size), voxel_grid_dim_(voxel_grid_dim) {
+VoxelCarving::VoxelCarving(const bb_bounds bbox,
+                           const std::size_t voxel_grid_dim)
+    : bbox_(bbox), voxel_grid_dim_(voxel_grid_dim) {
 
     voxel_slice_ = voxel_grid_dim * voxel_grid_dim;
     voxel_size_ = voxel_grid_dim * voxel_grid_dim * voxel_grid_dim;
     vox_array = ret::make_unique<float[]>(voxel_size_);
 }
 
-void VoxelCarving::carve(const Camera& cam, const start_params& params) {
+void VoxelCarving::carve(const Camera& cam) {
 
-    assert(cam.getImage().size() == img_size_);
     cv::Mat Silhouette, DistImage;
-    auto Mask = cam.getMask();
+    cv::Mat Mask = cam.getMask();
     cv::Canny(Mask, Silhouette, 0, 255);
     cv::bitwise_not(Silhouette, Silhouette);
     cv::distanceTransform(Silhouette, DistImage, CV_DIST_L2, 3);
+    params_ = estimateStartParameter(bbox_);
+    cv::Size img_size = Mask.size();
 
     for (std::size_t i = 0; i < voxel_grid_dim_; ++i) {
         for (std::size_t j = 0; j < voxel_grid_dim_; ++j) {
@@ -50,16 +53,15 @@ void VoxelCarving::carve(const Camera& cam, const start_params& params) {
 
                 // estimate voxel position inside camera view frustum
                 voxel v;
-                v.xpos = params.start_x + i * params.voxel_width;
-                v.ypos = params.start_y + j * params.voxel_height;
-                v.zpos = params.start_z + k * params.voxel_depth;
+                v.xpos = params_.start_x + i * params_.voxel_width;
+                v.ypos = params_.start_y + j * params_.voxel_height;
+                v.zpos = params_.start_z + k * params_.voxel_depth;
                 v.value = 1.0f;
 
                 auto im = project<cv::Point2f, voxel>(cam, v);
                 auto dist = -1.0f;
-
                 // check, if projected voxel is within image coords
-                if (inside(im)) {
+                if (inside(im, img_size)) {
                     dist = DistImage.at<float>(im);
                     if (Mask.at<uchar>(im) == 0) {
                         dist *= -1.0f;
@@ -73,4 +75,37 @@ void VoxelCarving::carve(const Camera& cam, const start_params& params) {
             }
         }
     }
+}
+
+void VoxelCarving::exportToDisk() const {
+
+    auto mc = ret::make_unique<mc::MarchingCubes>();
+    mc->setParams(params_.start_x, params_.start_z, params_.start_y,
+                  params_.voxel_width, params_.voxel_depth,
+                  params_.voxel_height, 0.0f, voxel_grid_dim_, voxel_grid_dim_,
+                  voxel_grid_dim_);
+    mc->execute(vox_array.get());
+    mc->saveAsOBJ("export.obj");
+}
+
+start_params VoxelCarving::estimateStartParameter(const bb_bounds& bbox) const {
+
+    auto PADDING = 0.11f;
+
+    auto bb_width = std::abs(bbox.xmax - bbox.xmin) * (1.0f + 2.0f * PADDING);
+    auto bb_height = std::abs(bbox.ymax - bbox.ymin) * (1.0f + 2.0f * PADDING);
+    auto bb_depth = std::abs(bbox.zmax - bbox.zmin);
+
+    auto offset_x = (bb_width - std::abs(bbox.xmax - bbox.xmin)) / 2.0f;
+    auto offset_y = (bb_height - std::abs(bbox.ymax - bbox.ymin)) / 2.0f;
+
+    start_params params;
+    params.start_x = bbox.xmin - offset_x;
+    params.start_y = bbox.ymin - offset_y;
+    params.start_z = 0.0f;
+    params.voxel_width = bb_width / voxel_grid_dim_;
+    params.voxel_height = bb_height / voxel_grid_dim_;
+    params.voxel_depth = bb_depth / voxel_grid_dim_;
+
+    return params;
 }

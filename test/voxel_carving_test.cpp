@@ -37,38 +37,27 @@ class VoxelCarvingTest : public testing::Test {
 
   public:
     virtual void SetUp() {
-        vc = ret::make_unique<VoxelCarving>(VOXEL_DIM, cv::Size(1280, 960));
         DataSetReader dsr(std::string(ASSETS_PATH) + "/squirrel");
         ds = dsr.load(NUM_IMGS);
         for (std::size_t i = 0; i < NUM_IMGS; ++i) {
             ds.getCamera(i).setMask(Segmentation::binarize(
                 ds.getCamera(i).getImage(), cv::Scalar(0, 0, 40)));
         }
+        BoundingBox bbox =
+            BoundingBox(ds.getCamera(0), ds.getCamera(NUM_IMGS - 1));
+        vc = ret::make_unique<VoxelCarving>(bbox.getBounds(), VOXEL_DIM);
     }
 
     std::unique_ptr<VoxelCarving> vc;
     ret::DataSet ds;
-    const std::size_t VOXEL_DIM = 64;
+    const std::size_t VOXEL_DIM = 128;
     const std::size_t NUM_IMGS = 36;
-
-    using Pair = const std::pair<float, float>;   // min, max
-    using BBox = std::tuple<float, float, float>; // width, height, depth
 };
 
 TEST_F(VoxelCarvingTest, Carve) {
 
-    Pair xdim(-6.21639f, 7.62138f);
-    Pair ydim(-10.2796f, 12.1731f);
-    Pair zdim(-14.0349f, 12.5358f);
-    BBox bb = std::make_tuple(std::abs(xdim.second - xdim.first) * 1.15f,
-                              std::abs(ydim.second - ydim.first) * 1.15f,
-                              std::abs(zdim.second - zdim.first) * 1.05f);
-    start_params params;
-    params.start_x = xdim.first - std::abs(xdim.second - xdim.first) * 0.15f;
-    params.start_y = ydim.first - std::abs(ydim.second - ydim.first) * 0.15f;
-    params.start_z = 0.0f;
-    params.voxel_width = std::get<0>(bb) / VOXEL_DIM;
-    params.voxel_height = std::get<1>(bb) / VOXEL_DIM;
-    params.voxel_depth = std::get<2>(bb) / VOXEL_DIM;
-    vc->carve(ds.getCamera(0), params);
+    for (std::size_t i = 0; i < ds.size(); ++i) {
+        vc->carve(ds.getCamera(i));
+    }
+    vc->exportToDisk();
 }

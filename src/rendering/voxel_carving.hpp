@@ -23,6 +23,7 @@
 #define RESTORE_RENDERING_VOXEL_CARVING_HPP
 
 #include "../common/camera.hpp"
+#include "bounding_box.hpp"
 #include <memory>
 #include <opencv2/core/core.hpp>
 
@@ -47,21 +48,25 @@ namespace ret {
 
         class VoxelCarving {
           public:
-            VoxelCarving(const std::size_t voxel_grid_dim,
-                         const cv::Size& img_size);
+            VoxelCarving(const bb_bounds bbox,
+                         const std::size_t voxel_grid_dim);
             VoxelCarving(VoxelCarving const&) = delete;
             VoxelCarving operator&=(VoxelCarving const&) = delete;
-            void carve(const Camera& cam, const start_params& params);
+            void carve(const Camera& cam);
+            void exportToDisk() const;
 
           private:
-            cv::Size img_size_;
+            bb_bounds bbox_;
             std::size_t voxel_grid_dim_, voxel_slice_, voxel_size_;
+            start_params params_;
             std::unique_ptr<float[]> vox_array;
 
-            template <typename T>
-            inline bool inside(const T& im) {
-                return (im.x > 0 && im.y > 0 && im.x < img_size_.width &&
-                        im.y < img_size_.height);
+            start_params estimateStartParameter(const bb_bounds& bbox) const;
+
+            template <typename Coord, typename Size>
+            inline bool inside(const Coord& im, const Size& size) {
+                return (im.x > 0 && im.y > 0 && im.x < size.width &&
+                        im.y < size.height);
             }
         };
     }
