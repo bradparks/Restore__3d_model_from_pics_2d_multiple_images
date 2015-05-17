@@ -28,7 +28,8 @@ TEST(SegmentationTest, BinarizeImage) {
 
     cv::Mat Original(240, 320, CV_8UC3, cv::Scalar::all(17));
     cv::Mat Binary = Segmentation::binarize(Original, cv::Scalar(200));
-    ASSERT_EQ(Binary.rows * Binary.cols, cv::countNonZero(Binary));
+    int size = Binary.rows * Binary.cols;
+    ASSERT_EQ(size, size - cv::countNonZero(Binary));
 }
 
 TEST(SegmentationTest, AssertColorImageWhenBinarizing) {

@@ -20,7 +20,8 @@
  * SOFTWARE. */
 
 #include "bounding_box.hpp"
-
+#include <vector>
+#include "../src/filtering/segmentation.hpp"
 #include <opencv2/imgproc/imgproc.hpp>
 
 using namespace ret::rendering;
@@ -35,14 +36,18 @@ bb_bounds BoundingBox::getBounds() const {
     auto rect2 = getBoundingRect(cam2_.getMask());
 
     // get corners from 2d bounding rects
-    auto p2 = (cv::Mat_<float>(3, 1) << rect1.x, rect1.y + rect1.height, 1.0f);
-    auto p4 = (cv::Mat_<float>(3, 1) << rect1.x + rect1.width, rect1.y, 1.0f);
-    auto p6 = (cv::Mat_<float>(3, 1) << rect2.x, rect2.y + rect2.height, 1.0f);
-    auto p8 = (cv::Mat_<float>(3, 1) << rect2.x + rect2.width, rect2.y, 1.0f);
+    cv::Mat p2 =
+        (cv::Mat_<float>(3, 1) << rect1.x, rect1.y + rect1.height, 1.0f);
+    cv::Mat p4 =
+        (cv::Mat_<float>(3, 1) << rect1.x + rect1.width, rect1.y, 1.0f);
+    cv::Mat p6 =
+        (cv::Mat_<float>(3, 1) << rect2.x, rect2.y + rect2.height, 1.0f);
+    cv::Mat p8 =
+        (cv::Mat_<float>(3, 1) << rect2.x + rect2.width, rect2.y, 1.0f);
 
     // convert to world points
-    auto K1_inv = cam1_.getCalibrationMatrix().inv();
-    auto K2_inv = cam2_.getCalibrationMatrix().inv();
+    cv::Mat K1_inv = cam1_.getCalibrationMatrix().inv();
+    cv::Mat K2_inv = cam2_.getCalibrationMatrix().inv();
     cv::Mat x2 = K1_inv * p2;
     cv::Mat x4 = K1_inv * p4;
     cv::Mat x6 = K2_inv * p6;
@@ -83,18 +88,17 @@ bb_bounds BoundingBox::getBounds() const {
 cv::Rect BoundingBox::getBoundingRect(cv::Mat Binary) const {
 
     assert(Binary.channels() == 1);
-    cv::dilate(Binary, Binary, cv::Mat());
-    int top = Binary.rows, bottom = -1, right = -1, left = Binary.cols;
-    for (int y = 0; y < Binary.rows; ++y) {
-        for (int x = 0; x < Binary.cols; ++x) {
-            if (Binary.at<uchar>(y, x) == 0) {
-                if (y > bottom) bottom = y;
-                if (x > right) right = x;
-                if (y < top) top = y;
-                if (x < left) left = x;
-            }
-        }
-    }
+    using Contour = std::vector<cv::Point>;
 
-    return cv::Rect(left, top, right - left, bottom - top);
+    std::vector<Contour> contours;
+    auto hierarchy = std::vector<cv::Vec4i>();
+    cv::findContours(Binary, contours, hierarchy, CV_RETR_TREE,
+                     CV_CHAIN_APPROX_SIMPLE);
+
+    auto result =
+        *std::max_element(contours.begin(), contours.end(),
+                          [](Contour a, Contour b) {
+                              return cv::contourArea(a) < cv::contourArea(b);
+                          });
+    return cv::boundingRect(cv::Mat(result));
 }

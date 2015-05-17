@@ -23,6 +23,7 @@
 #define RESTORE_RENDERING_HPP
 
 #include "../../src/rendering/voxel_carving.hpp"
+#include "../../src/rendering/bounding_box.hpp"
 #include "../../src/rendering/cv_utils.hpp"
 
 #endif
