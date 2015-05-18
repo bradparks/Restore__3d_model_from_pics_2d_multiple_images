@@ -19,12 +19,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE. */
 
+// C++ system files
+#include <cstdlib>
+
+// header files of other libraries
+#include <opencv2/imgproc/imgproc.hpp>
+
+// header files of project libraries
 #include "voxel_carving.hpp"
 #include "cv_utils.hpp"
 #include "mc/marching_cubes.hpp"
 #include "../common/utils.hpp"
-#include <cstdlib>
-#include <opencv2/imgproc/imgproc.hpp>
 
 using namespace ret::rendering;
 
@@ -44,26 +49,20 @@ void VoxelCarving::carve(const Camera& cam) {
     cv::Canny(Mask, Silhouette, 0, 255);
     cv::bitwise_not(Silhouette, Silhouette);
     cv::distanceTransform(Silhouette, DistImage, CV_DIST_L2, 3);
-    params_ = estimateStartParameter(bbox_);
+    params_ = calcStartParameter(bbox_);
     cv::Size img_size = Mask.size();
 
     for (std::size_t i = 0; i < voxel_grid_dim_; ++i) {
         for (std::size_t j = 0; j < voxel_grid_dim_; ++j) {
             for (std::size_t k = 0; k < voxel_grid_dim_; ++k) {
 
-                // estimate voxel position inside camera view frustum
-                voxel v;
-                v.xpos = params_.start_x + i * params_.voxel_width;
-                v.ypos = params_.start_y + j * params_.voxel_height;
-                v.zpos = params_.start_z + k * params_.voxel_depth;
-                v.value = 1.0f;
-
+                voxel v = calcVoxelPosCamInViewFrustum(i, j, k);
                 auto im = project<cv::Point2f, voxel>(cam, v);
                 auto dist = -1.0f;
                 // check, if projected voxel is within image coords
                 if (inside(im, img_size)) {
                     dist = DistImage.at<float>(im);
-                    if (Mask.at<uchar>(im) == 0) {
+                    if (Mask.at<uchar>(im) == 0) { // outside
                         dist *= -1.0f;
                     }
                 }
@@ -88,13 +87,25 @@ void VoxelCarving::exportToDisk() const {
     mc->saveAsOBJ("export.obj");
 }
 
-start_params VoxelCarving::estimateStartParameter(const bb_bounds& bbox) const {
+voxel VoxelCarving::calcVoxelPosCamInViewFrustum(const std::size_t i,
+                                                 const std::size_t j,
+                                                 const std::size_t k) const {
+    voxel v;
+    v.xpos = params_.start_x + i * params_.voxel_width;
+    v.ypos = params_.start_y + j * params_.voxel_depth;
+    v.zpos = params_.start_z + k * params_.voxel_height;
+    v.value = 1.0f;
 
-    auto PADDING = 0.11f;
+    return v;
+}
+
+start_params VoxelCarving::calcStartParameter(const bb_bounds& bbox) const {
+
+    auto PADDING = 0.50f;
 
     auto bb_width = std::abs(bbox.xmax - bbox.xmin) * (1.0f + 2.0f * PADDING);
-    auto bb_height = std::abs(bbox.ymax - bbox.ymin) * (1.0f + 2.0f * PADDING);
-    auto bb_depth = std::abs(bbox.zmax - bbox.zmin);
+    auto bb_depth = std::abs(bbox.ymax - bbox.ymin) * (1.0f + 2.0f * PADDING);
+    auto bb_height = std::abs(bbox.zmax - bbox.zmin);
 
     auto offset_x = (bb_width - std::abs(bbox.xmax - bbox.xmin)) / 2.0f;
     auto offset_y = (bb_height - std::abs(bbox.ymax - bbox.ymin)) / 2.0f;

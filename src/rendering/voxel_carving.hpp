@@ -61,7 +61,10 @@ namespace ret {
             start_params params_;
             std::unique_ptr<float[]> vox_array;
 
-            start_params estimateStartParameter(const bb_bounds& bbox) const;
+            voxel calcVoxelPosCamInViewFrustum(const std::size_t i,
+                                               const std::size_t j,
+                                               const std::size_t k) const;
+            start_params calcStartParameter(const bb_bounds& bbox) const;
 
             template <typename Coord, typename Size>
             inline bool inside(const Coord& im, const Size& size) {

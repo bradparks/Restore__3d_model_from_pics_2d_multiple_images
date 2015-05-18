@@ -44,7 +44,7 @@ class VoxelCarvingTest : public testing::Test {
                 ds.getCamera(i).getImage(), cv::Scalar(0, 0, 40)));
         }
         BoundingBox bbox =
-            BoundingBox(ds.getCamera(0), ds.getCamera(NUM_IMGS - 1));
+            BoundingBox(ds.getCamera(0), ds.getCamera((NUM_IMGS - 1) / 4));
         vc = ret::make_unique<VoxelCarving>(bbox.getBounds(), VOXEL_DIM);
     }
 
@@ -56,7 +56,7 @@ class VoxelCarvingTest : public testing::Test {
 
 TEST_F(VoxelCarvingTest, Carve) {
 
-    for (std::size_t i = 0; i < ds.size(); ++i) {
+    for (std::size_t i = 0; i < ds.size(); i+=6) {
         vc->carve(ds.getCamera(i));
     }
     vc->exportToDisk();
