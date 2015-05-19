@@ -40,6 +40,7 @@ BoundingBox::BoundingBox(const Camera& cam1, const Camera& cam2)
 
 bb_bounds BoundingBox::getBounds() const {
 
+    // TODO: Add assertion, if cams are orthogonal (with quaternions)
     // get 2d bounding rect around object
     auto rect1 = getBoundingRect(cam1_.getMask());
     auto rect2 = getBoundingRect(cam2_.getMask());
