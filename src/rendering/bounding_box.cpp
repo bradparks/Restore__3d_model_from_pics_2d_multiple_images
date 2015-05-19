@@ -19,10 +19,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE. */
 
-#include "bounding_box.hpp"
+// C system files
+// none
+
+// C++ system files
 #include <vector>
-#include "../src/filtering/segmentation.hpp"
+
+// header files of other libraries
 #include <opencv2/imgproc/imgproc.hpp>
+
+// header files of project libraries
+#include "bounding_box.hpp"
+#include "../src/filtering/segmentation.hpp"
+
 
 using namespace ret::rendering;
 

@@ -19,12 +19,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE. */
 
-#include "dataset_reader.hpp"
+// C system files
+// none
 
+// C++ system files
+// none
+
+// header files of other libraries
 #include <boost/filesystem.hpp>
 #include <boost/format.hpp>
 #include <opencv2/calib3d/calib3d.hpp>
 #include <opencv2/highgui/highgui.hpp>
+
+// header files of project libraries
+#include "dataset_reader.hpp"
 
 namespace fs = boost::filesystem;
 using ret::DataSet;

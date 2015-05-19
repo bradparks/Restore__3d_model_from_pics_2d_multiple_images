@@ -22,10 +22,18 @@
 #ifndef RESTORE_RENDERING_BOUNDING_BOX_HPP
 #define RESTORE_RENDERING_BOUNDING_BOX_HPP
 
-#include "../common/camera.hpp"
-#include "cv_utils.hpp"
+// C system files
+// none
 
+// C++ system files
+// none
+
+// header files of other libraries
 #include <opencv2/core/core.hpp>
+
+// header files of project libraries
+#include "cv_utils.hpp"
+#include "../common/camera.hpp"
 
 namespace ret {
 

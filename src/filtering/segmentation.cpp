@@ -19,9 +19,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE. */
 
-#include "segmentation.hpp"
+// C system files
+// none
 
+// C++ system files
+// none
+
+// header files of other libraries
 #include <opencv2/imgproc/imgproc.hpp>
+
+// header files of project libraries
+#include "segmentation.hpp"
 
 using ret::filtering::Segmentation;
 

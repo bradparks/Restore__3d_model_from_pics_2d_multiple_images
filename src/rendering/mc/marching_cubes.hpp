@@ -13,8 +13,16 @@
 #ifndef RESTORE_RENDERING_MC_MARCHING_CUBES_HPP
 #define RESTORE_RENDERING_MC_MARCHING_CUBES_HPP
 
+// C system files
+// none
+
+// C++ system files
 #include <vector>
 
+// header files of other libraries
+// none
+
+// header files of project libraries
 #include "basedef.hpp"
 #include "triangle.hpp"
 
@@ -29,20 +37,20 @@ namespace ret {
               public:
                 typedef std::vector<triangle> triangle_vector_type;
                 MarchingCubes();
-                MarchingCubes(const float offset_x, const float offset_y,
-                              const float offset_z, const float voxel_width,
-                              const float voxel_height, const float voxel_depth,
-                              const float isolevel, const int_type grid_dim_x,
-                              const int_type grid_dim_y,
-                              const int_type grid_dim_z);
+                MarchingCubes(const float offset_x_, const float offset_y_,
+                              const float offset_z_, const float voxel_width_,
+                              const float voxel_height_, const float voxel_depth_,
+                              const float isolevel_, const int_type grid_dim_x_,
+                              const int_type grid_dim_y_,
+                              const int_type grid_dim_z_);
                 virtual ~MarchingCubes();
-                void setParams(const float offset_x, const float offset_y,
-                               const float offset_z, const float voxel_width,
-                               const float voxel_height,
-                               const float voxel_depth, const float isolevel,
-                               const int_type grid_dim_x,
-                               const int_type grid_dim_y,
-                               const int_type grid_dim_z);
+                void setParams(const float offset_x_, const float offset_y_,
+                               const float offset_z_, const float voxel_width_,
+                               const float voxel_height_,
+                               const float voxel_depth_, const float isolevel_,
+                               const int_type grid_dim_x_,
+                               const int_type grid_dim_y_,
+                               const int_type grid_dim_z_);
 
                 /// The main function extracting an iso-surface from a given
                 /// dataset. Must be executed before getTriangles() should be
@@ -65,20 +73,20 @@ namespace ret {
 
               private:
                 /// origin of the voxel grid
-                float offset_x;
-                float offset_y;
-                float offset_z;
+                float offset_x_;
+                float offset_y_;
+                float offset_z_;
 
                 /// dimensions of a voxel (if they are not cubic)
-                float voxel_width;
-                float voxel_height;
-                float voxel_depth;
-                int_type grid_dim_x;
-                int_type grid_dim_y;
-                int_type grid_dim_z;
+                float voxel_width_;
+                float voxel_height_;
+                float voxel_depth_;
+                int_type grid_dim_x_;
+                int_type grid_dim_y_;
+                int_type grid_dim_z_;
 
                 /// the iso value of the surface to be extracted
-                float isolevel;
+                float isolevel_;
 
                 /// the triangle data of the currently extracted surface
                 triangle_vector_type triangle_vector;

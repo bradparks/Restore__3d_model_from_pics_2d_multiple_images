@@ -22,10 +22,16 @@
 #ifndef RESTORE_COMMON_DATASET_HPP
 #define RESTORE_COMMON_DATASET_HPP
 
+// C system files
+// none
+
+// C++ system files
 #include <vector>
 
+// header files of other libraries
 #include <opencv2/core/core.hpp>
 
+// header files of project libraries
 #include "camera.hpp"
 
 namespace ret {

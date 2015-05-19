@@ -19,8 +19,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE. */
 
+// C system files
+// none
+
+// C++ system files
 #include <limits>
 
+// header files of other libraries
+// none
+
+// header files of project libraries
 #include "quaternion.hpp"
 #include "math_utils.hpp"
 

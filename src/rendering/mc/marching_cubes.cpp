@@ -10,17 +10,25 @@
  *                                                                            *
  ******************************************************************************/
 
-#include "basedef.hpp"
-#include "marching_cubes.hpp"
-#include "vec3f.hpp"
-#include "triangle.hpp"
-#include "lookup.hpp"
+// C system files
+// none
 
+// C++ system files
 #include <cmath>
 #include <cassert>
 #include <cstring>
 #include <iostream>
 #include <fstream>
+
+// header files of other libraries
+// none
+
+// header files of project libraries
+#include "basedef.hpp"
+#include "marching_cubes.hpp"
+#include "vec3f.hpp"
+#include "triangle.hpp"
+#include "lookup.hpp"
 
 using namespace ret::rendering::mc;
 
@@ -173,16 +181,16 @@ MarchingCubes::MarchingCubes(const float offset_x, const float offset_y,
                              const float isolevel, const int_type grid_dim_x,
                              const int_type grid_dim_y,
                              const int_type grid_dim_z) {
-    this->offset_x = offset_x;
-    this->offset_y = offset_y;
-    this->offset_z = offset_z;
-    this->voxel_width = voxel_width;
-    this->voxel_height = voxel_height;
-    this->voxel_depth = voxel_depth;
-    this->isolevel = isolevel;
-    this->grid_dim_x = grid_dim_x;
-    this->grid_dim_y = grid_dim_y;
-    this->grid_dim_z = grid_dim_z;
+    this->offset_x_ = offset_x;
+    this->offset_y_ = offset_y;
+    this->offset_z_ = offset_z;
+    this->voxel_width_ = voxel_width;
+    this->voxel_height_ = voxel_height;
+    this->voxel_depth_ = voxel_depth;
+    this->isolevel_ = isolevel;
+    this->grid_dim_x_ = grid_dim_x;
+    this->grid_dim_y_ = grid_dim_y;
+    this->grid_dim_z_ = grid_dim_z;
 }
 
 MarchingCubes::MarchingCubes() {}
@@ -198,16 +206,16 @@ void MarchingCubes::setParams(const float offset_x, const float offset_y,
                               const int_type grid_dim_y,
                               const int_type grid_dim_z) {
 
-    this->offset_x = offset_x;
-    this->offset_y = offset_y;
-    this->offset_z = offset_z;
-    this->voxel_width = voxel_width;
-    this->voxel_height = voxel_height;
-    this->voxel_depth = voxel_depth;
-    this->isolevel = isolevel;
-    this->grid_dim_x = grid_dim_x;
-    this->grid_dim_y = grid_dim_y;
-    this->grid_dim_z = grid_dim_z;
+    this->offset_x_ = offset_x;
+    this->offset_y_ = offset_y;
+    this->offset_z_ = offset_z;
+    this->voxel_width_ = voxel_width;
+    this->voxel_height_ = voxel_height;
+    this->voxel_depth_ = voxel_depth;
+    this->isolevel_ = isolevel;
+    this->grid_dim_x_ = grid_dim_x;
+    this->grid_dim_y_ = grid_dim_y;
+    this->grid_dim_z_ = grid_dim_z;
 }
 
 void MarchingCubes::saveAsOBJ(const char* name) const {
@@ -423,17 +431,15 @@ void triangulate(const cube4c& values, const cubevec3f& points,
 
 void perform_slices(const float* fgrid, const int_type dim_x,
                     const int_type dim_z, const int_type dim_y,
-                    const int_type off_y, const float offset_x,
-                    const float offset_z, const float offset_y,
-                    const float voxel_width, const float voxel_depth,
-                    const float voxel_height, const float isolevel,
+                    const float offset_x, const float offset_z,
+                    const float offset_y, const float voxel_width,
+                    const float voxel_depth, const float voxel_height,
+                    const float isolevel,
                     MarchingCubes::triangle_vector_type& triangles) {
     //
     grid_cell* grid = (grid_cell*) fgrid;
     //
     int_type pre1, pre2;
-    int_type acc0, acc1;
-    int_type acc2, acc3;
     //
     const int_type dim_xz = dim_x * dim_z;
     //
@@ -838,13 +844,13 @@ void MarchingCubes::execute(const float* grid) {
     // As first estimation for the expected number of triangles
     // we use sqrt(cubes).
     //
-    this->triangle_vector.reserve(
-        (int) (sqrt(this->grid_dim_x * this->grid_dim_y * this->grid_dim_z)));
+    this->triangle_vector.reserve(static_cast<std::size_t>(
+        sqrt(this->grid_dim_x_ * this->grid_dim_y_ * this->grid_dim_z_)));
     //
-    perform_slices(grid, this->grid_dim_x, this->grid_dim_z, this->grid_dim_y,
-                   0, this->offset_x, this->offset_z, this->offset_y,
-                   this->voxel_width, this->voxel_depth, this->voxel_height,
-                   this->isolevel, this->triangle_vector);
+    perform_slices(grid, this->grid_dim_x_, this->grid_dim_z_,
+                   this->grid_dim_y_, this->offset_x_, this->offset_z_,
+                   this->offset_y_, this->voxel_width_, this->voxel_depth_,
+                   this->voxel_height_, this->isolevel_, this->triangle_vector);
     //
 }
 

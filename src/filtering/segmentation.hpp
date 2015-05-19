@@ -19,10 +19,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE. */
 
+// C system files
+// none
+
+// C++ system files
+// none
+
+// header files of other libraries
+#include <opencv2/core/core.hpp>
+
+// header files of project libraries
+// none
+
 #ifndef RESTORE_FILTERING_SEGMENTATION_HPP
 #define RESTORE_FILTERING_SEGMENTATION_HPP
-
-#include <opencv2/core/core.hpp>
 
 namespace ret {
 

@@ -22,6 +22,16 @@
 #ifndef RESTORE_RENDERING_CV_UTILS_HPP
 #define RESTORE_RENDERING_CV_UTILS_HPP
 
+// C system files
+// none
+
+// C++ system files
+// none
+
+// header files of other libraries
+// none
+
+// header files of project libraries
 #include "../common/camera.hpp"
 
 namespace ret {

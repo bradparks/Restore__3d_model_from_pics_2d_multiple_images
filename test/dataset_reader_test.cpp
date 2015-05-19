@@ -19,9 +19,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE. */
 
+// C system files
+// none
+
+// C++ system files
+// none
+
+// header files of other libraries
 #include <gtest/gtest.h>
-#include "../src/io/assets_path.hpp"
+
+// header files of project libraries
 #include <restore/io.hpp>
+#include "../src/io/assets_path.hpp"
 
 using ret::DataSet;
 using ret::io::DataSetReader;

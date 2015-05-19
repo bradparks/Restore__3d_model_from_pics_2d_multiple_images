@@ -79,10 +79,10 @@ void VoxelCarving::carve(const Camera& cam) {
 void VoxelCarving::exportToDisk() const {
 
     auto mc = ret::make_unique<mc::MarchingCubes>();
+    const int voxel_dim = static_cast<int>(voxel_grid_dim_);
     mc->setParams(params_.start_x, params_.start_z, params_.start_y,
                   params_.voxel_width, params_.voxel_depth,
-                  params_.voxel_height, 0.0f, voxel_grid_dim_, voxel_grid_dim_,
-                  voxel_grid_dim_);
+                  params_.voxel_height, 0.0f, voxel_dim, voxel_dim, voxel_dim);
     mc->execute(vox_array.get());
     mc->saveAsOBJ("export.obj");
 }

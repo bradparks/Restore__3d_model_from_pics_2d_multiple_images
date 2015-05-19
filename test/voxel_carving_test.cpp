@@ -19,15 +19,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE. */
 
-#include "../src/io/assets_path.hpp"
-#include <gtest/gtest.h>
+// C system files
+// none
+
+// C++ system files
 #include <memory>
 #include <utility>
 #include <tuple>
+
+// header files of other libraries
+#include <gtest/gtest.h>
+
+// header files of project libraries
 #include <restore/common.hpp>
 #include <restore/rendering.hpp>
 #include <restore/io.hpp>
 #include <restore/filtering.hpp>
+#include "../src/io/assets_path.hpp"
 
 using namespace ret::rendering;
 using namespace ret::io;
@@ -56,7 +64,7 @@ class VoxelCarvingTest : public testing::Test {
 
 TEST_F(VoxelCarvingTest, Carve) {
 
-    for (std::size_t i = 0; i < ds.size(); i+=6) {
+    for (std::size_t i = 0; i < ds.size(); i += 6) {
         vc->carve(ds.getCamera(i));
     }
     vc->exportToDisk();

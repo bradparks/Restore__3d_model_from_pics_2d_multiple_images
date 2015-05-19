@@ -22,7 +22,17 @@
 #ifndef RESTORE_MATH_QUATERNION_HPP
 #define RESTORE_MATH_QUATERNION_HPP
 
+// C system files
+// none
+
+// C++ system files
+// none
+
+// header files of other libraries
 #include <opencv2/core/core.hpp>
+
+// header files of project libraries
+// none
 
 namespace ret {
 

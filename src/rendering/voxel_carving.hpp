@@ -22,10 +22,18 @@
 #ifndef RESTORE_RENDERING_VOXEL_CARVING_HPP
 #define RESTORE_RENDERING_VOXEL_CARVING_HPP
 
-#include "../common/camera.hpp"
-#include "bounding_box.hpp"
+// C system files
+// none
+
+// C++ system files
 #include <memory>
+
+// header files of other libraries
 #include <opencv2/core/core.hpp>
+
+// header files of project libraries
+#include "bounding_box.hpp"
+#include "../common/camera.hpp"
 
 namespace ret {
 

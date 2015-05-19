@@ -22,11 +22,18 @@
 #ifndef RESTORE_IO_DATASET_READER_HPP
 #define RESTORE_IO_DATASET_READER_HPP
 
+// C system files
+// none
+
+// C++ system files
 #include <string>
 #include <vector>
-#include <restore/common.hpp>
 
+// header files of other libraries
 #include <opencv2/core/core.hpp>
+
+// header files of project libraries
+#include <restore/common.hpp>
 
 namespace ret {
 

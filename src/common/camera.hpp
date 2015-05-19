@@ -22,8 +22,16 @@
 #ifndef RESTORE_COMMON_CAMERA_HPP
 #define RESTORE_COMMON_CAMERA_HPP
 
+// C system files
+// none
+
+// C++ system files
+// none
+
+// header files of other libraries
 #include <opencv2/core/core.hpp>
 
+// header files of project libraries
 #include "camera_intrinsics.hpp"
 #include "camera_extrinsics.hpp"
 

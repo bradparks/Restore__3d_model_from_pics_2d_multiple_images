@@ -19,7 +19,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE. */
 
+// C system files
+// none
+
+// C++ system files
+// none
+
+// header files of other libraries
 #include <gtest/gtest.h>
+
+// header files of project libraries
 #include <restore/common.hpp>
 
 using ret::DataSet;

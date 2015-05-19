@@ -22,8 +22,17 @@
 #ifndef RESTORE_MATH_UTILS_HPP
 #define RESTORE_MATH_UTILS_HPP
 
+// C system files
+// none
+
+// C++ system files
 #include <limits>
+
+// header files of other libraries
 #include <opencv2/core/core.hpp>
+
+// header files of project libraries
+// none
 
 namespace ret {
 

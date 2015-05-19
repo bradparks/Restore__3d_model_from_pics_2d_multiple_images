@@ -13,6 +13,16 @@
 #ifndef RESTORE_RENDERING_MC_LOOKUP_HPP
 #define RESTORE_RENDERING_MC_LOOKUP_HPP
 
+// C system files
+// none
+
+// C++ system files
+// none
+
+// header files of other libraries
+// none
+
+// header files of project libraries
 #include "vec3f.hpp"
 #include "triangle.hpp"
 #include "marching_cubes.hpp"

@@ -22,10 +22,18 @@
 #ifndef RESTORE_COMMON_CAMERA_EXTRINSICS_HPP
 #define RESTORE_COMMON_CAMERA_EXTRINSICS_HPP
 
+// C system files
+// none
+
+// C++ system files
 #include <cstring>
 #include <ostream>
 
+// header files of other libraries
 #include <opencv2/core/core.hpp>
+
+// header files of project libraries
+// none
 
 namespace ret {
 

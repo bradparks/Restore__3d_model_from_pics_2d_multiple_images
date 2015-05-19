@@ -22,9 +22,17 @@
 #ifndef RESTORE_MATH_DUAL_QUATERNION_HPP
 #define RESTORE_MATH_DUAL_QUATERNION_HPP
 
-#include "quaternion.hpp"
+// C system files
+// none
+
+// C++ system files
 #include <vector>
+
+// header files of other libraries
 #include <opencv2/core/core.hpp>
+
+// header files of project libraries
+#include "quaternion.hpp"
 
 namespace ret {
 
@@ -75,7 +83,7 @@ namespace ret {
             static DualQuaternion dlb(const std::vector<DualQuaternion>& dqs,
                                       const std::vector<double>& weights);
 
-        private:
+          private:
             void initialize(const Quaternion& real, const cv::Vec3d& vec);
             Quaternion real_;
             Quaternion dual_;

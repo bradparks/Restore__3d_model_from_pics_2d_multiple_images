@@ -22,6 +22,10 @@
 #ifndef RESTORE_COMMON_UTILS_HPP
 #define RESTORE_COMMON_UTILS_HPP
 
+// C system files
+// none
+
+// C++ system files
 #include <cmath>
 #include <cstddef>
 #include <vector>
@@ -29,7 +33,11 @@
 #include <type_traits>
 #include <utility>
 
+// header files of other libraries
 #include <opencv2/core/core.hpp>
+
+// header files of project libraries
+// none
 
 namespace ret {
 

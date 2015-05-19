@@ -13,6 +13,16 @@
 #ifndef RESTORE_RENDERING_MC_TRIANGLE_HPP
 #define RESTORE_RENDERING_MC_TRIANGLE_HPP
 
+// C system files
+// none
+
+// C++ system files
+// none
+
+// header files of other libraries
+// none
+
+// header files of project libraries
 #include "vec3f.hpp"
 
 namespace ret {
