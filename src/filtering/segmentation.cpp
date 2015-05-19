@@ -42,3 +42,13 @@ cv::Mat Segmentation::binarize(const cv::Mat& Image, const cv::Scalar& thresh) {
 
     return Binary;
 }
+
+cv::Mat Segmentation::createDistMap(const cv::Mat& Mask) {
+
+    cv::Mat Silhouette, DistImage;
+    cv::Canny(Mask, Silhouette, 0, 255);
+    cv::bitwise_not(Silhouette, Silhouette);
+    cv::distanceTransform(Silhouette, DistImage, CV_DIST_L2, 3);
+
+    return DistImage;
+}

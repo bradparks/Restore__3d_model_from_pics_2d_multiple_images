@@ -32,7 +32,6 @@
 #include "bounding_box.hpp"
 #include "../src/filtering/segmentation.hpp"
 
-
 using namespace ret::rendering;
 
 BoundingBox::BoundingBox(const Camera& cam1, const Camera& cam2)
@@ -41,23 +40,22 @@ BoundingBox::BoundingBox(const Camera& cam1, const Camera& cam2)
 bb_bounds BoundingBox::getBounds() const {
 
     // TODO: Add assertion, if cams are orthogonal (with quaternions)
-    // get 2d bounding rect around object
     auto rect1 = getBoundingRect(cam1_.getMask());
     auto rect2 = getBoundingRect(cam2_.getMask());
 
     // get corners from 2d bounding rects
     cv::Mat p2 =
-        (cv::Mat_<float>(3, 1) << rect1.x, rect1.y + rect1.height, 1.0f);
-    cv::Mat p4 =
-        (cv::Mat_<float>(3, 1) << rect1.x + rect1.width, rect1.y, 1.0f);
-    cv::Mat p6 =
         (cv::Mat_<float>(3, 1) << rect2.x, rect2.y + rect2.height, 1.0f);
-    cv::Mat p8 =
+    cv::Mat p4 =
         (cv::Mat_<float>(3, 1) << rect2.x + rect2.width, rect2.y, 1.0f);
+    cv::Mat p6 =
+        (cv::Mat_<float>(3, 1) << rect1.x, rect1.y + rect1.height, 1.0f);
+    cv::Mat p8 =
+        (cv::Mat_<float>(3, 1) << rect1.x + rect1.width, rect1.y, 1.0f);
 
     // convert to world points
-    cv::Mat K1_inv = cam1_.getCalibrationMatrix().inv();
-    cv::Mat K2_inv = cam2_.getCalibrationMatrix().inv();
+    const cv::Mat K1_inv = cam1_.getCalibrationMatrix().inv();
+    const cv::Mat K2_inv = cam2_.getCalibrationMatrix().inv();
     cv::Mat x2 = K1_inv * p2;
     cv::Mat x4 = K1_inv * p4;
     cv::Mat x6 = K2_inv * p6;

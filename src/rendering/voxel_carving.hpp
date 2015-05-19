@@ -65,7 +65,7 @@ namespace ret {
 
           private:
             bb_bounds bbox_;
-            std::size_t voxel_grid_dim_, voxel_slice_, voxel_size_;
+            std::size_t voxel_dim_, voxel_slice_, voxel_size_;
             start_params params_;
             std::unique_ptr<float[]> vox_array;
 
