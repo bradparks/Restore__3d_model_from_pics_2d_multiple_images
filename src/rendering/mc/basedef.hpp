@@ -14,7 +14,7 @@
 #define RESTORE_RENDERING_MC_BASEDEF_HPP
 
 #define MC_GRID_SIZE_UNIT 32
-#define MC_REVERSE_TRIANGLES true
+#define MC_REVERSE_TRIANGLES false
 #define MC_CUBE_ALIGN true
 
 #define COMPUTE_INDEX(dim_x, dim_xz, x, z, y) \

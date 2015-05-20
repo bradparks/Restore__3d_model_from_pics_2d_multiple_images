@@ -36,11 +36,12 @@ namespace ret {
 
               public:
                 typedef std::vector<triangle> triangle_vector_type;
-                MarchingCubes();
+                MarchingCubes() = default;
                 MarchingCubes(const float offset_x_, const float offset_y_,
                               const float offset_z_, const float voxel_width_,
-                              const float voxel_height_, const float voxel_depth_,
-                              const float isolevel_, const int_type grid_dim_x_,
+                              const float voxel_height_,
+                              const float voxel_depth_, const float isolevel_,
+                              const int_type grid_dim_x_,
                               const int_type grid_dim_y_,
                               const int_type grid_dim_z_);
                 virtual ~MarchingCubes();
@@ -89,7 +90,7 @@ namespace ret {
                 float isolevel_;
 
                 /// the triangle data of the currently extracted surface
-                triangle_vector_type triangle_vector;
+                triangle_vector_type triangle_vector_;
             };
         }
     }

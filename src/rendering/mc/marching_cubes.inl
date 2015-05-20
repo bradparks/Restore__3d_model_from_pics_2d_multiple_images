@@ -29,19 +29,19 @@ namespace ret {
 
             inline const MarchingCubes::triangle_vector_type&
             MarchingCubes::getTriangles() const {
-                return this->triangle_vector;
+                return triangle_vector_;
             }
 
             inline int_type MarchingCubes::getGridDimX() const {
-                return this->grid_dim_x_;
+                return grid_dim_x_;
             }
 
             inline int_type MarchingCubes::getGridDimY() const {
-                return this->grid_dim_y_;
+                return grid_dim_y_;
             }
 
             inline int_type MarchingCubes::getGridDimZ() const {
-                return this->grid_dim_z_;
+                return grid_dim_z_;
             }
         }
     }
