@@ -45,10 +45,19 @@ cv::Mat Segmentation::binarize(const cv::Mat& Image, const cv::Scalar& thresh) {
 
 cv::Mat Segmentation::createDistMap(const cv::Mat& Mask) {
 
-    cv::Mat Silhouette, DistImage;
-    cv::Canny(Mask, Silhouette, 0, 255);
-    cv::bitwise_not(Silhouette, Silhouette);
-    cv::distanceTransform(Silhouette, DistImage, CV_DIST_L2, 3);
+    assert(Mask.channels() == 1);
+    cv::Mat DistImage;
+    cv::distanceTransform(createSilhouette(Mask), DistImage, CV_DIST_L2, 3);
 
     return DistImage;
+}
+
+cv::Mat Segmentation::createSilhouette(const cv::Mat& Mask) {
+
+    assert(Mask.channels() == 1);
+    cv::Mat Silhouette;
+    cv::Canny(Mask, Silhouette, 0, 255);
+    cv::bitwise_not(Silhouette, Silhouette);
+
+    return Silhouette;
 }

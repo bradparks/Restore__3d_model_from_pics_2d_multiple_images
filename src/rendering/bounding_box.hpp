@@ -55,7 +55,7 @@ namespace ret {
           private:
             Camera cam1_, cam2_;
 
-            cv::Rect getBoundingRect(cv::Mat Binary) const;
+            cv::Rect getBoundingRect(const cv::Mat& Binary) const;
         };
     }
 }

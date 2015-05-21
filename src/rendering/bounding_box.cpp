@@ -93,14 +93,14 @@ bb_bounds BoundingBox::getBounds() const {
     return bounds;
 }
 
-cv::Rect BoundingBox::getBoundingRect(cv::Mat Binary) const {
+cv::Rect BoundingBox::getBoundingRect(const cv::Mat &Binary) const {
 
     assert(Binary.channels() == 1);
     using Contour = std::vector<cv::Point>;
 
     std::vector<Contour> contours;
     auto hierarchy = std::vector<cv::Vec4i>();
-    cv::findContours(Binary, contours, hierarchy, CV_RETR_TREE,
+    cv::findContours(Binary.clone(), contours, hierarchy, CV_RETR_TREE,
                      CV_CHAIN_APPROX_SIMPLE);
 
     auto result =
