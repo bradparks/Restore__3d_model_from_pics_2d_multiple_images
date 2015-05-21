@@ -214,7 +214,7 @@ bool ExitedUnsuccessfully(int exit_status) {
 // one thread running, or cannot determine the number of threads, prior
 // to executing the given statement.  It is the responsibility of the
 // caller not to pass a thread_count of 1.
-static std::string DeathTestThreadWarning(size_t thread_count) {
+inline static std::string DeathTestThreadWarning(size_t thread_count) {
   Message msg;
   msg << "Death tests use fork(), which is unsafe particularly"
       << " in a threaded context. For this test, " << GTEST_NAME_ << " ";

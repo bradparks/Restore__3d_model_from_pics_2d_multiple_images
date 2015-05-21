@@ -90,9 +90,9 @@ voxel VoxelCarving::calcVoxelPosInCamViewFrustum(const std::size_t i,
                                                  const std::size_t j,
                                                  const std::size_t k) const {
     voxel v;
-    v.xpos = params_.start_x + k * params_.voxel_width;
-    v.ypos = params_.start_y + j * params_.voxel_height;
-    v.zpos = params_.start_z + i * params_.voxel_depth;
+    v.xpos = params_.start_x + static_cast<float>(k) * params_.voxel_width;
+    v.ypos = params_.start_y + static_cast<float>(j) * params_.voxel_height;
+    v.zpos = params_.start_z + static_cast<float>(i) * params_.voxel_depth;
     v.value = 1.0f;
 
     return v;
@@ -114,9 +114,9 @@ start_params VoxelCarving::calcStartParameter(const bb_bounds& bbox) const {
     params.start_x = bbox.xmin - offset_x;
     params.start_y = bbox.ymin - offset_y;
     params.start_z = 0.0f;
-    params.voxel_width = bb_width / voxel_dim_;
-    params.voxel_height = bb_height / voxel_dim_;
-    params.voxel_depth = bb_depth / voxel_dim_;
+    params.voxel_width = bb_width / static_cast<float>(voxel_dim_);
+    params.voxel_height = bb_height / static_cast<float>(voxel_dim_);
+    params.voxel_depth = bb_depth / static_cast<float>(voxel_dim_);
 
     return params;
 }
