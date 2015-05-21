@@ -41,9 +41,7 @@ namespace ret {
       public:
         Camera() = default;
 
-        Camera(const cv::Mat Image) {
-            this->Image_ = Image;
-        }
+        Camera(const cv::Mat Image) : Image_(Image) {}
 
         template <typename T>
         Camera& setProjectionMatrix(T&& P) {

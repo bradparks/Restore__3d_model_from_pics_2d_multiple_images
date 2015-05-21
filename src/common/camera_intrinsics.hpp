@@ -40,15 +40,13 @@ namespace ret {
 
     class CameraIntrinsics {
       public:
-        CameraIntrinsics() {
-            K_ = (cv::Mat_<float>(3, 3) << 0, 0, 0, 0, 0, 0, 0, 0, 1);
-            dist_ = cv::Mat::zeros(1, 4, CV_64F);
-        }
+        CameraIntrinsics()
+            : K_((cv::Mat_<float>(3, 3) << 0, 0, 0, 0, 0, 0, 0, 0, 1)),
+              dist_(cv::Mat::zeros(1, 4, CV_64F)) {}
 
-        CameraIntrinsics(const cv::Mat& K) {
+        CameraIntrinsics(const cv::Mat& K)
+            : K_(K), dist_(cv::Mat::zeros(1, 4, CV_64F)) {
             assert(K.size() == cv::Size(3, 3) && K.type() == CV_32F);
-            this->K_ = K;
-            dist_ = cv::Mat::zeros(1, 4, CV_64F);
         }
 
         CameraIntrinsics(const CameraIntrinsics& other)

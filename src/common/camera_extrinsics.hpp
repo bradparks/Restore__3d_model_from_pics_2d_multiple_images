@@ -39,16 +39,13 @@ namespace ret {
 
     class CameraExtrinsics {
       public:
-        CameraExtrinsics() {
-            R_ = cv::Mat(3, 3, CV_32F, cv::Scalar::all(0));
-            t_ = cv::Mat(4, 1, CV_32F, cv::Scalar::all(0));
-        }
+        CameraExtrinsics()
+            : R_(cv::Mat(3, 3, CV_32F, cv::Scalar::all(0))),
+              t_(cv::Mat(4, 1, CV_32F, cv::Scalar::all(0))) {}
 
-        CameraExtrinsics(const cv::Mat& R, const cv::Mat& t) {
+        CameraExtrinsics(const cv::Mat& R, const cv::Mat& t) : R_(R), t_(t) {
             assert(R.size() == cv::Size(3, 3) && R.type() == CV_32F);
             assert(t.size() == cv::Size(1, 4) && t.type() == CV_32F);
-            this->R_ = R;
-            this->t_ = t;
         }
 
         CameraExtrinsics(const CameraExtrinsics& other)
