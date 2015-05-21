@@ -32,14 +32,11 @@ namespace ret {
         namespace mc {
 
             typedef struct triangle {
-                union {
-                    struct {
-                        vec3f v1;
-                        vec3f v2;
-                        vec3f v3;
-                    } comp;
-                    vec3f v[3];
-                };
+                struct {
+                    vec3f v1;
+                    vec3f v2;
+                    vec3f v3;
+                } comp;
             } triangle;
         }
     }
