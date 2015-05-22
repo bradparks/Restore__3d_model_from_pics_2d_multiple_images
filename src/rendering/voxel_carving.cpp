@@ -24,6 +24,8 @@
 
 // C++ system files
 #include <cstdlib>
+#include <algorithm>
+#include <limits>
 
 // header files of other libraries
 #include <opencv2/imgproc/imgproc.hpp>
@@ -43,7 +45,9 @@ VoxelCarving::VoxelCarving(const bb_bounds bbox, const std::size_t voxel_dim)
       voxel_slice_(voxel_dim * voxel_dim),
       voxel_size_(voxel_dim * voxel_dim * voxel_dim),
       vox_array(ret::make_unique<float[]>(voxel_size_)),
-      params_(calcStartParameter(bbox)) {}
+      params_(calcStartParameter(bbox)) {
+    std::fill_n(vox_array.get(), voxel_size_, std::numeric_limits<float>::max());
+}
 
 void VoxelCarving::carve(const Camera& cam) {
 
