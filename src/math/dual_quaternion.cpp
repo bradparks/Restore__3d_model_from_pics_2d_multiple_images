@@ -44,29 +44,27 @@ DualQuaternion::DualQuaternion(const DualQuaternion& other)
 DualQuaternion::DualQuaternion(const Quaternion& real, const Quaternion& dual)
     : real_(real), dual_(dual) {}
 
-DualQuaternion::DualQuaternion(const Quaternion& real, const cv::Vec3d vec) {
-    initialize(real, vec);
-}
+DualQuaternion::DualQuaternion(const Quaternion& real, const cv::Vec3d vec)
+    : real_(initRealPart(real)), dual_(initDualPart(vec)) {}
 
-DualQuaternion::DualQuaternion(const cv::Vec3d rodrigues, const cv::Vec3d vec) {
-    initialize(Quaternion::fromRodriguesVec(rodrigues), vec);
-}
+DualQuaternion::DualQuaternion(const cv::Vec3d rodrigues, const cv::Vec3d vec)
+    : real_(initRealPart(Quaternion::fromRodriguesVec(rodrigues))),
+      dual_(initDualPart(vec)) {}
 
-DualQuaternion::DualQuaternion(const cv::Mat& Rot, const cv::Vec3d vec) {
-    initialize(Quaternion::fromRotMatrix(Rot), vec);
-}
+DualQuaternion::DualQuaternion(const cv::Mat& Rot, const cv::Vec3d vec)
+    : real_(initRealPart(Quaternion::fromRotMatrix(Rot))),
+      dual_(initDualPart(vec)) {}
 
-DualQuaternion::DualQuaternion(const cv::Mat& Pose) {
-    cv::Mat Rot = Pose(cv::Range(0, 3), cv::Range(0, 3)).clone();
-    cv::Vec3d trans = cv::Vec3d(Pose.at<double>(0, 3), Pose.at<double>(1, 3),
-                                Pose.at<double>(2, 3));
-    initialize(Quaternion::fromRotMatrix(Rot), trans);
-}
+DualQuaternion::DualQuaternion(const cv::Mat& Pose)
+    : real_(initRealPart(Quaternion::fromRotMatrix(
+          Pose(cv::Range(0, 3), cv::Range(0, 3)).clone()))),
+      dual_(initDualPart(cv::Vec3d(Pose.at<double>(0, 3), Pose.at<double>(1, 3),
+                                   Pose.at<double>(2, 3)))) {}
 
 DualQuaternion::DualQuaternion(const cv::Vec3d axis, double angle,
-                               const cv::Vec3d vec) {
-    initialize(Quaternion::fromAxisAngle(axis, angle), vec);
-}
+                               const cv::Vec3d vec)
+    : real_(initRealPart(Quaternion::fromAxisAngle(axis, angle))),
+      dual_(initDualPart(vec)) {}
 
 Quaternion DualQuaternion::getRotation() const {
     return real_;
@@ -273,7 +271,10 @@ DualQuaternion DualQuaternion::dlb(const std::vector<DualQuaternion>& dqs,
     return dlb;
 }
 
-void DualQuaternion::initialize(const Quaternion& real, const cv::Vec3d& vec) {
-    real_ = Quaternion(real).normalize();
-    dual_ = (Quaternion(0.0, vec) * real_) * 0.5;
+Quaternion DualQuaternion::initRealPart(const Quaternion& real) {
+    return Quaternion(real).normalize();
+}
+
+Quaternion DualQuaternion::initDualPart(const cv::Vec3d& vec) {
+    return (Quaternion(0.0, vec) * real_) * 0.5;
 }

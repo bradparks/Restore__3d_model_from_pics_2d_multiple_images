@@ -49,6 +49,8 @@ namespace ret {
             assert(K.size() == cv::Size(3, 3) && K.type() == CV_32F);
         }
 
+        virtual ~CameraIntrinsics() = default;
+
         CameraIntrinsics(const CameraIntrinsics& other)
             : K_(other.K_), dist_(other.dist_) {}
 

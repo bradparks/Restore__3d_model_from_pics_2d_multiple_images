@@ -175,15 +175,36 @@ struct cubeidx {
     };
 };
 
+MarchingCubes::MarchingCubes()
+    : offset_x_(0.0f),
+      offset_y_(0.0f),
+      offset_z_(0.0f),
+      voxel_width_(0.0f),
+      voxel_height_(0.0f),
+      voxel_depth_(0.0f),
+      isolevel_(0.0f),
+      grid_dim_x_(0),
+      grid_dim_y_(0),
+      grid_dim_z_(0),
+      triangle_vector_() {}
+
 MarchingCubes::MarchingCubes(const float offset_x, const float offset_y,
                              const float offset_z, const float voxel_width,
                              const float voxel_height, const float voxel_depth,
                              const float isolevel, const int_type grid_dim_x,
                              const int_type grid_dim_y,
-                             const int_type grid_dim_z) {
-    setParams(offset_x, offset_y, offset_z, voxel_width, voxel_height,
-              voxel_depth, isolevel, grid_dim_x, grid_dim_y, grid_dim_z);
-}
+                             const int_type grid_dim_z)
+    : offset_x_(offset_x),
+      offset_y_(offset_y),
+      offset_z_(offset_z),
+      voxel_width_(voxel_width),
+      voxel_height_(voxel_height),
+      voxel_depth_(voxel_depth),
+      isolevel_(isolevel),
+      grid_dim_x_(grid_dim_x),
+      grid_dim_y_(grid_dim_y),
+      grid_dim_z_(grid_dim_z),
+      triangle_vector_() {}
 
 MarchingCubes::~MarchingCubes() {
     triangle_vector_.clear();

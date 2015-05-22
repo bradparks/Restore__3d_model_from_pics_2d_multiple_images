@@ -38,6 +38,8 @@ namespace ret {
 
     class DataSet {
       public:
+        DataSet() : cameras_() {}
+
         template <typename T>
         void setCameras(T&& cameras) {
             this->cameras_ = std::forward<T>(cameras);

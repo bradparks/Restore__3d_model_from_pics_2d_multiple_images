@@ -84,7 +84,8 @@ namespace ret {
                                       const std::vector<double>& weights);
 
           private:
-            void initialize(const Quaternion& real, const cv::Vec3d& vec);
+            Quaternion initRealPart(const Quaternion& real);
+            Quaternion initDualPart(const cv::Vec3d& vec);
             Quaternion real_;
             Quaternion dual_;
         };

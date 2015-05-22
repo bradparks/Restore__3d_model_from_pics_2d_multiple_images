@@ -48,6 +48,8 @@ namespace ret {
             assert(t.size() == cv::Size(1, 4) && t.type() == CV_32F);
         }
 
+        virtual ~CameraExtrinsics() = default;
+
         CameraExtrinsics(const CameraExtrinsics& other)
             : R_(other.R_), t_(other.t_) {}
 

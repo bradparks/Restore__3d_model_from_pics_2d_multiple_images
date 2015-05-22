@@ -42,17 +42,15 @@ VoxelCarving::VoxelCarving(const bb_bounds bbox, const std::size_t voxel_dim)
     : bbox_(bbox),
       voxel_dim_(voxel_dim),
       voxel_slice_(voxel_dim * voxel_dim),
-      voxel_size_(voxel_dim * voxel_dim * voxel_dim) {
-
-    vox_array = ret::make_unique<float[]>(voxel_size_);
-}
+      voxel_size_(voxel_dim * voxel_dim * voxel_dim),
+      vox_array(ret::make_unique<float[]>(voxel_size_)),
+      params_(calcStartParameter(bbox)) {}
 
 void VoxelCarving::carve(const Camera& cam) {
 
     const cv::Mat Mask = cam.getMask();
     const cv::Mat DistImage = Segmentation::createDistMap(Mask);
     const cv::Size img_size = Mask.size();
-    params_ = calcStartParameter(bbox_);
 
     for (std::size_t i = 0; i < voxel_dim_; ++i) {
         for (std::size_t j = 0; j < voxel_dim_; ++j) {

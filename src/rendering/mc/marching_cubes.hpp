@@ -36,7 +36,7 @@ namespace ret {
 
               public:
                 typedef std::vector<triangle> triangle_vector_type;
-                MarchingCubes() = default;
+                MarchingCubes();
                 MarchingCubes(const float offset_x_, const float offset_y_,
                               const float offset_z_, const float voxel_width_,
                               const float voxel_height_,
@@ -82,12 +82,12 @@ namespace ret {
                 float voxel_width_;
                 float voxel_height_;
                 float voxel_depth_;
-                int_type grid_dim_x_;
-                int_type grid_dim_y_;
-                int_type grid_dim_z_;
 
                 /// the iso value of the surface to be extracted
                 float isolevel_;
+                int_type grid_dim_x_;
+                int_type grid_dim_y_;
+                int_type grid_dim_z_;
 
                 /// the triangle data of the currently extracted surface
                 triangle_vector_type triangle_vector_;
