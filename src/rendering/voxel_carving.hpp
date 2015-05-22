@@ -64,7 +64,6 @@ namespace ret {
             void exportToDisk() const;
 
           private:
-            bb_bounds bbox_;
             std::size_t voxel_dim_, voxel_slice_, voxel_size_;
             std::unique_ptr<float[]> vox_array;
             start_params params_;

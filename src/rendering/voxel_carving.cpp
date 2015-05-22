@@ -39,8 +39,7 @@ using namespace ret::rendering;
 using ret::filtering::Segmentation;
 
 VoxelCarving::VoxelCarving(const bb_bounds bbox, const std::size_t voxel_dim)
-    : bbox_(bbox),
-      voxel_dim_(voxel_dim),
+    : voxel_dim_(voxel_dim),
       voxel_slice_(voxel_dim * voxel_dim),
       voxel_size_(voxel_dim * voxel_dim * voxel_dim),
       vox_array(ret::make_unique<float[]>(voxel_size_)),
