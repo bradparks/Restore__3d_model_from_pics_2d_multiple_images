@@ -19,14 +19,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE. */
 
-#ifndef RESTORE_COMMON_HPP
-#define RESTORE_COMMON_HPP
+// C system files
+// none
 
-#include "../../src/common/utils.hpp"
-#include "../../src/common/camera_intrinsics.hpp"
-#include "../../src/common/camera_extrinsics.hpp"
-#include "../../src/common/camera.hpp"
-#include "../../src/common/dataset.hpp"
-#include "../../src/common/polydata.hpp"
+// C++ system files
+#include <vector>
 
-#endif
+// header files of other libraries
+#include <gtest/gtest.h>
+
+// header files of project libraries
+#include <restore/types.hpp>
+#include <restore/common.hpp>
+
+using namespace ret;
+
+TEST(PolyDataTest, GetSetTriangles) {
+
+    std::vector<triangle> triangles;
+    for (std::size_t i = 0; i < 4; ++i) {
+        triangle tri;
+        tri.comp.v1 = {static_cast<float>(i), 0.0f, 0.0f};
+        tri.comp.v2 = {0.0f, static_cast<float>(i), 0.0f};
+        tri.comp.v3 = {0.0f, 0.0f, static_cast<float>(i)};
+        triangles.push_back(tri);
+    }
+
+    PolyData pd;
+    pd.setTriangles(triangles);
+    const std::vector<triangle> triangles2 = pd.getTriangles();
+    ASSERT_EQ(triangles.size(), triangles2.size());
+    for (std::size_t i = 0; i < triangles.size(); ++i) {
+        ASSERT_EQ(triangles[i], triangles2[i]);
+    }
+}

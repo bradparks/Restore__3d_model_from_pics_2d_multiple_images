@@ -37,8 +37,9 @@
 #include "../filtering/segmentation.hpp"
 #include "../common/utils.hpp"
 
+using namespace ret;
 using namespace ret::rendering;
-using ret::filtering::Segmentation;
+using namespace ret::filtering;
 
 VoxelCarving::VoxelCarving(const bb_bounds bbox, const std::size_t voxel_dim)
     : voxel_dim_(voxel_dim),
@@ -46,7 +47,8 @@ VoxelCarving::VoxelCarving(const bb_bounds bbox, const std::size_t voxel_dim)
       voxel_size_(voxel_dim * voxel_dim * voxel_dim),
       vox_array(ret::make_unique<float[]>(voxel_size_)),
       params_(calcStartParameter(bbox)) {
-    std::fill_n(vox_array.get(), voxel_size_, std::numeric_limits<float>::max());
+    std::fill_n(vox_array.get(), voxel_size_,
+                std::numeric_limits<float>::max());
 }
 
 void VoxelCarving::carve(const Camera& cam) {
@@ -76,15 +78,23 @@ void VoxelCarving::carve(const Camera& cam) {
     }
 }
 
-void VoxelCarving::exportToDisk() const {
+PolyData VoxelCarving::createVisualHull() {
 
     auto mc = ret::make_unique<mc::MarchingCubes>();
-    const int voxel_dim = static_cast<int>(voxel_dim_);
+    auto voxel_dim = static_cast<int>(voxel_dim_);
     mc->setParams(params_.start_x, params_.start_z, params_.start_y,
                   params_.voxel_width, params_.voxel_depth,
                   params_.voxel_height, 0.0f, voxel_dim, voxel_dim, voxel_dim);
     mc->execute(vox_array.get());
-    mc->saveAsOBJ("export.obj");
+    visual_hull.setTriangles(mc->getTriangles());
+
+    return visual_hull;
+}
+
+void VoxelCarving::exportToDisk() const {
+
+    auto mc = ret::make_unique<mc::MarchingCubes>();
+    mc->saveASOBJ("export2.obj", visual_hull.getTriangles());
 }
 
 voxel VoxelCarving::calcVoxelPosInCamViewFrustum(const std::size_t i,

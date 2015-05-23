@@ -19,14 +19,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE. */
 
-#ifndef RESTORE_COMMON_HPP
-#define RESTORE_COMMON_HPP
+#ifndef RESTORE_COMMON_POLYDATA_HPP
+#define RESTORE_COMMON_POLYDATA_HPP
 
-#include "../../src/common/utils.hpp"
-#include "../../src/common/camera_intrinsics.hpp"
-#include "../../src/common/camera_extrinsics.hpp"
-#include "../../src/common/camera.hpp"
-#include "../../src/common/dataset.hpp"
-#include "../../src/common/polydata.hpp"
+// C system files
+// none
+
+// C++ system files
+#include <vector>
+#include <utility>
+
+// header files of other libraries
+// none
+
+// header files of project libraries
+#include <restore/types.hpp>
+
+namespace ret {
+
+    class PolyData {
+      public:
+        PolyData() : triangles_(), normals_() {}
+
+        template <typename T>
+        void setTriangles(T&& triangles) {
+            triangles_ = std::forward<T>(triangles);
+        }
+
+        std::vector<triangle> getTriangles() const {
+            return triangles_;
+        }
+
+      private:
+        std::vector<triangle> triangles_;
+        std::vector<vec3f> normals_;
+    };
+}
 
 #endif

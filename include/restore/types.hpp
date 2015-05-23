@@ -19,14 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE. */
 
-#ifndef RESTORE_COMMON_HPP
-#define RESTORE_COMMON_HPP
+#ifndef RESTORE_TYPES_HPP
+#define RESTORE_TYPES_HPP
 
-#include "../../src/common/utils.hpp"
-#include "../../src/common/camera_intrinsics.hpp"
-#include "../../src/common/camera_extrinsics.hpp"
-#include "../../src/common/camera.hpp"
-#include "../../src/common/dataset.hpp"
-#include "../../src/common/polydata.hpp"
+#include "../../src/common/types/vec3f.hpp"
+#include "../../src/common/types/triangle.hpp"
 
 #endif
+

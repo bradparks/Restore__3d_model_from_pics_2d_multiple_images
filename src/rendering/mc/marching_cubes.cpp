@@ -24,10 +24,9 @@
 // none
 
 // header files of project libraries
+#include <restore/types.hpp>
 #include "basedef.hpp"
 #include "marching_cubes.hpp"
-#include "vec3f.hpp"
-#include "triangle.hpp"
 #include "lookup.hpp"
 
 using namespace ret::rendering::mc;
@@ -98,7 +97,7 @@ union cube4 {
 };
 
 typedef cube4<grid_cell> cube4c;
-typedef cube4<vec3f> cube4vec3f;
+typedef cube4<ret::vec3f> cube4vec3f;
 typedef cube4<short> cube4s;
 
 /// Just a single cube. Here the order of the incidices are given as common.
@@ -132,7 +131,7 @@ union cube {
 #endif
 };
 
-typedef cube<vec3f> cubevec3f;
+typedef cube<ret::vec3f> cubevec3f;
 
 /// Template based index-mapping from cube4 to cube. This maps our cube4 index
 /// pattern to cubes with the standard index pattern.
@@ -231,12 +230,18 @@ void MarchingCubes::setParams(const float offset_x, const float offset_y,
 
 void MarchingCubes::saveAsOBJ(const char* name) const {
 
+    saveASOBJ(name, triangle_vector_);
+}
+
+void MarchingCubes::saveASOBJ(const char* name,
+                              const triangle_vector_type& triangles) const {
+
     std::ofstream output(name, std::ofstream::binary);
 
     int_type face = 1;
 
-    for (triangle_vector_type::const_iterator it = triangle_vector_.begin();
-         it != triangle_vector_.end(); it++) {
+    for (triangle_vector_type::const_iterator it = triangles.begin();
+         it != triangles.end(); it++) {
 
         // using "\n" instead of std::endl to avoid permanent flushing.
         output.write("v ", 2);
@@ -298,7 +303,7 @@ void triangulate(const cube4c& values, const cubevec3f& points,
                  MarchingCubes::triangle_vector_type& triangles,
                  const float isolevel) {
 
-    vec3f vertlist[12];
+    ret::vec3f vertlist[12];
 
     // Determine the index in the edge table, which tells us which vertices are
     // inside of the surface.
@@ -388,7 +393,7 @@ void triangulate(const cube4c& values, const cubevec3f& points,
                     values.data[cubeidx<cube>::i3],
                     values.data[cubeidx<cube>::i7], isolevel);
     }
-    triangle tri;
+    ret::triangle tri;
 
     // grab components.
     const lookup::lut_type sheets = lookup::alt_triangle_table[cubecase][0];
@@ -835,21 +840,14 @@ void MarchingCubes::execute(const float* grid) {
 
 namespace ret {
 
-    namespace rendering {
+    inline void interpolate(vec3f& result, const vec3f& p1, const vec3f& p2,
+                            const grid_cell& valp1, const grid_cell& valp2,
+                            const float isolevel) {
 
-        namespace mc {
-
-            inline void interpolate(vec3f& result, const vec3f& p1,
-                                    const vec3f& p2, const grid_cell& valp1,
-                                    const grid_cell& valp2,
-                                    const float isolevel) {
-
-                const float mu = ((isolevel - MC_VALUE(valp1)) /
-                                  (MC_VALUE(valp2) - MC_VALUE(valp1)));
-                result.x = p1.x + mu * (p2.x - p1.x);
-                result.y = p1.y + mu * (p2.y - p1.y);
-                result.z = p1.z + mu * (p2.z - p1.z);
-            }
-        }
+        const float mu = ((isolevel - MC_VALUE(valp1)) /
+                          (MC_VALUE(valp2) - MC_VALUE(valp1)));
+        result.x = p1.x + mu * (p2.x - p1.x);
+        result.y = p1.y + mu * (p2.y - p1.y);
+        result.z = p1.z + mu * (p2.z - p1.z);
     }
 }

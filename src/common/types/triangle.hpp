@@ -19,14 +19,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE. */
 
-#ifndef RESTORE_COMMON_HPP
-#define RESTORE_COMMON_HPP
+#ifndef RESTORE_COMMON_TYPES_TRIANGLE_HPP
+#define RESTORE_COMMON_TYPES_TRIANGLE_HPP
 
-#include "../../src/common/utils.hpp"
-#include "../../src/common/camera_intrinsics.hpp"
-#include "../../src/common/camera_extrinsics.hpp"
-#include "../../src/common/camera.hpp"
-#include "../../src/common/dataset.hpp"
-#include "../../src/common/polydata.hpp"
+// C system files
+// none
+
+// C++ system files
+// none
+
+// header files of other libraries
+// none
+
+// header files of project libraries
+#include "vec3f.hpp"
+
+namespace ret {
+
+    struct triangle {
+        struct {
+            vec3f v1;
+            vec3f v2;
+            vec3f v3;
+        } comp;
+
+        inline bool operator==(const triangle& other) const {
+            return (comp.v1 == other.comp.v1 && comp.v2 == other.comp.v2 &&
+                    comp.v3 == other.comp.v3);
+        }
+    };
+}
 
 #endif

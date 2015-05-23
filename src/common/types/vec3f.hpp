@@ -19,14 +19,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE. */
 
-#ifndef RESTORE_COMMON_HPP
-#define RESTORE_COMMON_HPP
+#ifndef RESTORE_COMMON_TYPES_VEC3F_HPP
+#define RESTORE_COMMON_TYPES_VEC3F_HPP
 
-#include "../../src/common/utils.hpp"
-#include "../../src/common/camera_intrinsics.hpp"
-#include "../../src/common/camera_extrinsics.hpp"
-#include "../../src/common/camera.hpp"
-#include "../../src/common/dataset.hpp"
-#include "../../src/common/polydata.hpp"
+// C system files
+// none
+
+// C++ system files
+// none
+
+// header files of other libraries
+// none
+
+// header files of project libraries
+// none
+
+namespace ret {
+
+    struct vec3f {
+        float x;
+        float y;
+        float z;
+
+        inline bool operator==(const vec3f& other) const {
+            return (x == other.x && y == other.y && z == other.z);
+        }
+    };
+}
 
 #endif

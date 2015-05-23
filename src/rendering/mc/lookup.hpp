@@ -23,13 +23,13 @@
 // none
 
 // header files of project libraries
-#include "vec3f.hpp"
-#include "triangle.hpp"
+#include <restore/types.hpp>
 #include "marching_cubes.hpp"
 
 namespace ret {
 
     namespace rendering {
+
         namespace mc {
 
             namespace lookup {

@@ -64,8 +64,9 @@ class VoxelCarvingTest : public testing::Test {
 
 TEST_F(VoxelCarvingTest, Carve) {
 
-    for (std::size_t i = 0; i < ds.size(); ++i) {
+    for (std::size_t i = 0; i < ds.size(); i+=6) {
         vc->carve(ds.getCamera(i));
     }
+    vc->createVisualHull();
     vc->exportToDisk();
 }

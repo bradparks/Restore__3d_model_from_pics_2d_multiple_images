@@ -23,8 +23,8 @@
 // none
 
 // header files of project libraries
+#include <restore/types.hpp>
 #include "basedef.hpp"
-#include "triangle.hpp"
 
 namespace ret {
 
@@ -71,6 +71,9 @@ namespace ret {
                 /// @brief Saves the surface data as an obj-file.
                 /// @param name the name of the obj-file (without .obj)
                 void saveAsOBJ(const char* name) const;
+
+                void saveASOBJ(const char* name,
+                               const triangle_vector_type& triangles) const;
 
               private:
                 /// origin of the voxel grid

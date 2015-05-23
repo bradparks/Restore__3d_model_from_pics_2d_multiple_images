@@ -34,6 +34,7 @@
 // header files of project libraries
 #include "bounding_box.hpp"
 #include "../common/camera.hpp"
+#include "../common/polydata.hpp"
 
 namespace ret {
 
@@ -61,11 +62,13 @@ namespace ret {
             VoxelCarving(VoxelCarving const&) = delete;
             VoxelCarving operator&=(VoxelCarving const&) = delete;
             void carve(const Camera& cam);
+            PolyData createVisualHull();
             void exportToDisk() const;
 
           private:
             std::size_t voxel_dim_, voxel_slice_, voxel_size_;
             std::unique_ptr<float[]> vox_array;
+            PolyData visual_hull;
             start_params params_;
 
             voxel calcVoxelPosInCamViewFrustum(const std::size_t i,
