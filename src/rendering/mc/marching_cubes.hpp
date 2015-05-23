@@ -70,10 +70,9 @@ namespace ret {
 
                 /// @brief Saves the surface data as an obj-file.
                 /// @param name the name of the obj-file (without .obj)
-                void saveAsOBJ(const char* name) const;
-
                 void saveASOBJ(const char* name,
-                               const triangle_vector_type& triangles) const;
+                               const triangle_vector_type& triangles,
+                               const std::vector<vec3f>& normals) const;
 
               private:
                 /// origin of the voxel grid

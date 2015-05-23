@@ -45,10 +45,10 @@ VoxelCarving::VoxelCarving(const bb_bounds bbox, const std::size_t voxel_dim)
     : voxel_dim_(voxel_dim),
       voxel_slice_(voxel_dim * voxel_dim),
       voxel_size_(voxel_dim * voxel_dim * voxel_dim),
-      vox_array(ret::make_unique<float[]>(voxel_size_)),
-      visual_hull(),
+      vox_array_(ret::make_unique<float[]>(voxel_size_)),
+      visual_hull_(),
       params_(calcStartParameter(bbox)) {
-    std::fill_n(vox_array.get(), voxel_size_,
+    std::fill_n(vox_array_.get(), voxel_size_,
                 std::numeric_limits<float>::max());
 }
 
@@ -73,7 +73,7 @@ void VoxelCarving::carve(const Camera& cam) {
                 }
 
                 const auto idx = k + j * voxel_dim_ + i * voxel_slice_;
-                if (dist < vox_array[idx]) vox_array[idx] = dist;
+                if (dist < vox_array_[idx]) vox_array_[idx] = dist;
             }
         }
     }
@@ -86,16 +86,44 @@ PolyData VoxelCarving::createVisualHull() {
     mc->setParams(params_.start_x, params_.start_z, params_.start_y,
                   params_.voxel_width, params_.voxel_depth,
                   params_.voxel_height, 0.0f, voxel_dim, voxel_dim, voxel_dim);
-    mc->execute(vox_array.get());
-    visual_hull.setTriangles(mc->getTriangles());
+    mc->execute(vox_array_.get());
+    auto triangles = mc->getTriangles();
+    visual_hull_.setTriangles(triangles);
+    visual_hull_.setNormals(calcSurfaceNormals(triangles));
 
-    return visual_hull;
+    return visual_hull_;
 }
 
 void VoxelCarving::exportToDisk() const {
 
+    assert(visual_hull_.getTriangles().size() > 0);
     auto mc = ret::make_unique<mc::MarchingCubes>();
-    mc->saveASOBJ("export2.obj", visual_hull.getTriangles());
+    mc->saveASOBJ("export.obj", visual_hull_.getTriangles(),
+                  visual_hull_.getNormals());
+}
+
+std::vector<vec3f> VoxelCarving::calcSurfaceNormals(
+    const std::vector<triangle>& triangles) const {
+
+    std::vector<vec3f> normals;
+    // one surface normal for each vertex in a triangle
+    normals.reserve(triangles.size() * 3);
+    for (const auto tri : triangles) {
+        vec3f n = calcSurfaceNormal(tri.comp.v1, tri.comp.v2, tri.comp.v3);
+        normals.emplace_back(n);
+    }
+
+    return normals;
+}
+
+vec3f VoxelCarving::calcSurfaceNormal(const vec3f& v1, const vec3f& v2,
+                                      const vec3f& v3) const {
+
+    vec3f n;
+    n.x = (v2.y - v1.y) * (v3.z - v1.z) - (v3.y - v1.y) * (v2.z - v1.z);
+    n.y = (v2.z - v1.z) * (v3.x - v1.x) - (v2.x - v1.x) * (v3.z - v1.z);
+    n.z = (v2.x - v1.x) * (v3.y - v1.y) - (v3.x - v1.x) * (v2.y - v1.y);
+    return n;
 }
 
 voxel VoxelCarving::calcVoxelPosInCamViewFrustum(const std::size_t i,

@@ -228,17 +228,14 @@ void MarchingCubes::setParams(const float offset_x, const float offset_y,
     grid_dim_z_ = grid_dim_z;
 }
 
-void MarchingCubes::saveAsOBJ(const char* name) const {
-
-    saveASOBJ(name, triangle_vector_);
-}
-
 void MarchingCubes::saveASOBJ(const char* name,
-                              const triangle_vector_type& triangles) const {
+                              const triangle_vector_type& triangles,
+                              const std::vector<vec3f>& normals) const {
 
     std::ofstream output(name, std::ofstream::binary);
 
     int_type face = 1;
+    std::size_t n_idx = 0;
 
     for (triangle_vector_type::const_iterator it = triangles.begin();
          it != triangles.end(); it++) {
@@ -265,29 +262,55 @@ void MarchingCubes::saveASOBJ(const char* name,
         output.write(" ", 1);
         output << it->comp.v3.z;
 
+        for (int i = 0; i < 3; ++i) {
+            output.write("\nvn ", 4);
+            output << normals[n_idx].x;
+            output.write(" ", 1);
+            output << normals[n_idx].y;
+            output.write(" ", 1);
+            output << normals[n_idx].z;
+        }
+
 #if MC_REVERSE_TRIANGLES
 
         output.write("\nf ", 3);
         output << face;
+        output.write("//", 2);
+        output << face;
         output.write(" ", 1);
+
+        output << (face + 1);
+        output.write("//", 2);
         output << (face + 1);
         output.write(" ", 1);
-        output << (face + 2);
 
+        output << (face + 2);
+        output.write("//", 2);
+        output << (face + 2);
+        output.write(" ", 1);
 #else
 
         output.write("\nf ", 3);
         output << face + 2;
+        output.write("//", 2);
+        output << face + 2;
         output.write(" ", 1);
+
+        output << (face + 1);
+        output.write("//", 2);
         output << (face + 1);
         output.write(" ", 1);
-        output << (face);
 
+        output << (face);
+        output.write("//", 2);
+        output << (face);
+        output.write(" ", 1);
 #endif
 
         output.write("\n", 1);
 
         face += 3;
+        n_idx += 1;
     }
     (void) output.close();
 }

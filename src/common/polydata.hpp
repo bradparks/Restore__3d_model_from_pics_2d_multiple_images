@@ -50,6 +50,15 @@ namespace ret {
             return triangles_;
         }
 
+        template <typename T>
+        void setNormals(T&& normals) {
+            normals_ = std::forward<T>(normals);
+        }
+
+        std::vector<vec3f> getNormals() const {
+            return normals_;
+        }
+
       private:
         std::vector<triangle> triangles_;
         std::vector<vec3f> normals_;

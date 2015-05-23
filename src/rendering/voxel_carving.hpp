@@ -67,10 +67,14 @@ namespace ret {
 
           private:
             std::size_t voxel_dim_, voxel_slice_, voxel_size_;
-            std::unique_ptr<float[]> vox_array;
-            PolyData visual_hull;
+            std::unique_ptr<float[]> vox_array_;
+            PolyData visual_hull_;
             start_params params_;
 
+            std::vector<vec3f> calcSurfaceNormals(
+                const std::vector<triangle>& triangles) const;
+            vec3f calcSurfaceNormal(const vec3f& v1, const vec3f& v2,
+                                    const vec3f& v3) const;
             voxel calcVoxelPosInCamViewFrustum(const std::size_t i,
                                                const std::size_t j,
                                                const std::size_t k) const;
