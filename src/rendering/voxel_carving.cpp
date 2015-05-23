@@ -46,6 +46,7 @@ VoxelCarving::VoxelCarving(const bb_bounds bbox, const std::size_t voxel_dim)
       voxel_slice_(voxel_dim * voxel_dim),
       voxel_size_(voxel_dim * voxel_dim * voxel_dim),
       vox_array(ret::make_unique<float[]>(voxel_size_)),
+      visual_hull(),
       params_(calcStartParameter(bbox)) {
     std::fill_n(vox_array.get(), voxel_size_,
                 std::numeric_limits<float>::max());
