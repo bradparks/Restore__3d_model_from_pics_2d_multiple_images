@@ -30,11 +30,12 @@
 
 // header files of other libraries
 #include <opencv2/core/core.hpp>
+#include <vtkSmartPointer.h>
+#include <vtkPolyData.h>
 
 // header files of project libraries
 #include "bounding_box.hpp"
 #include "../common/camera.hpp"
-#include "../common/polydata.hpp"
 
 namespace ret {
 
@@ -62,19 +63,15 @@ namespace ret {
             VoxelCarving(VoxelCarving const&) = delete;
             VoxelCarving operator&=(VoxelCarving const&) = delete;
             void carve(const Camera& cam);
-            PolyData createVisualHull();
+            vtkSmartPointer<vtkPolyData> createVisualHull(
+                const double isolevel = 0.0);
             void exportToDisk() const;
 
           private:
             std::size_t voxel_dim_, voxel_slice_, voxel_size_;
             std::unique_ptr<float[]> vox_array_;
-            PolyData visual_hull_;
             start_params params_;
 
-            std::vector<vec3f> calcSurfaceNormals(
-                const std::vector<triangle>& triangles) const;
-            vec3f calcSurfaceNormal(const vec3f& v1, const vec3f& v2,
-                                    const vec3f& v3) const;
             voxel calcVoxelPosInCamViewFrustum(const std::size_t i,
                                                const std::size_t j,
                                                const std::size_t k) const;

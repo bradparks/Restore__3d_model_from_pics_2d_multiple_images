@@ -68,5 +68,4 @@ TEST_F(VoxelCarvingTest, Carve) {
         vc->carve(ds.getCamera(i));
     }
     vc->createVisualHull();
-    vc->exportToDisk();
 }

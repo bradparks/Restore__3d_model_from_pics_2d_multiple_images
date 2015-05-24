@@ -29,9 +29,15 @@
 
 // header files of other libraries
 #include <opencv2/imgproc/imgproc.hpp>
+#include <vtkFloatArray.h>
+#include <vtkStructuredPoints.h>
+#include <vtkPointData.h>
+#include <vtkMarchingCubes.h>
+#include <vtkTransform.h>
+#include <vtkTransformPolyDataFilter.h>
+#include <vtkReverseSense.h>
 
 // header files of project libraries
-#include "mc/marching_cubes.hpp"
 #include "voxel_carving.hpp"
 #include "cv_utils.hpp"
 #include "../filtering/segmentation.hpp"
@@ -46,7 +52,6 @@ VoxelCarving::VoxelCarving(const bb_bounds bbox, const std::size_t voxel_dim)
       voxel_slice_(voxel_dim * voxel_dim),
       voxel_size_(voxel_dim * voxel_dim * voxel_dim),
       vox_array_(ret::make_unique<float[]>(voxel_size_)),
-      visual_hull_(),
       params_(calcStartParameter(bbox)) {
     std::fill_n(vox_array_.get(), voxel_size_,
                 std::numeric_limits<float>::max());
@@ -79,51 +84,45 @@ void VoxelCarving::carve(const Camera& cam) {
     }
 }
 
-PolyData VoxelCarving::createVisualHull() {
+vtkSmartPointer<vtkPolyData> VoxelCarving::createVisualHull(
+    const double isolevel) {
 
-    auto mc = ret::make_unique<mc::MarchingCubes>();
-    auto voxel_dim = static_cast<int>(voxel_dim_);
-    mc->setParams(params_.start_x, params_.start_z, params_.start_y,
-                  params_.voxel_width, params_.voxel_depth,
-                  params_.voxel_height, 0.0f, voxel_dim, voxel_dim, voxel_dim);
-    mc->execute(vox_array_.get());
-    auto triangles = mc->getTriangles();
-    visual_hull_.setTriangles(triangles);
-    visual_hull_.setNormals(calcSurfaceNormals(triangles));
+    // create vtk visualization pipeline from voxel grid
+    auto spoints = vtkSmartPointer<vtkStructuredPoints>::New();
+    auto vdim = static_cast<int>(voxel_dim_);
+    spoints->SetDimensions(vdim, vdim, vdim);
+    spoints->SetSpacing(params_.voxel_depth, params_.voxel_height,
+                        params_.voxel_width);
+    spoints->SetOrigin(params_.start_x, params_.start_y, params_.start_z);
 
-    return visual_hull_;
-}
+    auto farray = vtkSmartPointer<vtkFloatArray>::New();
+    auto vsize = static_cast<vtkIdType>(voxel_size_);
+    farray->SetNumberOfValues(vsize);
+    farray->SetArray(vox_array_.get(), vsize, 1);
+    spoints->GetPointData()->SetScalars(farray);
 
-void VoxelCarving::exportToDisk() const {
+    // create iso surface with marching cubes
+    auto mc_source = vtkSmartPointer<vtkMarchingCubes>::New();
+#ifdef VTK_MAJOR_VERSION >= 6
+    mc_source->SetInputData(spoints);
+#else
+    mc_source->SetInput(spoints);
+#endif
+    mc_source->SetNumberOfContours(1);
+    mc_source->SetValue(0, isolevel);
 
-    assert(visual_hull_.getTriangles().size() > 0);
-    auto mc = ret::make_unique<mc::MarchingCubes>();
-    mc->saveASOBJ("export.obj", visual_hull_.getTriangles(),
-                  visual_hull_.getNormals());
-}
+    auto lr_trans = vtkSmartPointer<vtkTransform>::New();
+    double elements[16] = {1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1};
+    lr_trans->SetMatrix(elements);
+    auto trans_filter = vtkSmartPointer<vtkTransformPolyDataFilter>::New();
+    trans_filter->SetTransform(lr_trans);
+    trans_filter->SetInputConnection(mc_source->GetOutputPort());
+    auto orientation = vtkSmartPointer<vtkReverseSense>::New();
+    orientation->SetInputConnection(trans_filter->GetOutputPort());
+    orientation->ReverseNormalsOn();
+    orientation->Update();
 
-std::vector<vec3f> VoxelCarving::calcSurfaceNormals(
-    const std::vector<triangle>& triangles) const {
-
-    std::vector<vec3f> normals;
-    // one surface normal for each vertex in a triangle
-    normals.reserve(triangles.size() * 3);
-    for (const auto tri : triangles) {
-        vec3f n = calcSurfaceNormal(tri.comp.v1, tri.comp.v2, tri.comp.v3);
-        normals.emplace_back(n);
-    }
-
-    return normals;
-}
-
-vec3f VoxelCarving::calcSurfaceNormal(const vec3f& v1, const vec3f& v2,
-                                      const vec3f& v3) const {
-
-    vec3f n;
-    n.x = (v2.y - v1.y) * (v3.z - v1.z) - (v3.y - v1.y) * (v2.z - v1.z);
-    n.y = (v2.z - v1.z) * (v3.x - v1.x) - (v2.x - v1.x) * (v3.z - v1.z);
-    n.z = (v2.x - v1.x) * (v3.y - v1.y) - (v3.x - v1.x) * (v2.y - v1.y);
-    return n;
+    return orientation->GetOutput();
 }
 
 voxel VoxelCarving::calcVoxelPosInCamViewFrustum(const std::size_t i,
