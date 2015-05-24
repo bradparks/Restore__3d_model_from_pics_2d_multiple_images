@@ -43,11 +43,7 @@ namespace ret {
 
         vec3f() = default;
 
-        vec3f(float x1, float y1, float z1) {
-            x = x1;
-            y = y1;
-            z = z1;
-        }
+        vec3f(float x1, float y1, float z1) : x(x1), y(y1), z(z1) {}
 
         inline bool operator==(const vec3f& other) const {
             return (x == other.x && y == other.y && z == other.z);
