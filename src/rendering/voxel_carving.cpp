@@ -104,10 +104,10 @@ vtkSmartPointer<vtkPolyData> VoxelCarving::createVisualHull(
 
     // create iso surface with marching cubes
     auto mc_source = vtkSmartPointer<vtkMarchingCubes>::New();
-#if VTK_MAJOR_VERSION <= 6
-    mc_source->SetInputData(spoints);
+#if VTK_MAJOR_VERSION < 6
+    mc_source->SetInput(spoints);   
 #else
-    mc_source->SetInput(spoints);
+    mc_source->SetInputData(spoints);
 #endif
     mc_source->SetNumberOfContours(1);
     mc_source->SetValue(0, isolevel);
