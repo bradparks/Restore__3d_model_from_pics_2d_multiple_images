@@ -29,6 +29,7 @@
 
 // header files of other libraries
 #include <opencv2/imgproc/imgproc.hpp>
+#include <vtkVersion.h>
 #include <vtkFloatArray.h>
 #include <vtkStructuredPoints.h>
 #include <vtkPointData.h>
@@ -103,7 +104,7 @@ vtkSmartPointer<vtkPolyData> VoxelCarving::createVisualHull(
 
     // create iso surface with marching cubes
     auto mc_source = vtkSmartPointer<vtkMarchingCubes>::New();
-#ifdef VTK_MAJOR_VERSION >= 6
+#if VTK_MAJOR_VERSION <= 6
     mc_source->SetInputData(spoints);
 #else
     mc_source->SetInput(spoints);
