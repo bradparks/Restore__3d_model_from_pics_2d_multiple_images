@@ -73,7 +73,7 @@ FUNCTION(SETUP_TARGET_FOR_COVERAGE _targetname _testrunner _outputname)
 	ENDIF() 
 
 	# remove and system headers and sources
-    SET(LCOV_REMOVE ${_outputname}.info '/usr/*' 'test/*' 'tools/*')
+    SET(LCOV_REMOVE ${_outputname}.info '/usr/*' 'test/*' 'tools/*' 'src/rendering/mc/*')
 	# remove thirdparty software
     SET(LCOV_REMOVE ${LCOV_REMOVE} 'thirdparty/*')
 
