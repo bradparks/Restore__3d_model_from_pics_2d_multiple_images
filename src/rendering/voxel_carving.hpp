@@ -42,14 +42,6 @@ namespace ret {
     namespace rendering {
 
         template <typename T>
-        struct voxel_t {
-            T xpos, ypos, zpos;
-            T res;
-            T value;
-        };
-        typedef voxel_t<float> voxel;
-
-        template <typename T>
         struct start_params_t {
             T start_x, start_y, start_z;
             T voxel_width, voxel_height, voxel_depth;
@@ -72,9 +64,9 @@ namespace ret {
             std::unique_ptr<float[]> vox_array_;
             start_params params_;
 
-            voxel calcVoxelPosInCamViewFrustum(const std::size_t i,
-                                               const std::size_t j,
-                                               const std::size_t k) const;
+            cv::Point3f calcVoxelPosInCamViewFrustum(const std::size_t i,
+                                                     const std::size_t j,
+                                                     const std::size_t k) const;
             start_params calcStartParameter(const bb_bounds& bbox) const;
 
             template <typename Coord, typename Size>

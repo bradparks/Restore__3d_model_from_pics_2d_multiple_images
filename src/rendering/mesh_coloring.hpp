@@ -19,47 +19,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE. */
 
-#ifndef RESTORE_RENDERING_CV_UTILS_HPP
-#define RESTORE_RENDERING_CV_UTILS_HPP
+#ifndef RESTORE_RENDERING_MESH_COLORING_HPP
+#define RESTORE_RENDERING_MESH_COLORING_HPP
 
 // C system files
 // none
 
 // C++ system files
-// none
+#include <vector>
 
 // header files of other libraries
-// none
+#include <opencv2/core/core.hpp>
+#include <vtkSmartPointer.h>
+#include <vtkPolyData.h>
+#include <vtkUnsignedCharArray.h>
 
 // header files of project libraries
 #include "../common/camera.hpp"
 
 namespace ret {
 
-    template <typename coord, typename point>
-    coord project(const Camera& cam, const point& v) {
+    namespace rendering {
 
-        coord im;
+        class MeshColoring {
+          public:
+            MeshColoring();
+            MeshColoring(MeshColoring const&) = delete;
+            MeshColoring operator&=(MeshColoring const&) = delete;
+            void colorize(vtkSmartPointer<vtkPolyData> mesh,
+                          const std::vector<Camera> dataset);
 
-        // project voxel into camera image coords
-        auto P = cam.getProjectionMatrix();
+          private:
+            vtkSmartPointer<vtkUnsignedCharArray> colors_;
+            cv::Size img_size_;
 
-        auto z = P.at<float>(2, 0) * v.x +
-                 P.at<float>(2, 1) * v.y +
-                 P.at<float>(2, 2) * v.z +
-                 P.at<float>(2, 3);
-
-        im.y =  (P.at<float>(1, 0) * v.x +
-                 P.at<float>(1, 1) * v.y +
-                 P.at<float>(1, 2) * v.z +
-                 P.at<float>(1, 3)) / z;
-
-        im.x =  (P.at<float>(0, 0) * v.x +
-                 P.at<float>(0, 1) * v.y +
-                 P.at<float>(0, 2) * v.z +
-                 P.at<float>(0, 3)) / z;
-
-        return im;
+            cv::Mat getCameraDirection(const Camera& cam) const;
+        };
     }
 }
 

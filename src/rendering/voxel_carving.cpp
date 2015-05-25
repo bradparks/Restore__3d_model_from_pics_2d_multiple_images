@@ -68,8 +68,8 @@ void VoxelCarving::carve(const Camera& cam) {
         for (std::size_t j = 0; j < voxel_dim_; ++j) {
             for (std::size_t k = 0; k < voxel_dim_; ++k) {
 
-                voxel v = calcVoxelPosInCamViewFrustum(i, j, k);
-                auto coord = project<cv::Point2f, voxel>(cam, v);
+                cv::Point3f voxel = calcVoxelPosInCamViewFrustum(i, j, k);
+                auto coord = project<cv::Point2f, cv::Point3f>(cam, voxel);
                 auto dist = -1.0f;
                 if (inside(coord, img_size)) {
                     dist = DistImage.at<float>(coord);
@@ -105,7 +105,7 @@ vtkSmartPointer<vtkPolyData> VoxelCarving::createVisualHull(
     // create iso surface with marching cubes
     auto mc_source = vtkSmartPointer<vtkMarchingCubes>::New();
 #if VTK_MAJOR_VERSION < 6
-    mc_source->SetInput(spoints);   
+    mc_source->SetInput(spoints);
 #else
     mc_source->SetInputData(spoints);
 #endif
@@ -126,16 +126,15 @@ vtkSmartPointer<vtkPolyData> VoxelCarving::createVisualHull(
     return orientation->GetOutput();
 }
 
-voxel VoxelCarving::calcVoxelPosInCamViewFrustum(const std::size_t i,
-                                                 const std::size_t j,
-                                                 const std::size_t k) const {
-    voxel v;
-    v.xpos = params_.start_x + static_cast<float>(k) * params_.voxel_width;
-    v.ypos = params_.start_y + static_cast<float>(j) * params_.voxel_height;
-    v.zpos = params_.start_z + static_cast<float>(i) * params_.voxel_depth;
-    v.value = 1.0f;
+cv::Point3f VoxelCarving::calcVoxelPosInCamViewFrustum(
+    const std::size_t i, const std::size_t j, const std::size_t k) const {
 
-    return v;
+    cv::Point3f voxel;
+    voxel.x = params_.start_x + static_cast<float>(k) * params_.voxel_width;
+    voxel.y = params_.start_y + static_cast<float>(j) * params_.voxel_height;
+    voxel.z = params_.start_z + static_cast<float>(i) * params_.voxel_depth;
+
+    return voxel;
 }
 
 start_params VoxelCarving::calcStartParameter(const bb_bounds& bbox) const {
