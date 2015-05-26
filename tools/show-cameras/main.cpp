@@ -56,18 +56,110 @@ using namespace ret::io;
 using namespace ret::rendering;
 using namespace ret::filtering;
 
+enum class Axis { X, Y, Z };
+
+DataSet loadDataSet(const std::string& path, const std::size_t num_imgs) {
+
+    DataSetReader dsr(path);
+    DataSet ds = dsr.load(num_imgs);
+    for (std::size_t i = 0; i < num_imgs; ++i) {
+        ds.getCamera(i).setMask(Segmentation::binarize(
+            ds.getCamera(i).getImage(), cv::Scalar(0, 0, 30)));
+    }
+
+    return ds;
+}
+
+void displayBoundingBox(const bb_bounds& bbox,
+                        vtkSmartPointer<vtkRenderer> renderer) {
+
+    auto bb_actor = vtkSmartPointer<vtkCubeAxesActor>::New();
+    bb_actor->SetBounds(bbox.xmin, bbox.xmax, bbox.ymin, bbox.ymax, 0.0,
+                        std::abs(bbox.zmax - bbox.zmin));
+    bb_actor->SetCamera(renderer->GetActiveCamera());
+    bb_actor->DrawXGridlinesOn();
+    bb_actor->DrawYGridlinesOn();
+    bb_actor->DrawZGridlinesOn();
+    renderer->AddActor(bb_actor);
+}
+
+void displayCamera(const Camera& camera, vtkSmartPointer<vtkRenderer> renderer,
+                   double& cam_color) {
+
+    auto cam_source = vtkSmartPointer<vtkConeSource>::New();
+    cam_source->SetHeight(4.0);
+    cam_source->SetRadius(2.0);
+    cam_source->SetResolution(4);
+    auto center = camera.getCenter();
+    cam_source->SetCenter(center.x, center.y, center.z);
+    auto lookat = getCameraDirection(camera, camera.getImage().size());
+    cam_source->SetDirection(lookat.at<float>(0, 0), lookat.at<float>(0, 1),
+                             lookat.at<float>(0, 2));
+    auto cam_mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+    cam_mapper->SetInputConnection(cam_source->GetOutputPort());
+    auto cam_actor = vtkSmartPointer<vtkActor>::New();
+    cam_actor->SetMapper(cam_mapper);
+    cam_actor->SetOrigin(center.x, center.y, center.z);
+    cam_color *= 0.9;
+    cam_actor->GetProperty()->SetColor(0.0, cam_color, 0.0);
+    renderer->AddActor(cam_actor);
+}
+
+void displayGridAxis(const Axis axis, vtkSmartPointer<vtkRenderer> renderer) {
+
+    const double LINE_LENGTH = 30.0;
+
+    auto axis_line = vtkSmartPointer<vtkLineSource>::New();
+    axis_line->SetPoint1(0.0, 0.0, 0.0);
+    auto axis_mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+    axis_mapper->SetInputConnection(axis_line->GetOutputPort());
+    auto axis_actor = vtkSmartPointer<vtkActor>::New();
+    axis_actor->GetProperty()->SetLineWidth(3);
+    axis_actor->SetMapper(axis_mapper);
+
+    switch (axis) {
+        case Axis::X:
+            axis_line->SetPoint2(LINE_LENGTH, 0.0, 0.0);
+            axis_actor->GetProperty()->SetColor(1.0, 0.0, 0.0);
+            break;
+        case Axis::Y:
+            axis_line->SetPoint2(0.0, LINE_LENGTH, 0.0);
+            axis_actor->GetProperty()->SetColor(0.0, 1.0, 0.0);
+            break;
+        default:
+        case Axis::Z:
+            axis_line->SetPoint2(0.0, 0.0, LINE_LENGTH);
+            axis_actor->GetProperty()->SetColor(0.0, 0.0, 1.0);
+            break;
+    }
+
+    renderer->AddActor(axis_actor);
+}
+
+void displayVisualHull(vtkSmartPointer<vtkPolyData> mesh,
+                       vtkSmartPointer<vtkRenderer> renderer) {
+
+    auto mesh_mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+#if VTK_MAJOR_VERSION < 6
+    mesh_mapper->SetInput(mesh);
+#else
+    mesh_mapper->SetInputData(mesh);
+#endif
+    auto mesh_actor = vtkSmartPointer<vtkActor>::New();
+    mesh_actor->GetProperty()->SetColor(0.7, 0.7, 0.7);
+    mesh_actor->GetProperty()->SetSpecular(0.4);
+    mesh_actor->GetProperty()->SetAmbient(0.5);
+    mesh_actor->GetProperty()->SetInterpolationToPhong();
+    mesh_actor->SetMapper(mesh_mapper);
+    renderer->AddActor(mesh_actor);
+}
+
 int main() {
 
     const std::size_t VOXEL_DIM = 128;
     const std::size_t NUM_IMGS = 36;
 
-    // load dataset
-    DataSetReader dsr(std::string(ASSETS_PATH) + "/squirrel2");
-    DataSet ds = dsr.load(NUM_IMGS);
-    for (std::size_t i = 0; i < NUM_IMGS; ++i) {
-        ds.getCamera(i).setMask(Segmentation::binarize(
-            ds.getCamera(i).getImage(), cv::Scalar(0, 0, 30)));
-    }
+    DataSet ds = loadDataSet(std::string(ASSETS_PATH) + "/squirrel", NUM_IMGS);
 
     // setup vtk renderer
     auto renderer = vtkSmartPointer<vtkRenderer>::New();
@@ -84,68 +176,15 @@ int main() {
         BoundingBox(ds.getCamera(0), ds.getCamera((NUM_IMGS / 4) - 1));
     auto bb_bounds = bbox.getBounds();
     auto vc = ret::make_unique<VoxelCarving>(bb_bounds, VOXEL_DIM);
-
-    // display bounding box
-    auto bb_actor = vtkSmartPointer<vtkCubeAxesActor>::New();
-    bb_actor->SetBounds(bb_bounds.xmin, bb_bounds.xmax, bb_bounds.ymin,
-                        bb_bounds.ymax, 0.0,
-                        std::abs(bb_bounds.zmax - bb_bounds.zmin));
-    bb_actor->SetCamera(renderer->GetActiveCamera());
-    bb_actor->DrawXGridlinesOn();
-    bb_actor->DrawYGridlinesOn();
-    bb_actor->DrawZGridlinesOn();
-    renderer->AddActor(bb_actor);
-
-    //    auto bb_x = vtkSmartPointer<vtkLineSource>::New();
-    //    bb_x->SetPoint1(bb_bounds.xmin, bb_bounds.ymin, 0.0);
-    //    bb_x->SetPoint2(bb_bounds.xmax, bb_bounds.ymin, 0.0);
-    //    auto bb_x_mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-    //    bb_x_mapper->SetInputConnection(bb_x->GetOutputPort());
-    //    auto bb_x_actor = vtkSmartPointer<vtkActor>::New();
-    //    bb_x_actor->GetProperty()->SetColor(1.0, 1.0, 1.0);
-    //    bb_x_actor->GetProperty()->SetLineWidth(1);
-    //    bb_x_actor->SetMapper(bb_x_mapper);
-    //    renderer->AddActor(bb_x_actor);
+    displayBoundingBox(bb_bounds, renderer);
 
     double cam_color = 1.0;
     for (const auto& camera : ds.getCameras()) {
-        // carve visual hull
         vc->carve(camera);
-
-        // visualize all cameras
-        auto cam_source = vtkSmartPointer<vtkConeSource>::New();
-        cam_source->SetHeight(4.0);
-        cam_source->SetRadius(2.0);
-        cam_source->SetResolution(4);
-        auto center = camera.getCenter();
-        cam_source->SetCenter(center.x, center.y, center.z);
-        auto lookat = getCameraDirection(camera, camera.getImage().size());
-        cam_source->SetDirection(lookat.at<float>(0, 0), lookat.at<float>(0, 1),
-                                 lookat.at<float>(0, 2));
-        auto cam_mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-        cam_mapper->SetInputConnection(cam_source->GetOutputPort());
-        auto cam_actor = vtkSmartPointer<vtkActor>::New();
-        cam_actor->SetMapper(cam_mapper);
-        cam_actor->SetOrigin(center.x, center.y, center.z);
-        cam_color *= 0.9;
-        cam_actor->GetProperty()->SetColor(0.0, cam_color, 0.0);
-        renderer->AddActor(cam_actor);
+        displayCamera(camera, renderer, cam_color);
     }
 
-    // display visual hull
-    auto mesh_mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-#if VTK_MAJOR_VERSION < 6
-    mesh_mapper->SetInput(vc->createVisualHull());
-#else
-    mesh_mapper->SetInputData(vc->createVisualHull());
-#endif
-    auto mesh_actor = vtkSmartPointer<vtkActor>::New();
-    mesh_actor->GetProperty()->SetColor(0.7, 0.7, 0.7);
-    mesh_actor->GetProperty()->SetSpecular(0.4);
-    mesh_actor->GetProperty()->SetAmbient(0.5);
-    mesh_actor->GetProperty()->SetInterpolationToPhong();
-    mesh_actor->SetMapper(mesh_mapper);
-    renderer->AddActor(mesh_actor);
+    displayVisualHull(vc->createVisualHull(), renderer);
 
     // setup lighting
     auto light = vtkSmartPointer<vtkLight>::New();
@@ -153,38 +192,9 @@ int main() {
     renderer->AddLight(light);
 
     // setup orientation marker
-    auto xaxis_line = vtkSmartPointer<vtkLineSource>::New();
-    xaxis_line->SetPoint1(0.0, 0.0, 0.0);
-    xaxis_line->SetPoint2(30.0, 0.0, 0.0);
-    auto xaxis_mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-    xaxis_mapper->SetInputConnection(xaxis_line->GetOutputPort());
-    auto xaxis_actor = vtkSmartPointer<vtkActor>::New();
-    xaxis_actor->GetProperty()->SetColor(1.0, 0.0, 0.0);
-    xaxis_actor->GetProperty()->SetLineWidth(3);
-    xaxis_actor->SetMapper(xaxis_mapper);
-    renderer->AddActor(xaxis_actor);
-
-    auto yaxis_line = vtkSmartPointer<vtkLineSource>::New();
-    yaxis_line->SetPoint1(0.0, 0.0, 0.0);
-    yaxis_line->SetPoint2(0.0, 30.0, 0.0);
-    auto yaxis_mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-    yaxis_mapper->SetInputConnection(yaxis_line->GetOutputPort());
-    auto yaxis_actor = vtkSmartPointer<vtkActor>::New();
-    yaxis_actor->GetProperty()->SetColor(0.0, 1.0, 0.0);
-    yaxis_actor->GetProperty()->SetLineWidth(3);
-    yaxis_actor->SetMapper(yaxis_mapper);
-    renderer->AddActor(yaxis_actor);
-
-    auto zaxis_line = vtkSmartPointer<vtkLineSource>::New();
-    zaxis_line->SetPoint1(0.0, 0.0, 0.0);
-    zaxis_line->SetPoint2(0.0, 0.0, 30.0);
-    auto zaxis_mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-    zaxis_mapper->SetInputConnection(zaxis_line->GetOutputPort());
-    auto zaxis_actor = vtkSmartPointer<vtkActor>::New();
-    zaxis_actor->GetProperty()->SetColor(0.0, 0.0, 1.0);
-    zaxis_actor->GetProperty()->SetLineWidth(3);
-    zaxis_actor->SetMapper(zaxis_mapper);
-    renderer->AddActor(zaxis_actor);
+    displayGridAxis(Axis::X, renderer);
+    displayGridAxis(Axis::Y, renderer);
+    displayGridAxis(Axis::Z, renderer);
 
     render_window->Render();
     render_window_interactor->Start();
