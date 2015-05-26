@@ -27,6 +27,7 @@
 #include <string>
 
 // header files of other libraries
+#include <vtkVersion.h>
 #include <vtkConeSource.h>
 #include <vtkPolyData.h>
 #include <vtkPropPicker.h>
@@ -133,7 +134,11 @@ int main() {
 
     // display visual hull
     auto mesh_mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+#if VTK_MAJOR_VERSION < 6
+    mesh_mapper->SetInput(vc->createVisualHull());
+#else
     mesh_mapper->SetInputData(vc->createVisualHull());
+#endif
     auto mesh_actor = vtkSmartPointer<vtkActor>::New();
     mesh_actor->GetProperty()->SetColor(0.7, 0.7, 0.7);
     mesh_actor->GetProperty()->SetSpecular(0.4);

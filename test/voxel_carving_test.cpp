@@ -29,6 +29,7 @@
 
 // header files of other libraries
 #include <gtest/gtest.h>
+#include <vtkVersion.h>
 #include <vtkPLYWriter.h>
 
 // header files of project libraries
@@ -72,7 +73,11 @@ TEST_F(VoxelCarvingTest, Carve) {
     //    MeshColoring mesh_color;
     //    mesh_color.colorize(mesh, ds.getCameras());
     auto plyExporter = vtkSmartPointer<vtkPLYWriter>::New();
+#if VTK_MAJOR_VERSION < 6
+    plyExporter->SetInput(mesh);
+#else
     plyExporter->SetInputData(mesh);
+#endif
     plyExporter->SetFileName("export.ply");
     //    plyExporter->SetColorModeToDefault();
     //    plyExporter->SetArrayName("Colors");
