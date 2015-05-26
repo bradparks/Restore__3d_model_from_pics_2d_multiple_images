@@ -43,6 +43,20 @@ cv::Mat Segmentation::binarize(const cv::Mat& Image, const cv::Scalar& thresh) {
     return Binary;
 }
 
+cv::Mat Segmentation::grabCut(const cv::Mat& Image) {
+
+    assert(Image.channels() == 3);
+    auto w_frag = Image.cols / 16.0;
+    auto h_frag = Image.rows / 16.0;
+    cv::Mat Result, bgModel, fgModel;
+    cv::Rect area(4 * w_frag, 0 * h_frag, 9 * w_frag, 13 * h_frag);
+    cv::grabCut(Image, Result, area, bgModel, fgModel, 1,
+                cv::GC_INIT_WITH_RECT);
+    cv::compare(Result, cv::GC_PR_FGD, Result, cv::CMP_EQ);
+
+    return Result;
+}
+
 cv::Mat Segmentation::createDistMap(const cv::Mat& Mask) {
 
     assert(Mask.channels() == 1);

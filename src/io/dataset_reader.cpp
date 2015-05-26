@@ -43,8 +43,14 @@ DataSetReader::DataSetReader(const std::string& directory)
 
 DataSet DataSetReader::load(const std::size_t numImages) const {
 
-    auto K = loadMatrixFromFile("/K.xml", "K_matrix");
-    auto dist = loadMatrixFromFile("/dist.xml", "dist_coeff");
+    cv::Mat K, dist;
+    if (fs::exists("/K.xml")) {
+        K = loadMatrixFromFile("/K.xml", "K_matrix");
+    }
+
+    if (fs::exists("/dist.xml")) {
+        dist = loadMatrixFromFile("/dist.xml", "dist_coeff");
+    }
     auto projMats = loadProjectionMatrices(numImages, "/viff.xml");
     DataSet ds;
     fs::path dir(directory_);
@@ -58,8 +64,8 @@ DataSet DataSetReader::load(const std::size_t numImages) const {
                 cv::decomposeProjectionMatrix(P, K2, R, t);
 
                 Camera cam(cv::imread(iter->path().string()));
-                cam.setCalibrationMatrix(K);
-                cam.setDistortionCoeffs(dist);
+                cam.setCalibrationMatrix(K.empty() ? K2 : K);
+                if (!dist.empty()) cam.setDistortionCoeffs(dist);
                 cam.setProjectionMatrix(P);
                 cam.setRotationMatrix(R);
                 cam.setTranslationVector(t);

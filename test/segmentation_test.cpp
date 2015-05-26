@@ -27,6 +27,7 @@
 
 // header files of other libraries
 #include <gtest/gtest.h>
+#include <opencv2/highgui/highgui.hpp>
 
 // header files of project libraries
 #include <restore/filtering.hpp>
@@ -45,4 +46,13 @@ TEST(SegmentationTest, AssertColorImageWhenBinarizing) {
 
     cv::Mat Original(240, 320, CV_8U, cv::Scalar::all(17));
     ASSERT_DEATH(Segmentation::binarize(Original, cv::Scalar(200)), "");
+}
+
+TEST(SegmentationTest, GrabCutImage) {
+
+//    cv::Mat tmp =
+//        cv::imread("/Users/kai/Projekte/Restore/assets/aeffle/image_00.png");
+//    cv::Mat Binary = Segmentation::grabCut(tmp);
+//    cv::imshow("Binary", Binary);
+//    cv::waitKey();
 }

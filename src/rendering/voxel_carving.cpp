@@ -33,6 +33,7 @@
 #include <vtkFloatArray.h>
 #include <vtkStructuredPoints.h>
 #include <vtkPointData.h>
+#include <vtkPolyDataNormals.h>
 #include <vtkMarchingCubes.h>
 #include <vtkTransform.h>
 #include <vtkTransformPolyDataFilter.h>
@@ -112,18 +113,25 @@ vtkSmartPointer<vtkPolyData> VoxelCarving::createVisualHull(
     mc_source->SetNumberOfContours(1);
     mc_source->SetValue(0, isolevel);
 
-    auto lr_trans = vtkSmartPointer<vtkTransform>::New();
-    double elements[16] = {1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1};
-    lr_trans->SetMatrix(elements);
-    auto trans_filter = vtkSmartPointer<vtkTransformPolyDataFilter>::New();
-    trans_filter->SetTransform(lr_trans);
-    trans_filter->SetInputConnection(mc_source->GetOutputPort());
-    auto orientation = vtkSmartPointer<vtkReverseSense>::New();
-    orientation->SetInputConnection(trans_filter->GetOutputPort());
-    orientation->ReverseNormalsOn();
-    orientation->Update();
+    // calculate surface normals
+    auto surface_normals = vtkSmartPointer<vtkPolyDataNormals>::New();
+    surface_normals->SetInputConnection(mc_source->GetOutputPort());
+    surface_normals->SetFeatureAngle(60.0);
+    surface_normals->ComputePointNormalsOn();
+    surface_normals->Update();
 
-    return orientation->GetOutput();
+//    auto lr_trans = vtkSmartPointer<vtkTransform>::New();
+//    double elements[16] = {1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1};
+//    lr_trans->SetMatrix(elements);
+//    auto trans_filter = vtkSmartPointer<vtkTransformPolyDataFilter>::New();
+//    trans_filter->SetTransform(lr_trans);
+//    trans_filter->SetInputConnection(surface_normals->GetOutputPort());
+//    auto orientation = vtkSmartPointer<vtkReverseSense>::New();
+//    orientation->SetInputConnection(trans_filter->GetOutputPort());
+//    orientation->ReverseNormalsOn();
+//    orientation->Update();
+
+    return surface_normals->GetOutput();
 }
 
 cv::Point3f VoxelCarving::calcVoxelPosInCamViewFrustum(
@@ -139,8 +147,8 @@ cv::Point3f VoxelCarving::calcVoxelPosInCamViewFrustum(
 
 start_params VoxelCarving::calcStartParameter(const bb_bounds& bbox) const {
 
-    auto MARGIN_X = 0.06f;
-    auto MARGIN_Y = 0.20f;
+    auto MARGIN_X = 0.0f;//0.06f;
+    auto MARGIN_Y = 0.0f;//0.20f;
 
     auto bb_width = std::abs(bbox.xmax - bbox.xmin) * (1.0f + 2.0f * MARGIN_X);
     auto bb_height = std::abs(bbox.ymax - bbox.ymin) * (1.0f + 2.0f * MARGIN_Y);

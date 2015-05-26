@@ -29,6 +29,7 @@
 
 // header files of other libraries
 #include <gtest/gtest.h>
+#include <vtkPLYWriter.h>
 
 // header files of project libraries
 #include <restore/common.hpp>
@@ -64,8 +65,17 @@ class VoxelCarvingTest : public testing::Test {
 
 TEST_F(VoxelCarvingTest, Carve) {
 
-    for (std::size_t i = 0; i < ds.size(); i+=6) {
+    for (std::size_t i = 0; i < ds.size(); i += 1) {
         vc->carve(ds.getCamera(i));
     }
-    vc->createVisualHull();
+    auto mesh = vc->createVisualHull();
+    //    MeshColoring mesh_color;
+    //    mesh_color.colorize(mesh, ds.getCameras());
+    auto plyExporter = vtkSmartPointer<vtkPLYWriter>::New();
+    plyExporter->SetInputData(mesh);
+    plyExporter->SetFileName("export.ply");
+    //    plyExporter->SetColorModeToDefault();
+    //    plyExporter->SetArrayName("Colors");
+    plyExporter->Update();
+    plyExporter->Write();
 }

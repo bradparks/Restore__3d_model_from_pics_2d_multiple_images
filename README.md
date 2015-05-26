@@ -5,12 +5,20 @@
 # What is RESTORE?
 RESTORE: REconStruction with Texture-based Object REfinement
 
-The aim of this project is the realization of a hard- and software system for
-3D reconstruction. An object is placed on a turntable and automatically 
-photographed by a static, calibrated camera from several viewing angles. The
-obtained images are then segmented and a rough 3D reconstruction of the object
-will be created (so called visual hull). The texture of the object will then be
-used to refine the 3D reconstruction.
+The 3D reconstruction of real objects from multiple images is a recent and
+exciting research topic in the field of computer vision. At the same time the
+demand for 3D models in the movie and game industry is increasing.
+
+A simple and cost-efficient way of reconstruction real objects is using only
+a single camera. In this project a hard- and software system is developed which
+makes the 3D reconstruction of real objects easy. The hardware consists of a
+turntable on which an object can be placed, a motor which drives the rotary
+table, a controller to control the motor as well as a calibrated camera for
+taking pictures of the object.
+
+From the camera images a visual hull is first computed, which gives a first
+rough estimation of the 3D reconstruction. This model is then refined using
+only the texture of the object.
 
 ## License
 RESTORE is released under the terms of the MIT License.

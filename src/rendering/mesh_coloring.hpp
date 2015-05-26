@@ -52,8 +52,6 @@ namespace ret {
           private:
             vtkSmartPointer<vtkUnsignedCharArray> colors_;
             cv::Size img_size_;
-
-            cv::Mat getCameraDirection(const Camera& cam) const;
         };
     }
 }

@@ -19,14 +19,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE. */
 
-#include "io/assets_path.hpp"
+// C system files
+// none
 
+// C++ system files
+#include <iostream>
+
+// header files of other libraries
 #include <opencv2/highgui/highgui.hpp>
 
+// header files of project libraries
 #include <restore/io.hpp>
 #include <restore/filtering.hpp>
-
-#include <iostream>
+#include "io/assets_path.hpp"
 
 using ret::DataSet;
 using ret::io::DataSetReader;
@@ -42,7 +47,6 @@ int main() {
         cv::Vec3d vec(pt.x, pt.y, pt.z);
         std::cout << cv::norm(pt) << std::endl;
     }
-
 
     std::cout << "ds: " << ds.size() << std::endl;
     cv::imshow("Original", ds.getCamera(0).getImage());

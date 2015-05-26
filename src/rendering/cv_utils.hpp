@@ -29,7 +29,8 @@
 // none
 
 // header files of other libraries
-// none
+#include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 // header files of project libraries
 #include "../common/camera.hpp"
@@ -44,22 +45,34 @@ namespace ret {
         // project voxel into camera image coords
         auto P = cam.getProjectionMatrix();
 
-        auto z = P.at<float>(2, 0) * v.x +
-                 P.at<float>(2, 1) * v.y +
-                 P.at<float>(2, 2) * v.z +
-                 P.at<float>(2, 3);
+        auto z = P.at<float>(2, 0) * v.x + P.at<float>(2, 1) * v.y +
+                 P.at<float>(2, 2) * v.z + P.at<float>(2, 3);
 
-        im.y =  (P.at<float>(1, 0) * v.x +
-                 P.at<float>(1, 1) * v.y +
-                 P.at<float>(1, 2) * v.z +
-                 P.at<float>(1, 3)) / z;
+        im.y = (P.at<float>(1, 0) * v.x + P.at<float>(1, 1) * v.y +
+                P.at<float>(1, 2) * v.z + P.at<float>(1, 3)) /
+               z;
 
-        im.x =  (P.at<float>(0, 0) * v.x +
-                 P.at<float>(0, 1) * v.y +
-                 P.at<float>(0, 2) * v.z +
-                 P.at<float>(0, 3)) / z;
+        im.x = (P.at<float>(0, 0) * v.x + P.at<float>(0, 1) * v.y +
+                P.at<float>(0, 2) * v.z + P.at<float>(0, 3)) /
+               z;
 
         return im;
+    }
+
+    inline cv::Mat getCameraDirection(const Camera& cam,
+                                      const cv::Size& img_size) {
+
+        cv::Mat center = (cv::Mat_<float>(3, 1) << img_size.width / 2.0f,
+                          img_size.height / 2.0f, 1.0f);
+
+        cv::Mat X;
+        cv::solve(cam.getCalibrationMatrix(), center, X, cv::DECOMP_LU);
+
+        cv::Mat Rt;
+        cv::transpose(cam.getRotationMatrix(), Rt);
+        X = Rt * (X * (-1));
+
+        return X / cv::norm(X);
     }
 }
 

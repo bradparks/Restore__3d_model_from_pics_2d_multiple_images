@@ -23,5 +23,6 @@
 #define RESTORE_IO_HPP
 
 #include "../../src/io/dataset_reader.hpp"
+#include "../../src/io/assets_path.hpp"
 
 #endif
