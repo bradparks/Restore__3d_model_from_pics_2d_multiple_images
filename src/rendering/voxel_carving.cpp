@@ -35,9 +35,6 @@
 #include <vtkPointData.h>
 #include <vtkPolyDataNormals.h>
 #include <vtkMarchingCubes.h>
-#include <vtkTransform.h>
-#include <vtkTransformPolyDataFilter.h>
-#include <vtkReverseSense.h>
 
 // header files of project libraries
 #include "voxel_carving.hpp"
@@ -93,8 +90,8 @@ vtkSmartPointer<vtkPolyData> VoxelCarving::createVisualHull(
     auto spoints = vtkSmartPointer<vtkStructuredPoints>::New();
     auto vdim = static_cast<int>(voxel_dim_);
     spoints->SetDimensions(vdim, vdim, vdim);
-    spoints->SetSpacing(params_.voxel_depth, params_.voxel_height,
-                        params_.voxel_width);
+    spoints->SetSpacing(params_.voxel_width, params_.voxel_height,
+                        params_.voxel_depth);
     spoints->SetOrigin(params_.start_x, params_.start_y, params_.start_z);
 
     auto farray = vtkSmartPointer<vtkFloatArray>::New();
@@ -120,17 +117,6 @@ vtkSmartPointer<vtkPolyData> VoxelCarving::createVisualHull(
     surface_normals->ComputePointNormalsOn();
     surface_normals->Update();
 
-//    auto lr_trans = vtkSmartPointer<vtkTransform>::New();
-//    double elements[16] = {1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1};
-//    lr_trans->SetMatrix(elements);
-//    auto trans_filter = vtkSmartPointer<vtkTransformPolyDataFilter>::New();
-//    trans_filter->SetTransform(lr_trans);
-//    trans_filter->SetInputConnection(surface_normals->GetOutputPort());
-//    auto orientation = vtkSmartPointer<vtkReverseSense>::New();
-//    orientation->SetInputConnection(trans_filter->GetOutputPort());
-//    orientation->ReverseNormalsOn();
-//    orientation->Update();
-
     return surface_normals->GetOutput();
 }
 
@@ -147,8 +133,8 @@ cv::Point3f VoxelCarving::calcVoxelPosInCamViewFrustum(
 
 start_params VoxelCarving::calcStartParameter(const bb_bounds& bbox) const {
 
-    auto MARGIN_X = 0.0f;//0.06f;
-    auto MARGIN_Y = 0.0f;//0.20f;
+    auto MARGIN_X =  0.09f;
+    auto MARGIN_Y =  0.09f;
 
     auto bb_width = std::abs(bbox.xmax - bbox.xmin) * (1.0f + 2.0f * MARGIN_X);
     auto bb_height = std::abs(bbox.ymax - bbox.ymin) * (1.0f + 2.0f * MARGIN_Y);

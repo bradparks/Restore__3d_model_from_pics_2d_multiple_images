@@ -45,13 +45,13 @@ bb_bounds BoundingBox::getBounds() const {
 
     // get corners from 2d bounding rects
     cv::Mat p2 =
-        (cv::Mat_<float>(3, 1) << rect2.x, rect2.y + rect2.height, 1.0f);
-    cv::Mat p4 =
-        (cv::Mat_<float>(3, 1) << rect2.x + rect2.width, rect2.y, 1.0f);
-    cv::Mat p6 =
         (cv::Mat_<float>(3, 1) << rect1.x, rect1.y + rect1.height, 1.0f);
-    cv::Mat p8 =
+    cv::Mat p4 =
         (cv::Mat_<float>(3, 1) << rect1.x + rect1.width, rect1.y, 1.0f);
+    cv::Mat p6 =
+        (cv::Mat_<float>(3, 1) << rect2.x, rect2.y + rect2.height, 1.0f);
+    cv::Mat p8 =
+        (cv::Mat_<float>(3, 1) << rect2.x + rect2.width, rect2.y, 1.0f);
 
     // convert to world points
     const cv::Mat K1_inv = cam1_.getCalibrationMatrix().inv();

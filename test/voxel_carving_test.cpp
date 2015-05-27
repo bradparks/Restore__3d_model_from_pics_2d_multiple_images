@@ -51,7 +51,7 @@ class VoxelCarvingTest : public testing::Test {
         ds = dsr.load(NUM_IMGS);
         for (std::size_t i = 0; i < NUM_IMGS; ++i) {
             ds.getCamera(i).setMask(Segmentation::binarize(
-                ds.getCamera(i).getImage(), cv::Scalar(0, 0, 40)));
+                ds.getCamera(i).getImage(), cv::Scalar(0, 0, 30)));
         }
         BoundingBox bbox =
             BoundingBox(ds.getCamera(0), ds.getCamera((NUM_IMGS / 4) - 1));

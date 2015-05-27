@@ -34,6 +34,7 @@
 #include <vtkPointData.h>
 #include <vtkLight.h>
 #include <vtkLine.h>
+#include <vtkPLYWriter.h>
 #include <vtkLineSource.h>
 #include <vtkProperty.h>
 #include <vtkSmartPointer.h>
@@ -158,8 +159,9 @@ int main() {
 
     const std::size_t VOXEL_DIM = 128;
     const std::size_t NUM_IMGS = 36;
+    std::string model("squirrel-light3");
 
-    DataSet ds = loadDataSet(std::string(ASSETS_PATH) + "/squirrel", NUM_IMGS);
+    DataSet ds = loadDataSet(std::string(ASSETS_PATH) + "/" + model, NUM_IMGS);
 
     // setup vtk renderer
     auto renderer = vtkSmartPointer<vtkRenderer>::New();
@@ -172,8 +174,7 @@ int main() {
         vtkSmartPointer<vtkRenderWindowInteractor>::New();
     render_window_interactor->SetRenderWindow(render_window);
 
-    BoundingBox bbox =
-        BoundingBox(ds.getCamera(0), ds.getCamera((NUM_IMGS / 4) - 1));
+    BoundingBox bbox(ds.getCamera(0), ds.getCamera((NUM_IMGS / 4) - 1));
     auto bb_bounds = bbox.getBounds();
     auto vc = ret::make_unique<VoxelCarving>(bb_bounds, VOXEL_DIM);
     displayBoundingBox(bb_bounds, renderer);
@@ -181,10 +182,13 @@ int main() {
     double cam_color = 1.0;
     for (const auto& camera : ds.getCameras()) {
         vc->carve(camera);
+        auto pt = camera.getCenter();
+        std::cout << pt.x << " " << pt.y << " " << pt.z << std::endl;
         displayCamera(camera, renderer, cam_color);
     }
 
-    displayVisualHull(vc->createVisualHull(), renderer);
+    auto mesh = vc->createVisualHull();
+    displayVisualHull(mesh, renderer);
 
     // setup lighting
     auto light = vtkSmartPointer<vtkLight>::New();
@@ -195,6 +199,16 @@ int main() {
     displayGridAxis(Axis::X, renderer);
     displayGridAxis(Axis::Y, renderer);
     displayGridAxis(Axis::Z, renderer);
+
+    auto plyExporter = vtkSmartPointer<vtkPLYWriter>::New();
+#if VTK_MAJOR_VERSION < 6
+    plyExporter->SetInput(mesh);
+#else
+    plyExporter->SetInputData(mesh);
+#endif
+    plyExporter->SetFileName(model.append(".ply").c_str());
+    plyExporter->Update();
+    plyExporter->Write();
 
     render_window->Render();
     render_window_interactor->Start();
