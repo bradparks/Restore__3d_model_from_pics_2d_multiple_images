@@ -11,6 +11,9 @@ bin/
 # Generated files
 src/io/assets_path.hpp
 
+# Large assets
+assets/nogit
+
 # C++
 # Compiled Object files
 *.slo

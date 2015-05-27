@@ -23,7 +23,6 @@
 // none
 
 // C++ system files
-#include <iostream>
 #include <string>
 
 // header files of other libraries
@@ -159,7 +158,7 @@ int main() {
 
     const std::size_t VOXEL_DIM = 128;
     const std::size_t NUM_IMGS = 36;
-    std::string model("squirrel-light3");
+    std::string model("squirrel");
 
     DataSet ds = loadDataSet(std::string(ASSETS_PATH) + "/" + model, NUM_IMGS);
 
@@ -182,8 +181,6 @@ int main() {
     double cam_color = 1.0;
     for (const auto& camera : ds.getCameras()) {
         vc->carve(camera);
-        auto pt = camera.getCenter();
-        std::cout << pt.x << " " << pt.y << " " << pt.z << std::endl;
         displayCamera(camera, renderer, cam_color);
     }
 
