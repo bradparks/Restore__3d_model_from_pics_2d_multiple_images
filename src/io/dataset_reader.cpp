@@ -23,7 +23,9 @@
 // none
 
 // C++ system files
-// none
+#include <iostream>
+#include <algorithm>
+#include <iterator>
 
 // header files of other libraries
 #include <boost/filesystem.hpp>
@@ -52,18 +54,26 @@ DataSet DataSetReader::load(const std::size_t numImages) const {
         dist = loadMatrixFromFile("/dist.xml", "dist_coeff");
     }
     auto projMats = loadProjectionMatrices(numImages, "/viff.xml");
-    DataSet ds;
+
     fs::path dir(directory_);
-    fs::directory_iterator end;
-    std::size_t camIdx = 0;
-    for (fs::directory_iterator iter(dir); iter != end; ++iter) {
-        if (fs::is_regular_file(*iter)) {
-            if (iter->path().extension() == ".png") {
+    DataSet ds;
+    if (fs::exists(dir) && fs::is_directory(dir)) {
+        // sorting paths, since directory listing is not sorted under Linux
+        using paths = std::vector<fs::path>;
+        paths stored_paths;
+        std::copy(fs::directory_iterator(dir), fs::directory_iterator(),
+                  std::back_inserter(stored_paths));
+        std::sort(stored_paths.begin(), stored_paths.end());
+
+        std::size_t camIdx = 0;
+        for (paths::const_iterator iter(stored_paths.begin());
+             iter != stored_paths.end(); ++iter) {
+            if (fs::is_regular_file(*iter) && iter->extension() == ".png") {
                 cv::Mat P = projMats[camIdx++];
                 cv::Mat R, K2, t;
                 cv::decomposeProjectionMatrix(P, K2, R, t);
 
-                Camera cam(cv::imread(iter->path().string()));
+                Camera cam(cv::imread(iter->string()));
                 cam.setCalibrationMatrix(K.empty() ? K2 : K);
                 if (!dist.empty()) cam.setDistortionCoeffs(dist);
                 cam.setProjectionMatrix(P);
