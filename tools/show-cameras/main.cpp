@@ -154,6 +154,22 @@ void displayVisualHull(vtkSmartPointer<vtkPolyData> mesh,
     renderer->AddActor(mesh_actor);
 }
 
+void exportMesh(vtkSmartPointer<vtkPolyData> mesh,
+                const std::string& filename) {
+
+    auto plyExporter = vtkSmartPointer<vtkPLYWriter>::New();
+#if VTK_MAJOR_VERSION < 6
+    plyExporter->SetInput(mesh);
+#else
+    plyExporter->SetInputData(mesh);
+#endif
+    plyExporter->SetFileName(filename.c_str());
+    plyExporter->SetColorModeToDefault();
+    plyExporter->SetArrayName("Colors");
+    plyExporter->Update();
+    plyExporter->Write();
+}
+
 int main() {
 
     const std::size_t VOXEL_DIM = 128;
@@ -196,16 +212,6 @@ int main() {
     displayGridAxis(Axis::X, renderer);
     displayGridAxis(Axis::Y, renderer);
     displayGridAxis(Axis::Z, renderer);
-
-    auto plyExporter = vtkSmartPointer<vtkPLYWriter>::New();
-#if VTK_MAJOR_VERSION < 6
-    plyExporter->SetInput(mesh);
-#else
-    plyExporter->SetInputData(mesh);
-#endif
-    plyExporter->SetFileName(model.append(".ply").c_str());
-    plyExporter->Update();
-    plyExporter->Write();
 
     render_window->Render();
     render_window_interactor->Start();
