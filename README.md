@@ -1,4 +1,4 @@
-![Logo](doc/restore-logo.png)
+![Logo](doc/img/restore-logo.png)
 
 [![Build Status](https://travis-ci.org/NewProggie/Restore.svg?branch=master)](https://travis-ci.org/NewProggie/Restore) [![Coverage Status](https://coveralls.io/repos/NewProggie/Restore/badge.svg?branch=master)](https://coveralls.io/r/NewProggie/Restore?branch=master) [![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
 
@@ -19,6 +19,14 @@ taking pictures of the object.
 From the camera images a visual hull is first computed, which gives a first
 rough estimation of the 3D reconstruction. This model is then refined using
 only the texture of the object.
+
+## Visual Hull
+With the silhouettes of an object from multiple camera views, the first step of
+the 3D reconstruction is computing the visual hull. That is the maximum volume
+in 3D space which may have produced them. This step requires the camera
+projection matrix from every camera image to be known.
+
+![Visual Hull](doc/img/voxelcarving-squirrel.gif)
 
 ## License
 RESTORE is released under the terms of the MIT License.
