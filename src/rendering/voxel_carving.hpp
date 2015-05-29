@@ -50,15 +50,36 @@ namespace ret {
         };
         typedef start_params_t<float> start_params;
 
+        /// @brief Creates a rough 3D reconstruction (so called visual hull)
+        /// from a set of @ref Camera. The physical dimension of the object is
+        /// defined through a @ref BoundingBox. The visual hull is created piece
+        /// by piece through calling carve for each camera in the set.
         class VoxelCarving {
           public:
+            /// @brief Given the voxel grid dimension this constructor fills up
+            /// a voxel grid ready to be used for carving out a reconstruction
+            /// @param bbox Dimensions of the bounding box
+            /// @param voxel_grid_dim Dimension of the voxel grid
             VoxelCarving(const bb_bounds bbox,
                          const std::size_t voxel_grid_dim);
+
             VoxelCarving(VoxelCarving const&) = delete;
             VoxelCarving operator&=(VoxelCarving const&) = delete;
+
+            /// @brief Creates a silhouette from the object, projects each
+            /// voxel from the voxel grid into the the given camera and
+            /// calculates the distance to the edge of the silhouette. Must be
+            /// called for every @ref Camera in a set in order to create a
+            /// visual hull
+            /// @param cam current @ref Camera
             void carve(const Camera& cam);
+
+            /// @brief Creates a visual hull from a camera set
+            /// @param isolevel threshold used for surface extraction
+            /// @return visual hull
             vtkSmartPointer<vtkPolyData> createVisualHull(
                 const double isolevel = 0.0);
+
             void setBoundingBoxMargin(const std::pair<float, float>& margin_xy);
             void setBoundingBoxXMargin(const float margin_x);
             void setBoundingBoxYMargin(const float margin_y);
