@@ -27,6 +27,8 @@
 
 // C++ system files
 #include <memory>
+#include <vector>
+#include <utility>
 
 // header files of other libraries
 #include <opencv2/core/core.hpp>
@@ -57,12 +59,15 @@ namespace ret {
             void carve(const Camera& cam);
             vtkSmartPointer<vtkPolyData> createVisualHull(
                 const double isolevel = 0.0);
-            void exportToDisk() const;
+            void setBoundingBoxMargin(const std::pair<float, float>& margin_xy);
+            void setBoundingBoxXMargin(const float margin_x);
+            void setBoundingBoxYMargin(const float margin_y);
 
           private:
             std::size_t voxel_dim_, voxel_slice_, voxel_size_;
             std::unique_ptr<float[]> vox_array_;
             start_params params_;
+            std::pair<float, float> bb_margin_;
 
             cv::Point3f calcVoxelPosInCamViewFrustum(const std::size_t i,
                                                      const std::size_t j,

@@ -51,7 +51,8 @@ VoxelCarving::VoxelCarving(const bb_bounds bbox, const std::size_t voxel_dim)
       voxel_slice_(voxel_dim * voxel_dim),
       voxel_size_(voxel_dim * voxel_dim * voxel_dim),
       vox_array_(ret::make_unique<float[]>(voxel_size_)),
-      params_(calcStartParameter(bbox)) {
+      params_(calcStartParameter(bbox)),
+      bb_margin_(std::make_pair(0.10f, 0.10f)) {
     std::fill_n(vox_array_.get(), voxel_size_,
                 std::numeric_limits<float>::max());
 }
@@ -71,9 +72,7 @@ void VoxelCarving::carve(const Camera& cam) {
                 auto dist = -1.0f;
                 if (inside(coord, img_size)) {
                     dist = DistImage.at<float>(coord);
-                    if (Mask.at<uchar>(coord) == 0) { // outside
-                        dist *= -1.0f;
-                    }
+                    if (!Mask.at<uchar>(coord)) dist *= -1.0f; // outside
                 }
 
                 const auto idx = k + j * voxel_dim_ + i * voxel_slice_;
@@ -120,6 +119,21 @@ vtkSmartPointer<vtkPolyData> VoxelCarving::createVisualHull(
     return surface_normals->GetOutput();
 }
 
+void VoxelCarving::setBoundingBoxMargin(
+    const std::pair<float, float>& margin_xy) {
+    bb_margin_ = margin_xy;
+}
+
+void VoxelCarving::setBoundingBoxXMargin(const float margin_x) {
+
+    bb_margin_.first = margin_x;
+}
+
+void VoxelCarving::setBoundingBoxYMargin(const float margin_y) {
+
+    bb_margin_.second = margin_y;
+}
+
 cv::Point3f VoxelCarving::calcVoxelPosInCamViewFrustum(
     const std::size_t i, const std::size_t j, const std::size_t k) const {
 
@@ -133,11 +147,10 @@ cv::Point3f VoxelCarving::calcVoxelPosInCamViewFrustum(
 
 start_params VoxelCarving::calcStartParameter(const bb_bounds& bbox) const {
 
-    auto MARGIN_X =  0.09f;
-    auto MARGIN_Y =  0.09f;
-
-    auto bb_width = std::abs(bbox.xmax - bbox.xmin) * (1.0f + 2.0f * MARGIN_X);
-    auto bb_height = std::abs(bbox.ymax - bbox.ymin) * (1.0f + 2.0f * MARGIN_Y);
+    auto bb_width =
+        std::abs(bbox.xmax - bbox.xmin) * (1.0f + 2.0f * bb_margin_.first);
+    auto bb_height =
+        std::abs(bbox.ymax - bbox.ymin) * (1.0f + 2.0f * bb_margin_.second);
     auto bb_depth = std::abs(bbox.zmax - bbox.zmin);
 
     auto offset_x = (bb_width - std::abs(bbox.xmax - bbox.xmin)) / 2.0f;
