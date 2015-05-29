@@ -23,7 +23,6 @@
 // none
 
 // C++ system files
-#include <iostream>
 #include <algorithm>
 #include <iterator>
 
@@ -46,11 +45,11 @@ DataSetReader::DataSetReader(const std::string& directory)
 DataSet DataSetReader::load(const std::size_t numImages) const {
 
     cv::Mat K, dist;
-    if (fs::exists("/K.xml")) {
+    if (fs::exists(directory_ + "/K.xml")) {
         K = loadMatrixFromFile("/K.xml", "K_matrix");
     }
 
-    if (fs::exists("/dist.xml")) {
+    if (fs::exists(directory_ + "/dist.xml")) {
         dist = loadMatrixFromFile("/dist.xml", "dist_coeff");
     }
     auto projMats = loadProjectionMatrices(numImages, "/viff.xml");

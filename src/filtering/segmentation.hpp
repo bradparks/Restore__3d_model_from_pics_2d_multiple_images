@@ -42,7 +42,10 @@ namespace ret {
           public:
             static cv::Mat binarize(const cv::Mat& Image,
                                     const cv::Scalar& thresh);
-            static cv::Mat grabCut(const cv::Mat& Image);
+            static cv::Mat grabCut(const cv::Mat& Image,
+                                   unsigned char num_frags,
+                                   const cv::Point& w_from_to,
+                                   const cv::Point& h_from_to);
             static cv::Mat createDistMap(const cv::Mat& Mask);
             static cv::Mat createSilhouette(const cv::Mat& Mask);
         };

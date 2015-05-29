@@ -43,13 +43,17 @@ cv::Mat Segmentation::binarize(const cv::Mat& Image, const cv::Scalar& thresh) {
     return Binary;
 }
 
-cv::Mat Segmentation::grabCut(const cv::Mat& Image) {
+cv::Mat Segmentation::grabCut(const cv::Mat& Image, unsigned char num_frags,
+                              const cv::Point& w_from_to,
+                              const cv::Point& h_from_to) {
 
     assert(Image.channels() == 3);
-    auto w_frag = Image.cols / 16.0;
-    auto h_frag = Image.rows / 16.0;
+    assert((num_frags & (num_frags - 1)) == 0);
+    auto w_frag = Image.cols / static_cast<float>(num_frags);
+    auto h_frag = Image.rows / static_cast<float>(num_frags);
     cv::Mat Result, bgModel, fgModel;
-    cv::Rect area(4 * w_frag, 0 * h_frag, 9 * w_frag, 13 * h_frag);
+    cv::Rect area(w_from_to.x * w_frag, w_from_to.y * h_frag,
+                  h_from_to.x * w_frag, h_from_to.y * h_frag);
     cv::grabCut(Image, Result, area, bgModel, fgModel, 1,
                 cv::GC_INIT_WITH_RECT);
     cv::compare(Result, cv::GC_PR_FGD, Result, cv::CMP_EQ);

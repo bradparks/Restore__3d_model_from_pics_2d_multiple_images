@@ -48,11 +48,44 @@ TEST(SegmentationTest, AssertColorImageWhenBinarizing) {
     ASSERT_DEATH(Segmentation::binarize(Original, cv::Scalar(200)), "");
 }
 
+TEST(SegmentationTest, CreateSilhouetteMask) {
+
+    cv::Mat Original(240, 320, CV_8U, cv::Scalar::all(255));
+    cv::Mat Black(20, 20, CV_8U, cv::Scalar::all(0));
+    cv::Mat SubRegion = Original(cv::Rect(100, 100, Black.cols, Black.rows));
+    Black.copyTo(SubRegion);
+    ASSERT_GT(cv::countNonZero(Segmentation::createSilhouette(Original)),
+              cv::countNonZero(Original));
+}
+
+TEST(SegmentationTest, CreateDistMap) {
+
+    cv::Mat Original(240, 320, CV_8U, cv::Scalar::all(255));
+    cv::Mat Black(20, 1, CV_8U, cv::Scalar::all(0));
+    cv::Mat SubRegion = Original(cv::Rect(100, 100, Black.cols, Black.rows));
+    Black.copyTo(SubRegion);
+    cv::Mat Distmap = Segmentation::createDistMap(Original);
+    ASSERT_TRUE(Distmap.type() == CV_32F);
+
+    ASSERT_LT(Distmap.at<float>(100, 99), Distmap.at<float>(100, 100));
+    ASSERT_GT(Distmap.at<float>(100, 100), Distmap.at<float>(100, 101));
+}
+
+TEST(SegmentationTest, GrabCutWithNotPowerOf2NumFrags) {
+
+    cv::Mat Tmp(240, 320, CV_8UC3, cv::Scalar::all(255));
+    ASSERT_DEATH(Segmentation::grabCut(Tmp, 15, cv::Point(), cv::Point()), "");
+}
+
 TEST(SegmentationTest, GrabCutImage) {
 
-//    cv::Mat tmp =
-//        cv::imread("/Users/kai/Projekte/Restore/assets/aeffle/image_00.png");
-//    cv::Mat Binary = Segmentation::grabCut(tmp);
-//    cv::imshow("Binary", Binary);
-//    cv::waitKey();
+    cv::Mat Original(240, 320, CV_8UC3, cv::Scalar::all(255));
+    cv::Mat Black(20, 20, CV_8UC3, cv::Scalar::all(0));
+    cv::Mat SubRegion = Original(cv::Rect(100, 100, Black.cols, Black.rows));
+    Black.copyTo(SubRegion);
+
+    cv::Mat Segmented =
+        Segmentation::grabCut(Original, 16, cv::Point(0, 0), cv::Point(8, 8));
+    ASSERT_TRUE(Segmented.at<uchar>(110, 110) == 255);
+    ASSERT_TRUE(Segmented.at<uchar>(200, 200) == 0);
 }
