@@ -8,21 +8,21 @@ PROJECT_NAME           = "Restore"
 PROJECT_NUMBER         =
 PROJECT_BRIEF          = "SfS with texture-based mesh object refinement"
 PROJECT_LOGO           =
-OUTPUT_DIRECTORY       =
+OUTPUT_DIRECTORY       = doc
 CREATE_SUBDIRS         = NO
 ALLOW_UNICODE_NAMES    = NO
 OUTPUT_LANGUAGE        = English
 BRIEF_MEMBER_DESC      = YES
 REPEAT_BRIEF           = YES
 ABBREVIATE_BRIEF       =
-ALWAYS_DETAILED_SEC    = YES
-INLINE_INHERITED_MEMB  = YES
+ALWAYS_DETAILED_SEC    = NO
+INLINE_INHERITED_MEMB  = NO
 FULL_PATH_NAMES        = YES
 STRIP_FROM_PATH        = include
 STRIP_FROM_INC_PATH    =
 SHORT_NAMES            = NO
 JAVADOC_AUTOBRIEF      = NO
-QT_AUTOBRIEF           = YES
+QT_AUTOBRIEF           = NO
 MULTILINE_CPP_IS_BRIEF = NO
 INHERIT_DOCS           = YES
 SEPARATE_MEMBER_PAGES  = NO
@@ -51,7 +51,7 @@ LOOKUP_CACHE_SIZE      = 0
 #---------------------------------------------------------------------------
 EXTRACT_ALL            = YES
 EXTRACT_PRIVATE        = YES
-EXTRACT_PACKAGE        = YES
+EXTRACT_PACKAGE        = NO
 EXTRACT_STATIC         = YES
 EXTRACT_LOCAL_CLASSES  = YES
 EXTRACT_LOCAL_METHODS  = YES
@@ -98,7 +98,7 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 # Configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = src
+INPUT                  = src/
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          =
 RECURSIVE              = YES
@@ -109,7 +109,7 @@ EXCLUDE_SYMBOLS        =
 EXAMPLE_PATH           =
 EXAMPLE_PATTERNS       =
 EXAMPLE_RECURSIVE      = NO
-IMAGE_PATH             =
+IMAGE_PATH             = doc/img/
 INPUT_FILTER           =
 FILTER_PATTERNS        =
 FILTER_SOURCE_FILES    = NO
@@ -118,8 +118,8 @@ USE_MDFILE_AS_MAINPAGE =
 #---------------------------------------------------------------------------
 # Configuration options related to source browsing
 #---------------------------------------------------------------------------
-SOURCE_BROWSER         = YES
-INLINE_SOURCES         = YES
+SOURCE_BROWSER         = NO
+INLINE_SOURCES         = NO
 STRIP_CODE_COMMENTS    = YES
 REFERENCED_BY_RELATION = NO
 REFERENCES_RELATION    = NO
@@ -253,8 +253,8 @@ PERLMOD_MAKEVAR_PREFIX =
 # Configuration options related to the preprocessor
 #---------------------------------------------------------------------------
 ENABLE_PREPROCESSING   = YES
-MACRO_EXPANSION        = NO
-EXPAND_ONLY_PREDEF     = NO
+MACRO_EXPANSION        = YES
+EXPAND_ONLY_PREDEF     = YES
 SEARCH_INCLUDES        = YES
 INCLUDE_PATH           =
 INCLUDE_FILE_PATTERNS  =
@@ -277,7 +277,7 @@ CLASS_DIAGRAMS         = YES
 MSCGEN_PATH            =
 DIA_PATH               =
 HIDE_UNDOC_RELATIONS   = YES
-HAVE_DOT               = NO
+HAVE_DOT               = YES
 DOT_NUM_THREADS        = 0
 DOT_FONTNAME           = Helvetica
 DOT_FONTSIZE           = 10
@@ -285,7 +285,7 @@ DOT_FONTPATH           =
 CLASS_GRAPH            = YES
 COLLABORATION_GRAPH    = YES
 GROUP_GRAPHS           = YES
-UML_LOOK               = NO
+UML_LOOK               = YES
 UML_LIMIT_NUM_FIELDS   = 10
 TEMPLATE_RELATIONS     = NO
 INCLUDE_GRAPH          = YES
