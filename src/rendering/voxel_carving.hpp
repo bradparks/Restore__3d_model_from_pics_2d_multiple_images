@@ -43,6 +43,8 @@ namespace ret {
 
     namespace rendering {
 
+        /// @brief Start parameter used to calculate the offset when carving
+        /// the visual hull
         template <typename T>
         struct start_params_t {
             T start_x, start_y, start_z;
@@ -54,6 +56,7 @@ namespace ret {
         /// from a set of @ref Camera. The physical dimension of the object is
         /// defined through a @ref BoundingBox. The visual hull is created piece
         /// by piece through calling carve for each camera in the set.
+        /// @image html voxelcarving-squirrel.gif
         class VoxelCarving {
           public:
             /// @brief Given the voxel grid dimension this constructor fills up
@@ -80,8 +83,19 @@ namespace ret {
             vtkSmartPointer<vtkPolyData> createVisualHull(
                 const double isolevel = 0.0);
 
+            /// @brief Manually adjust the binary image-based bounding box
+            /// calculation in x and y direction
+            /// @param margin_xy offset for x and y direction
             void setBoundingBoxMargin(const std::pair<float, float>& margin_xy);
+
+            /// @brief Manually adjust the binary image-based bounding box
+            /// calculation in x direction
+            /// @param margin_x offset for x direction
             void setBoundingBoxXMargin(const float margin_x);
+
+            /// @brief Manually adjust the binary image-based bounding box
+            /// calculation in y direction
+            /// @param margin_y offset for y direction
             void setBoundingBoxYMargin(const float margin_y);
 
           private:

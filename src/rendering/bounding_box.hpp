@@ -39,6 +39,8 @@ namespace ret {
 
     namespace rendering {
 
+        /// @brief Bounding box parameter used for estimating the 3D bounding
+        /// box used for @ref VoxelCarving
         template <typename T>
         struct bb_bounds_t {
             T xmin, xmax;
@@ -47,9 +49,22 @@ namespace ret {
         };
         typedef bb_bounds_t<float> bb_bounds;
 
+        /// @brief Estimates the bounding box, which is the rectangular box
+        /// having a minimum value and at the same time fully includes the
+        /// photographed object. Since the rotation axis of the rotary table is
+        /// defined with respect to the camera geometry used in the calibration
+        /// process, the bounding box is calculated by backprojecting the
+        /// silhouette bounding rectangles from two orthogonal camera views and
+        /// then intersecting the resulting open volumes
         class BoundingBox {
           public:
+            /// @brief Sinks the given two cameras without doing any further
+            /// initialization
             BoundingBox(const Camera& cam1, const Camera& cam2);
+
+            /// @brief Estimates the bounding box by backprojecting the object
+            /// silhouette bounding rectangles from the given two camera views
+            /// @return bb_bounds Estimated bounding box
             bb_bounds getBounds() const;
 
           private:

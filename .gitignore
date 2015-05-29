@@ -8,6 +8,9 @@ install_manifest.txt
 build/
 bin/
 
+# Doxygen
+doc/html
+
 # Generated files
 src/io/assets_path.hpp
 

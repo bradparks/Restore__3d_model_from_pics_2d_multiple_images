@@ -41,11 +41,23 @@ namespace ret {
 
     namespace rendering {
 
+        /// @brief Colorize a given 3D mesh using the surface normal for each
+        /// vertex of the mesh. The color is extracted from the photographs of
+        /// the object. For each vertex, there is a set of @ref Camera images
+        /// to extract the color from.
         class MeshColoring {
           public:
+            /// @brief Init the color array used for 3D mesh colorization
             MeshColoring();
+
             MeshColoring(MeshColoring const&) = delete;
             MeshColoring operator&=(MeshColoring const&) = delete;
+
+            /// @brief Extracts color information from the whole dataset and
+            /// colorizes each vertex of the mesh using a robust weighted
+            /// approach where inconsistent surface colors are filtered
+            /// @param mesh 3D reconstructed mesh
+            /// @param dataset Camera dataset for the given mesh
             void colorize(vtkSmartPointer<vtkPolyData> mesh,
                           const std::vector<Camera> dataset);
 
