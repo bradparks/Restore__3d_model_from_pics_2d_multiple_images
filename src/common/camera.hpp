@@ -79,6 +79,23 @@ namespace ret {
             return cv::Point3d(x / t, y / t, z / t);
         }
 
+        cv::Mat getDirection() {
+            if (!Direction_.empty()) return Direction_;
+
+            const cv::Size img_size = Image_.size();
+            cv::Mat Center = (cv::Mat_<float>(3, 1) << img_size.width / 2.0f,
+                              img_size.height / 2.0f, 1.0f);
+
+            cv::Mat X;
+            cv::solve(getCalibrationMatrix(), Center, X, cv::DECOMP_LU);
+
+            cv::Mat Rt;
+            cv::transpose(getRotationMatrix(), Rt);
+            X = Rt * (X * (-1));
+            Direction_ = X / cv::norm(X);
+            return Direction_;
+        }
+
         template <typename T>
         Camera& setImage(T&& Image) {
             this->Image_ = std::forward<T>(Image);
@@ -103,6 +120,7 @@ namespace ret {
         cv::Mat P_;
         cv::Mat Image_;
         cv::Mat Mask_;
+        cv::Mat Direction_;
     };
 }
 

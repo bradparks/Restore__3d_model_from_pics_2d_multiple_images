@@ -83,7 +83,7 @@ void displayBoundingBox(const bb_bounds& bbox,
     renderer->AddActor(bb_actor);
 }
 
-void displayCamera(const Camera& camera, vtkSmartPointer<vtkRenderer> renderer,
+void displayCamera(Camera& camera, vtkSmartPointer<vtkRenderer> renderer,
                    double& cam_color) {
 
     auto cam_source = vtkSmartPointer<vtkConeSource>::New();
@@ -92,7 +92,7 @@ void displayCamera(const Camera& camera, vtkSmartPointer<vtkRenderer> renderer,
     cam_source->SetResolution(4);
     auto center = camera.getCenter();
     cam_source->SetCenter(center.x, center.y, center.z);
-    auto lookat = getCameraDirection(camera, camera.getImage().size());
+    auto lookat = camera.getDirection();
     cam_source->SetDirection(lookat.at<float>(0, 0), lookat.at<float>(0, 1),
                              lookat.at<float>(0, 2));
     auto cam_mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
@@ -195,7 +195,7 @@ int main() {
     displayBoundingBox(bb_bounds, renderer);
 
     double cam_color = 1.0;
-    for (const auto& camera : ds.getCameras()) {
+    for (auto& camera : ds.getCameras()) {
         vc->carve(camera);
         displayCamera(camera, renderer, cam_color);
     }

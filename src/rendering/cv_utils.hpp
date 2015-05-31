@@ -58,22 +58,6 @@ namespace ret {
 
         return im;
     }
-
-    inline cv::Mat getCameraDirection(const Camera& cam,
-                                      const cv::Size& img_size) {
-
-        cv::Mat center = (cv::Mat_<float>(3, 1) << img_size.width / 2.0f,
-                          img_size.height / 2.0f, 1.0f);
-
-        cv::Mat X;
-        cv::solve(cam.getCalibrationMatrix(), center, X, cv::DECOMP_LU);
-
-        cv::Mat Rt;
-        cv::transpose(cam.getRotationMatrix(), Rt);
-        X = Rt * (X * (-1));
-
-        return X / cv::norm(X);
-    }
 }
 
 #endif

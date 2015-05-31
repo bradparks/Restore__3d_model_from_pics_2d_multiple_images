@@ -50,10 +50,9 @@ namespace ret {
             LightDirEstimation(const double vis_angle_thresh = 0.5,
                                const std::size_t sample_size = 1000,
                                const std::size_t num_iterations = 2000);
-            cv::Vec3f execute(const Camera& cam,
+            cv::Vec3f execute(Camera& cam,
                               vtkSmartPointer<vtkPolyData> visual_hull);
-            void execute(const DataSet& ds,
-                         vtkSmartPointer<vtkPolyData> visual_hull);
+            void execute(DataSet& ds, vtkSmartPointer<vtkPolyData> visual_hull);
 
           private:
             double vis_angle_thresh_;

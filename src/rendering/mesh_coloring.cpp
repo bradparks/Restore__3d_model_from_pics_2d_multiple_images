@@ -44,7 +44,7 @@ MeshColoring::MeshColoring()
 }
 
 void MeshColoring::colorize(vtkSmartPointer<vtkPolyData> mesh,
-                            const std::vector<Camera> dataset) {
+                            std::vector<Camera> dataset) {
 
     assert(dataset.size() > 0);
     colors_->Reset();
@@ -57,7 +57,7 @@ void MeshColoring::colorize(vtkSmartPointer<vtkPolyData> mesh,
             (cv::Mat_<float>(3, 1) << normal[0], normal[1], normal[2]);
         std::map<double, std::size_t> angles;
         for (std::size_t j = 0; j < dataset.size(); ++j) {
-            cv::Mat cam_normal = getCameraDirection(dataset[j], img_size_);
+            cv::Mat cam_normal = dataset[j].getDirection();
             angles[sf_normal.dot(cam_normal)] = j;
         }
 

@@ -59,7 +59,7 @@ namespace ret {
             /// @param mesh 3D reconstructed mesh
             /// @param dataset Camera dataset for the given mesh
             void colorize(vtkSmartPointer<vtkPolyData> mesh,
-                          const std::vector<Camera> dataset);
+                          std::vector<Camera> dataset);
 
           private:
             vtkSmartPointer<vtkUnsignedCharArray> colors_;

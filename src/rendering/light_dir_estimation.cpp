@@ -45,7 +45,7 @@ LightDirEstimation::LightDirEstimation(const double vis_angle_thresh,
 }
 
 cv::Vec3f LightDirEstimation::execute(
-    const Camera& cam, vtkSmartPointer<vtkPolyData> visual_hull) {
+    Camera& cam, vtkSmartPointer<vtkPolyData> visual_hull) {
 
     assert(cam.getImage().channels() == 3);
     using calib::contour_point;
@@ -58,7 +58,7 @@ cv::Vec3f LightDirEstimation::execute(
     for (vtkIdType idx = 0; idx < visual_hull->GetNumberOfPoints(); ++idx) {
         auto pt_vishull = getVertex(visual_hull, idx);
         auto normal = getNormal(visual_hull, idx);
-        auto cam_normal = getCameraDirection(cam, img_size);
+        auto cam_normal = cam.getDirection();
         double angle = normal.dot(cam_normal);
         if (angle >= vis_angle_thresh_) {
             auto coord = project<cv::Point2f, cv::Point3d>(cam, pt_vishull);
@@ -77,13 +77,13 @@ cv::Vec3f LightDirEstimation::execute(
     return estimateRansacLightDir(sample_points);
 }
 
-void LightDirEstimation::execute(const DataSet& ds,
+void LightDirEstimation::execute(DataSet& ds,
                                  vtkSmartPointer<vtkPolyData> visual_hull) {
 
     using calib::contour_point;
     assert(ds.size() > 0);
     std::vector<cv::Vec3f> light_directions;
-    for (const auto& cam : ds.getCameras()) {
+    for (auto& cam : ds.getCameras()) {
         light_directions.emplace_back(execute(cam, visual_hull));
     }
 }
