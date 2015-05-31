@@ -19,13 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE. */
 
-#ifndef RESTORE_RENDERING_HPP
-#define RESTORE_RENDERING_HPP
+#ifndef RESTORE_CALIBRATION_HPP
+#define RESTORE_CALIBRATION_HPP
 
-#include "../../src/rendering/voxel_carving.hpp"
-#include "../../src/rendering/mesh_coloring.hpp"
-#include "../../src/rendering/light_dir_estimation.hpp"
-#include "../../src/rendering/bounding_box.hpp"
-#include "../../src/rendering/cv_utils.hpp"
+#include "../../src/calibration/light_direction_model.hpp"
+#include "../../src/calibration/ransac.hpp"
 
 #endif
+
+

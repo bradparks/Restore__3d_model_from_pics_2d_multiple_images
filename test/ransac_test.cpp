@@ -19,13 +19,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE. */
 
-#ifndef RESTORE_RENDERING_HPP
-#define RESTORE_RENDERING_HPP
+// C system files
+// none
 
-#include "../../src/rendering/voxel_carving.hpp"
-#include "../../src/rendering/mesh_coloring.hpp"
-#include "../../src/rendering/light_dir_estimation.hpp"
-#include "../../src/rendering/bounding_box.hpp"
-#include "../../src/rendering/cv_utils.hpp"
+// C++ system files
+// none
 
-#endif
+// header files of other libraries
+#include <gtest/gtest.h>
+#include <opencv2/core/core.hpp>
+
+// header files of project libraries
+#include <restore/calibration.hpp>
+
+using namespace ret::calib;

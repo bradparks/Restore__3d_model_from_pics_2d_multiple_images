@@ -43,10 +43,8 @@ namespace ret {
         struct contour_point_t {
             Vec normal;
             T intensity;
-            contour_point_t(Vec norm, T intens) {
-                normal = norm;
-                intensity = intens;
-            }
+            contour_point_t(Vec norm, T intens)
+                : normal(norm), intensity(intens) {}
         };
         typedef contour_point_t<unsigned char, cv::Vec3f> contour_point;
 
@@ -62,24 +60,25 @@ namespace ret {
 
             /// @brief Set current obseration set
             /// @param observation_set Obseration set
-            void setObservationSet(std::vector<contour_point> observation_set);
+            Ransac& setObservationSet(
+                std::vector<contour_point> observation_set);
 
             /// @brief Set current best model for light direction estimation
             /// @param model Light direction model
-            void setModel(LightDirectionModel& model);
+            Ransac& setModel(LightDirectionModel& model);
 
             /// @brief Set threshold for deciding, if light direction votes for
             /// current model
             /// @param thresh Threshold value
-            void setThreshold(const float thresh);
+            Ransac& setThreshold(const float thresh);
 
             /// @brief Set number of iterations
             /// @param iterations Number of iterations
-            void setIterations(const std::size_t iterations);
+            Ransac& setIterations(const std::size_t iterations);
 
             /// @brief Set number of required inliers
             /// @param required_inliers Number of required inliers
-            void setRequiredInliers(const std::size_t required_inliers);
+            Ransac& setRequiredInliers(const std::size_t required_inliers);
 
             /// @brief Returns best model, if one was found
             /// @param model Best model for light direction

@@ -41,27 +41,32 @@ Ransac::Ransac()
       best_error_(std::numeric_limits<float>::max()),
       threshold_(0) {
     // initialize random seed
-    srand(time(nullptr));
+    std::srand(std::time(nullptr));
 }
 
-void Ransac::setObservationSet(std::vector<contour_point> observation_set) {
+Ransac& Ransac::setObservationSet(std::vector<contour_point> observation_set) {
     observation_set_ = observation_set;
+    return *this;
 }
 
-void Ransac::setModel(LightDirectionModel& model) {
+Ransac& Ransac::setModel(LightDirectionModel& model) {
     best_model_ = model;
+    return *this;
 }
 
-void Ransac::setThreshold(const float thresh) {
+Ransac& Ransac::setThreshold(const float thresh) {
     threshold_ = thresh;
+    return *this;
 }
 
-void Ransac::setIterations(const std::size_t iterations) {
+Ransac& Ransac::setIterations(const std::size_t iterations) {
     iterations_ = iterations;
+    return *this;
 }
 
-void Ransac::setRequiredInliers(const std::size_t required_inliers) {
+Ransac& Ransac::setRequiredInliers(const std::size_t required_inliers) {
     required_inliers_ = required_inliers;
+    return *this;
 }
 
 bool Ransac::getBestModel(LightDirectionModel& model) {

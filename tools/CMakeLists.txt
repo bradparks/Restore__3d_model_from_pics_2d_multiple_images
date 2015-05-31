@@ -7,3 +7,10 @@ FILE(GLOB_RECURSE show_cameras_SRCS
 ADD_EXECUTABLE(show_cameras ${show_cameras_SRCS} ${PROJECT_SOURCES})
 TARGET_LINK_LIBRARIES(show_cameras ${OpenCV_LIBS} ${Boost_LIBRARIES}
     ${VTK_LIBRARIES})
+
+FILE(GLOB_RECURSE light_direction_SRCS
+    ${PROJECT_SOURCE_DIR}/tools/light-directions/*.hpp
+    ${PROJECT_SOURCE_DIR}/tools/light-directions/*.cpp)
+ADD_EXECUTABLE(light_directions ${light_direction_SRCS} ${PROJECT_SOURCES})
+TARGET_LINK_LIBRARIES(light_directions ${OpenCV_LIBS} ${Boost_LIBRARIES}
+    ${VTK_LIBRARIES})
