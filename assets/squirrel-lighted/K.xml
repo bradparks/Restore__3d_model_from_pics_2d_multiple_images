@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<opencv_storage>
+<K_matrix type_id="opencv-matrix">
+  <rows>3</rows>
+  <cols>3</cols>
+  <dt>f</dt>
+  <data>
+    1758.944546780866 0. 666.25542730097618 
+    0. 1777.2268124569339 272.88518782967623 
+    0. 0. 1.</data></K_matrix>
+</opencv_storage>
