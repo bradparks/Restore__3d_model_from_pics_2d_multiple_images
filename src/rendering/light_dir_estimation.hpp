@@ -53,6 +53,8 @@ namespace ret {
             cv::Vec3f execute(Camera& cam,
                               vtkSmartPointer<vtkPolyData> visual_hull);
             void execute(DataSet& ds, vtkSmartPointer<vtkPolyData> visual_hull);
+            cv::Mat displayLightDirections(
+                const Camera& cam, const cv::Vec3f& max_consensus) const;
 
           private:
             double vis_angle_thresh_;
@@ -62,6 +64,13 @@ namespace ret {
 
             cv::Vec3f estimateRansacLightDir(
                 const std::vector<calib::contour_point> contour_points) const;
+            std::vector<calib::contour_point> generateSamples() const;
+            cv::Mat createNormalMapFromRandomContourPoints(
+                const std::size_t rnd1, const std::size_t rnd2,
+                const std::size_t rnd3) const;
+            cv::Mat createIntensityVecFromRandomContourPoints(
+                const std::size_t rnd1, const std::size_t rnd2,
+                const std::size_t rnd3) const;
             cv::Vec3d getVertex(vtkSmartPointer<vtkPolyData> visual_hull,
                                 const vtkIdType id) const;
             cv::Vec3d getNormal(vtkSmartPointer<vtkPolyData> visual_hull,

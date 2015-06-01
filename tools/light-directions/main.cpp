@@ -57,8 +57,7 @@ int main() {
 
     const std::size_t VOXEL_DIM = 128;
     const std::size_t NUM_IMGS = 36;
-    DataSet ds = loadDataSet(
-        std::string(ASSETS_PATH) + "/nogit/squirrel-light2", NUM_IMGS);
+    DataSet ds = loadDataSet(std::string(ASSETS_PATH) + "/squirrel", NUM_IMGS);
     BoundingBox bbox(ds.getCamera(0), ds.getCamera((NUM_IMGS / 4) - 1));
     auto bb_bounds = bbox.getBounds();
     auto vc = ret::make_unique<VoxelCarving>(bb_bounds, VOXEL_DIM);
@@ -68,7 +67,12 @@ int main() {
     auto mesh = vc->createVisualHull();
 
     LightDirEstimation light;
-    auto light_dir = light.execute(ds.getCamera(0), mesh);
+    for (auto idx = 0; idx < NUM_IMGS; ++idx) {
+        auto light_dir = light.execute(ds.getCamera(idx), mesh);
+        cv::Mat light_dirs = light.displayLightDirections(
+            ds.getCamera(idx).getImage(), light_dir);
+        cv::imwrite("light_dir" + std::to_string(idx) + ".png", light_dirs);
+    }
 
     return 0;
 }
