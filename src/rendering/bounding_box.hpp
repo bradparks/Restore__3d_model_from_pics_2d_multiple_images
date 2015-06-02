@@ -55,7 +55,19 @@ namespace ret {
         /// defined with respect to the camera geometry used in the calibration
         /// process, the bounding box is calculated by backprojecting the
         /// silhouette bounding rectangles from two orthogonal camera views and
-        /// then intersecting the resulting open volumes
+        /// then intersecting the resulting open volumes. The orientation of the
+        /// bounding box according to the world coordinate system is as follows:
+        /// @code
+        ///         +---------+
+        ///         |\         \ bbdepth
+        ///         | +---------+
+        ///     (z) | |         |
+        /// (y)  ↑  + |         | bbheight
+        ///   ↖  |   \| bbwidth |
+        ///    \ |    +---------+
+        ///     \|
+        ///      +-------→ (x)
+        /// @endcode
         class BoundingBox {
           public:
             /// @brief Sinks the given two cameras without doing any further
