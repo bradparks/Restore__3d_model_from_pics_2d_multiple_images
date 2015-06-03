@@ -20,7 +20,7 @@
 // none
 
 // header files of project libraries
-#include "marching_cubes.hpp"
+#include "rendering/mc/marching_cubes.hpp"
 
 namespace ret {
 

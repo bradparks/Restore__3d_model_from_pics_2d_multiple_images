@@ -23,8 +23,9 @@
 // none
 
 // header files of project libraries
-#include <restore/types.hpp>
-#include "basedef.hpp"
+#include "common/types/triangle.hpp"
+#include "common/types/vec3f.hpp"
+#include "rendering/mc/basedef.hpp"
 
 namespace ret {
 

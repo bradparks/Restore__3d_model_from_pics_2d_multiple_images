@@ -23,8 +23,7 @@
 // none
 
 // header files of project libraries
-#include <restore/types.hpp>
-#include "marching_cubes.hpp"
+// none
 
 namespace ret {
 

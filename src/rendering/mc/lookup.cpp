@@ -10,7 +10,7 @@
  *                                                                            *
  ******************************************************************************/
 
-#include "lookup.hpp"
+#include "rendering/mc/lookup.hpp"
 
 namespace ret {
 

@@ -10,6 +10,8 @@
  *                                                                            *
  ******************************************************************************/
 
+#include "rendering/mc/marching_cubes.hpp"
+
 // C system files
 // none
 
@@ -24,10 +26,10 @@
 // none
 
 // header files of project libraries
-#include <restore/types.hpp>
-#include "basedef.hpp"
-#include "marching_cubes.hpp"
-#include "lookup.hpp"
+#include "common/types/triangle.hpp"
+#include "common/types/vec3f.hpp"
+#include "rendering/mc/basedef.hpp"
+#include "rendering/mc/lookup.hpp"
 
 using namespace ret::rendering::mc;
 
