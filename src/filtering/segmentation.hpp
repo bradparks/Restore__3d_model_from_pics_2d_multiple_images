@@ -18,6 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#ifndef RESTORE_FILTERING_SEGMENTATION_HPP
+#define RESTORE_FILTERING_SEGMENTATION_HPP
+
 // C system files
 // none
 
@@ -29,9 +32,6 @@
 
 // header files of project libraries
 // none
-
-#ifndef RESTORE_FILTERING_SEGMENTATION_HPP
-#define RESTORE_FILTERING_SEGMENTATION_HPP
 
 namespace ret {
 
