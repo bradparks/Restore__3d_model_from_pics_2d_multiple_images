@@ -42,7 +42,7 @@ Ransac::Ransac()
       best_error_(std::numeric_limits<float>::max()),
       threshold_(0) {
     // initialize random seed
-    std::srand(std::time(nullptr));
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
 }
 
 Ransac& Ransac::setObservationSet(std::vector<contour_point> observation_set) {
@@ -129,7 +129,8 @@ LightDirectionModel Ransac::getModel(
     }
 
     cv::Mat N1;
-    cv::invert(N.reshape(1, observation.size()), N1, cv::DECOMP_SVD);
+    cv::invert(N.reshape(1, static_cast<int>(observation.size())), N1,
+               cv::DECOMP_SVD);
     cv::Mat S = N1 * I;
     cv::normalize(S, S);
 
@@ -155,8 +156,8 @@ bool Ransac::fitsModel(const contour_point& cp,
 std::vector<contour_point> Ransac::getMaybeInliers() const {
     std::vector<contour_point> maybe_inliers;
     for (std::size_t i = 0; i < 3; ++i) {
-        maybe_inliers.push_back(
-            observation_set_.at(rand() % observation_set_.size()));
+        maybe_inliers.push_back(observation_set_.at(
+            static_cast<std::size_t>(rand()) % observation_set_.size()));
     }
 
     return maybe_inliers;
@@ -174,7 +175,8 @@ int Ransac::getModelError(const std::vector<contour_point>& point_list,
         }
     }
 
-    return (max_error - consensus_set.size());
+    return static_cast<int>(static_cast<std::size_t>(max_error) -
+                            consensus_set.size());
 }
 
 float Ransac::getDistance(const contour_point& cp,

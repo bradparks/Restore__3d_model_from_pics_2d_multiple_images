@@ -48,8 +48,8 @@ cv::Mat Segmentation::grabCut(const cv::Mat& Image, unsigned char num_frags,
 
     assert(Image.channels() == 3);
     assert((num_frags & (num_frags - 1)) == 0);
-    auto w_frag = Image.cols / static_cast<float>(num_frags);
-    auto h_frag = Image.rows / static_cast<float>(num_frags);
+    auto w_frag = Image.cols / static_cast<int>(num_frags);
+    auto h_frag = Image.rows / static_cast<int>(num_frags);
     cv::Mat Result, bgModel, fgModel;
     cv::Rect area(w_from_to.x * w_frag, w_from_to.y * h_frag,
                   h_from_to.x * w_frag, h_from_to.y * h_frag);
