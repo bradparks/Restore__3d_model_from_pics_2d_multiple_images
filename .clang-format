@@ -1,4 +1,4 @@
-# Clang-Format Style Options for 3.6+
+# Clang-Format Style Options for 3.7+
 ---
 # We'll use defaults from the Google style, but with 4 columns indentation.
 BasedOnStyle: Google
@@ -7,9 +7,9 @@ IndentWidth: 4
 Language: Cpp
 AccessModifierOffset: -2
 AllowShortBlocksOnASingleLine: false
+AlignConsecutiveAssignments: true
+SpaceAfterCStyleCast: true
 KeepEmptyLinesAtTheStartOfBlocks: true
 SpacesBeforeTrailingComments: 1
 NamespaceIndentation: All
 Standard: Cpp11
-AllowShortFunctionsOnASingleLine: Empty
-SpaceAfterCStyleCast: true

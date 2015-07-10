@@ -7,6 +7,7 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
         INCLUDE(cmake/code_coverage.cmake REQUIRED)
     ENDIF()
     INCLUDE(cmake/compiler_flags.cmake REQUIRED)
+    INCLUDE(cmake/dynamic_analyzer_options.cmake REQUIRED)
 ELSEIF(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     IF(NOT EXISTS ${CMAKE_CXX_COMPILER})
         MESSAGE(FATAL_ERROR "${PROJECT_NAME} Clang++ compiler not found.")
@@ -16,6 +17,7 @@ ELSEIF(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         MESSAGE(WARNING "Code coverage only with GCC available.")
     ENDIF()
     INCLUDE(cmake/compiler_flags.cmake REQUIRED)
+    INCLUDE(cmake/dynamic_analyzer_options.cmake REQUIRED)
 ENDIF()
 
 # Add user supplied extra options
@@ -26,11 +28,3 @@ SET(EXTRA_C_FLAGS_RELEASE "${EXTRA_C_FLAGS_RELEASE}"
 SET(EXTRA_C_FLAGS_DEBUG "${EXTRA_C_FLAGS_DEBUG}" 
     CACHE INTERNAL "Extra compiler options for Debug build")
 
-# Combine all "extra" options
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_C_FLAGS}")
-SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} ${EXTRA_C_FLAGS_DEBUG}")
-SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} ${EXTRA_C_FLAGS_RELEASE}")
-
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${EXTRA_C_FLAGS}")
-SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${EXTRA_C_FLAGS_RELEASE}")
-SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${EXTRA_C_FLAGS_DEBUG}")
