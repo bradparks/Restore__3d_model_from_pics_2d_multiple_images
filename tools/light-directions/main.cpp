@@ -72,7 +72,7 @@ int main() {
     for (auto idx = 0; idx < NUM_IMGS; ++idx) {
         auto light_dir = light.execute(ds.getCamera(idx), mesh);
         cv::Mat light_dirs = light.displayLightDirections(
-            ds.getCamera(idx).getImage(), light_dir);
+            ds.getCamera(idx), light_dir);
         cv::imwrite("light_dir" + std::to_string(idx) + ".png", light_dirs);
     }
 

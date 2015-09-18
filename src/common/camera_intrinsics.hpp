@@ -64,8 +64,8 @@ namespace ret {
                 c1.K_.step[0] * static_cast<std::size_t>(c1.K_.rows);
             auto sizeInBytesDist =
                 c1.dist_.step[0] * static_cast<std::size_t>(c1.dist_.rows);
-            return (std::memcmp(c1.K_.data, c2.K_.data, sizeInBytesK) == 0 &&
-                    std::memcmp(c1.dist_.data, c2.dist_.data,
+            return (memcmp(c1.K_.data, c2.K_.data, sizeInBytesK) == 0 &&
+                    memcmp(c1.dist_.data, c2.dist_.data,
                                 sizeInBytesDist) == 0);
         }
 
