@@ -46,7 +46,7 @@ namespace ret {
             DualQuaternion(const Quaternion& real, const cv::Vec3d vec);
             DualQuaternion(const cv::Vec3d rodrigues, const cv::Vec3d vec);
             DualQuaternion(const cv::Mat& Rot, const cv::Vec3d vec);
-            DualQuaternion(const cv::Mat& Pose);
+            explicit DualQuaternion(const cv::Mat& Pose);
             DualQuaternion(const cv::Vec3d axis, double angle,
                            const cv::Vec3d vec);
 

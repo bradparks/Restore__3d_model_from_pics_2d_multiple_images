@@ -40,18 +40,18 @@ using ret::filtering::Segmentation;
 int main() {
 
     DataSetReader dsr(std::string(ASSETS_PATH) + "/squirrel");
-    DataSet ds = dsr.load(36);
+    auto ds = dsr.load(36);
 
     for (const auto& cam : ds.getCameras()) {
-        cv::Point3d pt = cam.getCenter();
+        auto pt = cam.getCenter();
         cv::Vec3d vec(pt.x, pt.y, pt.z);
         std::cout << cv::norm(pt) << std::endl;
     }
 
     std::cout << "ds: " << ds.size() << std::endl;
     cv::imshow("Original", ds.getCamera(0).getImage());
-    cv::Mat Binary = Segmentation::binarize(ds.getCamera(0).getImage(),
-                                            cv::Scalar(0, 0, 40));
+    auto Binary = Segmentation::binarize(ds.getCamera(0).getImage(),
+                                         cv::Scalar(0, 0, 40));
     cv::imshow("Binary", Binary);
     cv::waitKey();
 

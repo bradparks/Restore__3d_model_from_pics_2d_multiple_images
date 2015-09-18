@@ -24,13 +24,9 @@
 // none
 
 // C++ system files
-#include <cstdlib>
-#include <algorithm>
 #include <limits>
 
 // header files of other libraries
-#include <opencv2/imgproc/imgproc.hpp>
-#include <vtkVersion.h>
 #include <vtkFloatArray.h>
 #include <vtkStructuredPoints.h>
 #include <vtkPointData.h>
@@ -59,15 +55,15 @@ VoxelCarving::VoxelCarving(const bb_bounds bbox, const std::size_t voxel_dim)
 
 void VoxelCarving::carve(const Camera& cam) {
 
-    const cv::Mat Mask = cam.getMask();
-    const cv::Mat DistImage = Segmentation::createDistMap(Mask);
-    const cv::Size img_size = Mask.size();
+    const auto Mask = cam.getMask();
+    const auto DistImage = Segmentation::createDistMap(Mask);
+    const auto img_size = Mask.size();
 
-    for (std::size_t i = 0; i < voxel_dim_; ++i) {
-        for (std::size_t j = 0; j < voxel_dim_; ++j) {
-            for (std::size_t k = 0; k < voxel_dim_; ++k) {
+    for (auto i = 0; i < voxel_dim_; ++i) {
+        for (auto j = 0; j < voxel_dim_; ++j) {
+            for (auto k = 0; k < voxel_dim_; ++k) {
 
-                cv::Point3f voxel = calcVoxelPosInCamViewFrustum(i, j, k);
+                auto voxel = calcVoxelPosInCamViewFrustum(i, j, k);
                 auto coord = project<cv::Point2f, cv::Point3f>(cam, voxel);
                 auto dist = -1.0f;
                 if (inside(coord, img_size)) {
@@ -82,8 +78,8 @@ void VoxelCarving::carve(const Camera& cam) {
     }
 }
 
-vtkSmartPointer<vtkPolyData> VoxelCarving::createVisualHull(
-    const double isolevel) {
+vtkSmartPointer<vtkPolyData>
+VoxelCarving::createVisualHull(const double isolevel) const {
 
     // create vtk visualization pipeline from voxel grid
     auto spoints = vtkSmartPointer<vtkStructuredPoints>::New();

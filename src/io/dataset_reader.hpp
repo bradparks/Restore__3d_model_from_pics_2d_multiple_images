@@ -40,7 +40,7 @@ namespace ret {
 
         class DataSetReader {
           public:
-            DataSetReader(const std::string& directory);
+            explicit DataSetReader(const std::string& directory);
             DataSet load(const std::size_t numImages) const;
 
           private:

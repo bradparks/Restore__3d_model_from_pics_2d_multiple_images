@@ -71,17 +71,17 @@ Quaternion DualQuaternion::getRotation() const {
 }
 
 cv::Vec3d DualQuaternion::getTranslation() const {
-    Quaternion q = (dual_ * real_.conj()) * 2.0;
-    cv::Vec4d comps = q.getComponents();
+    auto q = (dual_ * real_.conj()) * 2.0;
+    auto comps = q.getComponents();
     return cv::Vec3d(comps[1], comps[2], comps[3]);
 }
 
 cv::Mat DualQuaternion::getPose() const {
-    DualQuaternion dq = DualQuaternion(real_, dual_);
+    auto dq = DualQuaternion(real_, dual_);
     dq = dq.normalize();
 
-    cv::Mat P = dq.real_.toRotMatrix4x4();
-    cv::Vec3d trans = dq.getTranslation();
+    auto P = dq.real_.toRotMatrix4x4();
+    auto trans = dq.getTranslation();
 
     for (auto idx : {0, 1, 2}) P.at<double>(idx, 3) = trans[idx];
     return P;

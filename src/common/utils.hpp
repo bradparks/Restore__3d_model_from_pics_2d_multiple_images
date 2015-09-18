@@ -85,7 +85,7 @@ namespace ret {
 
     inline std::string getImgType(int img_type_int) {
         // 7 base types, with five channel options each (none or C1, ..., C4)
-        int numImgTypes = 35;
+        auto numImgTypes = 35;
         int enum_ints[] = {CV_8U,  CV_8UC1,  CV_8UC2,  CV_8UC3,  CV_8UC4,
                            CV_8S,  CV_8SC1,  CV_8SC2,  CV_8SC3,  CV_8SC4,
                            CV_16U, CV_16UC1, CV_16UC2, CV_16UC3, CV_16UC4,
@@ -102,7 +102,7 @@ namespace ret {
             "CV_32F", "CV_32FC1", "CV_32FC2", "CV_32FC3", "CV_32FC4",
             "CV_64F", "CV_64FC1", "CV_64FC2", "CV_64FC3", "CV_64FC4"};
 
-        for (int i = 0; i < numImgTypes; i++)
+        for (auto i = 0; i < numImgTypes; i++)
             if (img_type_int == enum_ints[i]) {
                 return enum_strings[i];
             }

@@ -29,7 +29,7 @@
 #include <limits>
 
 // header files of other libraries
-#include <opencv2/imgproc/imgproc.hpp>
+// none
 
 // header files of project libraries
 // none
@@ -71,7 +71,7 @@ Ransac& Ransac::setRequiredInliers(const std::size_t required_inliers) {
 }
 
 bool Ransac::getBestModel(LightDirectionModel& model) {
-    bool model_found = false;
+    auto model_found = false;
     std::size_t iterations = 0;
 
     while (iterations < iterations_) {

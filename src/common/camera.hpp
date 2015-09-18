@@ -40,9 +40,8 @@ namespace ret {
       public:
         Camera() = default;
 
-        Camera(const cv::Mat Image)
-            : P_(cv::Mat(3, 4, CV_32F)),
-              Image_(Image),
+        explicit Camera(const cv::Mat Image)
+            : P_(cv::Mat(3, 4, CV_32F)), Image_(Image),
               Mask_(cv::Mat(Image.size(), CV_8U)) {}
 
         template <typename T>
@@ -70,10 +69,10 @@ namespace ret {
             cv::Mat P_013;
             for (auto idx : {0, 1, 3}) P_013.push_back(P_.col(idx));
 
-            double x = cv::determinant(P_(cv::Range(0, 3), cv::Range(1, 4)));
-            double y = -cv::determinant(P_023.reshape(0, 3).t());
-            double z = cv::determinant(P_013.reshape(0, 3).t());
-            double t = -cv::determinant(P_(cv::Range(0, 3), cv::Range(0, 3)));
+            auto x = cv::determinant(P_(cv::Range(0, 3), cv::Range(1, 4)));
+            auto y = -cv::determinant(P_023.reshape(0, 3).t());
+            auto z = cv::determinant(P_013.reshape(0, 3).t());
+            auto t = -cv::determinant(P_(cv::Range(0, 3), cv::Range(0, 3)));
 
             return cv::Point3d(x / t, y / t, z / t);
         }
@@ -81,7 +80,7 @@ namespace ret {
         cv::Mat getDirection() {
             if (!Direction_.empty()) return Direction_;
 
-            const cv::Size img_size = Image_.size();
+            const auto img_size = Image_.size();
             cv::Mat Center = (cv::Mat_<float>(3, 1) << img_size.width / 2.0f,
                               img_size.height / 2.0f, 1.0f);
 

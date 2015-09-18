@@ -44,7 +44,8 @@ namespace ret {
           public:
             LightDirectionModel_() : x(0), y(0), z(0){};
             LightDirectionModel_(T x1, T y1, T z1) : x(x1), y(y1), z(z1) {}
-            LightDirectionModel_(const Vec l) : x(l[0]), y(l[1]), z(l[2]) {}
+            explicit LightDirectionModel_(const Vec l)
+                : x(l[0]), y(l[1]), z(l[2]) {}
             T x, y, z;
         };
         typedef LightDirectionModel_<float, cv::Vec3f> LightDirectionModel;

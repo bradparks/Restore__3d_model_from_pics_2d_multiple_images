@@ -47,7 +47,7 @@ namespace ret {
         /// illumination model and a robust @ref Ransac scheme for estimation
         class LightDirEstimation {
           public:
-            LightDirEstimation(const double vis_angle_thresh = 0.5,
+            explicit LightDirEstimation(const double vis_angle_thresh = 0.5,
                                const std::size_t sample_size = 1000,
                                const std::size_t num_iterations = 2000);
             cv::Vec3f execute(Camera& cam,
@@ -57,11 +57,6 @@ namespace ret {
                 const Camera& cam, const cv::Vec3f& max_consensus) const;
 
           private:
-            double vis_angle_thresh_;
-            std::size_t sample_size_;
-            std::size_t num_iterations_;
-            std::vector<calib::contour_point> contour_points_;
-
             cv::Vec3f estimateRansacLightDir(
                 const std::vector<calib::contour_point> contour_points) const;
             std::vector<calib::contour_point> generateSamples() const;
@@ -75,6 +70,11 @@ namespace ret {
                                 const vtkIdType id) const;
             cv::Vec3d getNormal(vtkSmartPointer<vtkPolyData> visual_hull,
                                 const vtkIdType id) const;
+
+            double vis_angle_thresh_;
+            std::size_t sample_size_;
+            std::size_t num_iterations_;
+            std::vector<calib::contour_point> contour_points_;
         };
     }
 }

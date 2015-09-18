@@ -29,7 +29,6 @@
 
 // header files of other libraries
 #include <opencv2/core/core.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
 
 // header files of project libraries
 #include "common/camera.hpp"

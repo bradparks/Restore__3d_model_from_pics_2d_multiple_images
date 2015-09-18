@@ -30,7 +30,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 
 // header files of project libraries
-#include "filtering/segmentation.hpp"
+// none
 
 using namespace ret::rendering;
 

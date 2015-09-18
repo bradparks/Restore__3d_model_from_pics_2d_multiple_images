@@ -78,10 +78,10 @@ Quaternion Quaternion::operator*(const Quaternion& other) const {
 }
 
 cv::Vec3d Quaternion::operator*(const cv::Vec3d& vec) const {
-    double qs = s_;
-    double qx = vec_[0];
-    double qy = vec_[1];
-    double qz = vec_[2];
+    auto qs = s_;
+    auto qx = vec_[0];
+    auto qy = vec_[1];
+    auto qz = vec_[2];
 
     // clang-format off
     cv::Mat r = (cv::Mat_<double>(3, 3) <<
@@ -115,13 +115,13 @@ double Quaternion::dot(Quaternion& other) const {
 }
 
 double Quaternion::magnitude() const {
-    Quaternion q = Quaternion(*this);
+    auto q = Quaternion(*this);
     return sqrt(q.dot(q));
 }
 
 Quaternion& Quaternion::normalize() {
-    Quaternion q = Quaternion(*this);
-    double n = q.dot(q);
+    auto q = Quaternion(*this);
+    auto n = q.dot(q);
 
     if (math::equals(n, 1.0)) {
         return *this;
@@ -136,8 +136,8 @@ Quaternion Quaternion::conj() const {
 }
 
 Quaternion Quaternion::inv() const {
-    Quaternion q = Quaternion(*this);
-    double n = q.dot(q);
+    auto q = Quaternion(*this);
+    auto n = q.dot(q);
 
     if (equals(n, 1.0)) {
         return conj();
@@ -159,9 +159,9 @@ cv::Vec3d Quaternion::toEulerAngles() const {
 }
 
 cv::Mat Quaternion::toRotMatrix() const {
-    double x = vec_[0];
-    double y = vec_[1];
-    double z = vec_[2];
+    auto x = vec_[0];
+    auto y = vec_[1];
+    auto z = vec_[2];
 
     // clang-format off
     return (cv::Mat_<double>(3, 3) <<
@@ -172,9 +172,9 @@ cv::Mat Quaternion::toRotMatrix() const {
 }
 
 cv::Mat Quaternion::toRotMatrix4x4() const {
-    double x = vec_[0];
-    double y = vec_[1];
-    double z = vec_[2];
+    auto x = vec_[0];
+    auto y = vec_[1];
+    auto z = vec_[2];
 
     // clang-format off
     return (cv::Mat_<double>(4, 4) <<
@@ -193,24 +193,24 @@ Quaternion Quaternion::fromRotMatrix(const cv::Mat& rotMatrix) {
     assert(rotMatrix.cols == 3 && rotMatrix.rows == 3 &&
            rotMatrix.type() == CV_64FC1);
 
-    double m00 = rotMatrix.at<double>(0, 0);
-    double m01 = rotMatrix.at<double>(0, 1);
-    double m02 = rotMatrix.at<double>(0, 2);
+    auto m00 = rotMatrix.at<double>(0, 0);
+    auto m01 = rotMatrix.at<double>(0, 1);
+    auto m02 = rotMatrix.at<double>(0, 2);
 
-    double m10 = rotMatrix.at<double>(1, 0);
-    double m11 = rotMatrix.at<double>(1, 1);
-    double m12 = rotMatrix.at<double>(1, 2);
+    auto m10 = rotMatrix.at<double>(1, 0);
+    auto m11 = rotMatrix.at<double>(1, 1);
+    auto m12 = rotMatrix.at<double>(1, 2);
 
-    double m20 = rotMatrix.at<double>(2, 0);
-    double m21 = rotMatrix.at<double>(2, 1);
-    double m22 = rotMatrix.at<double>(2, 2);
+    auto m20 = rotMatrix.at<double>(2, 0);
+    auto m21 = rotMatrix.at<double>(2, 1);
+    auto m22 = rotMatrix.at<double>(2, 2);
 
     // trace
-    double t = m00 + m11 + m22;
+    auto t = m00 + m11 + m22;
 
     double m[] = {m00, m11, m22, t};
-    int maxIdx = 0;
-    for (int i = 1; i < 4; i++) {
+    auto maxIdx = 0;
+    for (auto i = 1; i < 4; i++) {
         if (m[maxIdx] < m[i]) {
             maxIdx = i;
         }
@@ -245,31 +245,31 @@ Quaternion Quaternion::fromRotMatrix(const cv::Mat& rotMatrix) {
 
 Quaternion Quaternion::fromRodriguesVec(const cv::Vec3d& rodrigues) {
     // get rotation angle
-    double angle = norm(rodrigues);
+    auto angle = norm(rodrigues);
 
     if (equals(angle, 0.0)) {
         return Quaternion::fromAxisAngle(cv::Vec3d(0, 0, 0), angle);
     }
 
     // normalize rodrigues vector
-    cv::Vec3d rod = rodrigues / angle;
+    auto rod = rodrigues / angle;
 
     return Quaternion::fromAxisAngle(rod, angle);
 }
 
 Quaternion Quaternion::fromEulerAngles(const cv::Vec3d& eulerAngles) {
-    double sx2 = sin(0.5 * eulerAngles[0]);
-    double sy2 = sin(0.5 * eulerAngles[1]);
-    double sz2 = sin(0.5 * eulerAngles[2]);
+    auto sx2 = sin(0.5 * eulerAngles[0]);
+    auto sy2 = sin(0.5 * eulerAngles[1]);
+    auto sz2 = sin(0.5 * eulerAngles[2]);
 
-    double cx2 = cos(0.5 * eulerAngles[0]);
-    double cy2 = cos(0.5 * eulerAngles[1]);
-    double cz2 = cos(0.5 * eulerAngles[2]);
+    auto cx2 = cos(0.5 * eulerAngles[0]);
+    auto cy2 = cos(0.5 * eulerAngles[1]);
+    auto cz2 = cos(0.5 * eulerAngles[2]);
 
-    double s = cz2 * cy2 * cx2 + sz2 * sy2 * sx2;
-    double x = cz2 * cy2 * sx2 - sz2 * sy2 * cx2;
-    double y = cz2 * sy2 * cx2 + sz2 * cy2 * sx2;
-    double z = sz2 * cy2 * cx2 - cz2 * sy2 * sx2;
+    auto s = cz2 * cy2 * cx2 + sz2 * sy2 * sx2;
+    auto x = cz2 * cy2 * sx2 - sz2 * sy2 * cx2;
+    auto y = cz2 * sy2 * cx2 + sz2 * cy2 * sx2;
+    auto z = sz2 * cy2 * cx2 - cz2 * sy2 * sx2;
 
     return Quaternion(s, x, y, z);
 }
@@ -277,13 +277,13 @@ Quaternion Quaternion::fromEulerAngles(const cv::Vec3d& eulerAngles) {
 Quaternion Quaternion::fromAxisAngle(const cv::Vec3d& axis, double angle) {
     // calculate euler parameters
 
-    double halfSin = sin(0.5f * angle);
-    double halfCos = cos(0.5f * angle);
+    auto halfSin = sin(0.5f * angle);
+    auto halfCos = cos(0.5f * angle);
 
-    double s = halfCos;
-    double x = axis[0] * halfSin;
-    double y = axis[1] * halfSin;
-    double z = axis[2] * halfSin;
+    auto s = halfCos;
+    auto x = axis[0] * halfSin;
+    auto y = axis[1] * halfSin;
+    auto z = axis[2] * halfSin;
 
     return Quaternion(s, x, y, z);
 }
@@ -294,13 +294,13 @@ Quaternion Quaternion::betweenTwoVecs(const cv::Vec3d& a, const cv::Vec3d& b) {
         return Quaternion();
     }
 
-    cv::Vec3d u = a / norm(a);
-    cv::Vec3d v = b / norm(b);
+    auto u = a / norm(a);
+    auto v = b / norm(b);
 
-    double cosTheta = u.dot(v);
-    double angle = acos(cosTheta);
+    auto cosTheta = u.dot(v);
+    auto angle = acos(cosTheta);
 
-    cv::Vec3d w = u.cross(v);
+    auto w = u.cross(v);
     w /= norm(w);
 
     return Quaternion::fromAxisAngle(w, angle);
@@ -310,19 +310,19 @@ Quaternion Quaternion::lookAt(const cv::Vec3d& a, const cv::Vec3d& b) {
     cv::Vec3d gFwd(1, 0, 0);
     cv::Vec3d gUp(0, 0, 1);
 
-    cv::Vec3d forward(b - a);
-    double lForward = norm(forward);
+    auto forward(b - a);
+    auto lForward = norm(forward);
     if (lForward > 0) {
         forward /= lForward;
     }
 
-    cv::Vec3d right = forward.cross(gUp);
-    double lRight = norm(right);
+    auto right = forward.cross(gUp);
+    auto lRight = norm(right);
     if (lRight > 0) {
         right /= lRight;
     }
 
-    double dot = gFwd.dot(forward);
+    auto dot = gFwd.dot(forward);
 
     if (fabs(dot - (-1.0)) < std::numeric_limits<double>::epsilon()) {
         return Quaternion::fromAxisAngle(gUp, static_cast<double>(CV_PI));
@@ -332,10 +332,10 @@ Quaternion Quaternion::lookAt(const cv::Vec3d& a, const cv::Vec3d& b) {
         return Quaternion(); // identity
     }
 
-    double angle = acos(dot);
+    auto angle = acos(dot);
 
-    cv::Vec3d rotAxis = gFwd.cross(forward);
-    double lRotAxis = norm(rotAxis);
+    auto rotAxis = gFwd.cross(forward);
+    auto lRotAxis = norm(rotAxis);
     if (lRotAxis > 0) {
         rotAxis /= lRotAxis;
     }
@@ -353,9 +353,9 @@ Quaternion Quaternion::slerp(const Quaternion& q1, const Quaternion& q2,
         return q2;
     }
 
-    Quaternion q3 = Quaternion(q2);
+    auto q3 = Quaternion(q2);
 
-    double dot = q1.dot(q3);
+    auto dot = q1.dot(q3);
 
     if (dot < 0) {
         dot = -dot;
@@ -363,7 +363,7 @@ Quaternion Quaternion::slerp(const Quaternion& q1, const Quaternion& q2,
     }
 
     if (dot < 0.95) {
-        double angle = acos(dot);
+        auto angle = acos(dot);
         return Quaternion((q1 * sin(angle * (1 - t)) + q3 * sin(angle * t)) /
                           sin(angle));
     } else {
@@ -372,8 +372,8 @@ Quaternion Quaternion::slerp(const Quaternion& q1, const Quaternion& q2,
 }
 
 Quaternion Quaternion::log(const Quaternion& q) {
-    cv::Vec3d qVec = q.vec_;
-    double vecLength = cv::norm(qVec);
+    auto qVec = q.vec_;
+    auto vecLength = cv::norm(qVec);
 
     if (equals(vecLength, 0.0)) {
         if (q.s_ > 0)
@@ -383,21 +383,21 @@ Quaternion Quaternion::log(const Quaternion& q) {
                               0.0);
     }
 
-    double qLength = q.magnitude();
-    double t = atan2(vecLength, q.s_);
+    auto qLength = q.magnitude();
+    auto t = atan2(vecLength, q.s_);
 
     return Quaternion(cv::log(qLength), t * cv::normalize(qVec));
 }
 
 Quaternion Quaternion::exp(const Quaternion& q) {
-    cv::Vec3d qVec = q.vec_;
-    double angle = cv::norm(qVec);
+    auto qVec = q.vec_;
+    auto angle = cv::norm(qVec);
 
     return Quaternion(cos(angle), sin(angle) * cv::normalize(qVec)) *
            cv::exp(q.s_);
 }
 
 Quaternion Quaternion::pow(const Quaternion& q, double t) {
-    Quaternion l = log(q) * t;
+    auto l = log(q) * t;
     return exp(l);
 }

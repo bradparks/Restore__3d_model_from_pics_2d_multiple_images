@@ -27,7 +27,6 @@
 #include <map>
 
 // header files of other libraries
-#include <opencv2/imgproc/imgproc.hpp>
 #include <vtkPointData.h>
 
 // header files of project libraries
@@ -49,7 +48,7 @@ void MeshColoring::colorize(vtkSmartPointer<vtkPolyData> mesh,
     assert(dataset.size() > 0);
     colors_->Reset();
     img_size_ = dataset[0].getImage().size();
-    for (vtkIdType idx = 0; idx < mesh->GetNumberOfPoints(); ++idx) {
+    for (auto idx = 0; idx < mesh->GetNumberOfPoints(); ++idx) {
 
         double normal[3];
         mesh->GetPointData()->GetNormals()->GetTuple(idx, normal);

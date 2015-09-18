@@ -25,7 +25,6 @@
 // none
 
 // C++ system files
-#include <cstring>
 #include <cassert>
 #include <ostream>
 
@@ -43,7 +42,7 @@ namespace ret {
             : K_((cv::Mat_<float>(3, 3) << 0, 0, 0, 0, 0, 0, 0, 0, 1)),
               dist_(cv::Mat::zeros(1, 4, CV_64F)) {}
 
-        CameraIntrinsics(const cv::Mat& K)
+        explicit CameraIntrinsics(const cv::Mat& K)
             : K_(K), dist_(cv::Mat::zeros(1, 4, CV_64F)) {
             assert(K.size() == cv::Size(3, 3) && K.type() == CV_32F);
         }
@@ -61,9 +60,9 @@ namespace ret {
 
         friend bool operator==(const CameraIntrinsics& c1,
                                const CameraIntrinsics& c2) {
-            std::size_t sizeInBytesK =
+            auto sizeInBytesK =
                 c1.K_.step[0] * static_cast<std::size_t>(c1.K_.rows);
-            std::size_t sizeInBytesDist =
+            auto sizeInBytesDist =
                 c1.dist_.step[0] * static_cast<std::size_t>(c1.dist_.rows);
             return (std::memcmp(c1.K_.data, c2.K_.data, sizeInBytesK) == 0 &&
                     std::memcmp(c1.dist_.data, c2.dist_.data,

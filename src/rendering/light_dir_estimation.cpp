@@ -59,7 +59,7 @@ cv::Vec3f LightDirEstimation::execute(
         auto pt_vishull = getVertex(visual_hull, idx);
         auto normal = getNormal(visual_hull, idx);
         auto cam_normal = cam.getDirection();
-        double angle = normal.dot(cam_normal);
+        auto angle = normal.dot(cam_normal);
         if (angle >= vis_angle_thresh_) {
             auto coord = project<cv::Point2f, cv::Point3d>(cam, pt_vishull);
             contour_points_.emplace_back(
@@ -83,11 +83,11 @@ void LightDirEstimation::execute(DataSet& ds,
 cv::Mat LightDirEstimation::displayLightDirections(
     const Camera& cam, const cv::Vec3f& max_consensus) const {
 
-    const cv::Mat Image = cam.getImage();
+    const auto Image = cam.getImage();
     assert(Image.channels() == 3);
-    const cv::Size img_size = Image.size();
-    const std::size_t heat_step = 7;
-    const std::size_t radius = img_size.height / 2;
+    const auto img_size = Image.size();
+    const auto heat_step = 7;
+    const auto radius = img_size.height / 2;
     const cv::Point center(img_size.width / 2, img_size.height / 2);
 
     // create composed image with light directions
@@ -104,7 +104,7 @@ cv::Mat LightDirEstimation::displayLightDirections(
         auto rnd3 = std::rand() % contour_points_.size();
         auto N = createNormalMapFromRandomContourPoints(rnd1, rnd2, rnd3);
         auto I = createIntensityVecFromRandomContourPoints(rnd1, rnd2, rnd3);
-        cv::Vec3f l = cv::normalize(cv::Vec3f(cv::Mat(N.inv() * I)));
+        auto l = cv::normalize(cv::Vec3f(cv::Mat(N.inv() * I)));
         cv::Point p((l[1] * radius + center.x), l[0] * radius + center.y);
         cv::Scalar heat(Normals.at<cv::Vec3b>(p)[0],
                         Normals.at<cv::Vec3b>(p)[1],

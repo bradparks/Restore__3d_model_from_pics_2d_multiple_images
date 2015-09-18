@@ -60,9 +60,9 @@ namespace ret {
 
         friend bool operator==(const CameraExtrinsics& c1,
                                const CameraExtrinsics& c2) {
-            std::size_t sizeInBytesR =
+            auto sizeInBytesR =
                 c1.R_.step[0] * static_cast<std::size_t>(c1.R_.rows);
-            std::size_t sizeInBytesT =
+            auto sizeInBytesT =
                 c1.t_.step[0] * static_cast<std::size_t>(c1.t_.rows);
             return (std::memcmp(c1.R_.data, c2.R_.data, sizeInBytesR) == 0 &&
                     std::memcmp(c1.t_.data, c2.t_.data, sizeInBytesT) == 0);

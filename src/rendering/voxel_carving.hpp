@@ -80,7 +80,7 @@ namespace ret {
             /// @param isolevel threshold used for surface extraction
             /// @return visual hull
             vtkSmartPointer<vtkPolyData> createVisualHull(
-                const double isolevel = 0.0);
+                const double isolevel = 0.0) const;
 
             /// @brief Manually adjust the binary image-based bounding box
             /// calculation in x and y direction
@@ -98,11 +98,6 @@ namespace ret {
             void setBoundingBoxYMargin(const float margin_y);
 
           private:
-            std::size_t voxel_dim_, voxel_slice_, voxel_size_;
-            std::unique_ptr<float[]> vox_array_;
-            start_params params_;
-            std::pair<float, float> bb_margin_;
-
             cv::Point3f calcVoxelPosInCamViewFrustum(const std::size_t i,
                                                      const std::size_t j,
                                                      const std::size_t k) const;
@@ -113,6 +108,11 @@ namespace ret {
                 return (im.x > 0 && im.y > 0 && im.x < size.width &&
                         im.y < size.height);
             }
+
+            std::size_t voxel_dim_, voxel_slice_, voxel_size_;
+            std::unique_ptr<float[]> vox_array_;
+            start_params params_;
+            std::pair<float, float> bb_margin_;
         };
     }
 }

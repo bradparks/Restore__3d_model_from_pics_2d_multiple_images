@@ -63,9 +63,9 @@ namespace ret {
                 angle = deg2rad(angle);
             }
 
-            double s = sin(angle);
-            double c = cos(angle);
-            double mc = 1.0 - c;
+            auto s = sin(angle);
+            auto c = cos(angle);
+            auto mc = 1.0 - c;
 
             axis /= norm(axis);
             double x = axis[0];

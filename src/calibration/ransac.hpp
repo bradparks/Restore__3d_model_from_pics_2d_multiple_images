@@ -98,14 +98,6 @@ namespace ret {
                 const std::vector<contour_point>& observation) const;
 
           private:
-            std::vector<contour_point> observation_set_;
-            std::vector<contour_point> best_consensus_set_;
-            LightDirectionModel best_model_;
-            std::size_t required_inliers_;
-            std::size_t iterations_;
-            float best_error_;
-            float threshold_;
-
             bool isMember(
                 const contour_point& cp,
                 const std::vector<contour_point>& maybe_inliers) const;
@@ -116,6 +108,14 @@ namespace ret {
                               const LightDirectionModel& model) const;
             float getDistance(const contour_point& cp,
                               const LightDirectionModel& model) const;
+
+            std::vector<contour_point> observation_set_;
+            std::vector<contour_point> best_consensus_set_;
+            LightDirectionModel best_model_;
+            std::size_t required_inliers_;
+            std::size_t iterations_;
+            float best_error_;
+            float threshold_;
         };
     }
 }
