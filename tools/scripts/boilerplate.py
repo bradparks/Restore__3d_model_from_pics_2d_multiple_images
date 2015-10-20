@@ -60,7 +60,7 @@ def get_header(filename):
   return '\n'.join([comment + line for line in LINES])
 
 
-def _CppHeader(filename):
+def cpp_header(filename):
   guard = filename.replace('/', '_').replace('.', '_').upper() + '_'
   return '\n'.join([
     '',
@@ -109,7 +109,7 @@ def create_file(filename):
   contents = get_header(filename) + '\n'
 
   if filename.endswith('.h'):
-    contents += _CppHeader(filename)
+    contents += cpp_header(filename)
   elif filename.endswith('.cpp'):
     contents += cpp_implementation(filename)
 

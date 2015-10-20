@@ -7,7 +7,7 @@ IndentWidth: 4
 Language: Cpp
 AccessModifierOffset: -2
 AllowShortBlocksOnASingleLine: false
-#AlignConsecutiveAssignments: true
+AlignConsecutiveAssignments: true
 SpaceAfterCStyleCast: true
 KeepEmptyLinesAtTheStartOfBlocks: true
 SpacesBeforeTrailingComments: 1
