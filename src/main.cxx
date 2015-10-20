@@ -26,34 +26,62 @@
 
 // header files of other libraries
 #include <opencv2/highgui/highgui.hpp>
+#include <vtkPolyData.h>
+#include <vtkPLYWriter.h>
 
 // header files of project libraries
 #include "common/dataset.hpp"
+#include "common/utils.hpp"
 #include "io/dataset_reader.hpp"
 #include "io/assets_path.hpp"
 #include "filtering/segmentation.hpp"
+#include "rendering/bounding_box.hpp"
+#include "rendering/mesh_coloring.hpp"
+#include "rendering/voxel_carving.hpp"
 
 using ret::DataSet;
 using ret::io::DataSetReader;
 using ret::filtering::Segmentation;
+using ret::rendering::BoundingBox;
+using ret::rendering::MeshColoring;
+using ret::rendering::VoxelCarving;
+
+void exportMesh(vtkSmartPointer<vtkPolyData> mesh,
+                const std::string& filename) {
+
+    auto plyExporter = vtkSmartPointer<vtkPLYWriter>::New();
+#if VTK_MAJOR_VERSION < 6
+    plyExporter->SetInput(mesh);
+#else
+    plyExporter->SetInputData(mesh);
+#endif
+    plyExporter->SetFileName(filename.c_str());
+    plyExporter->SetColorModeToDefault();
+    plyExporter->SetArrayName("Colors");
+    plyExporter->Update();
+    plyExporter->Write();
+}
 
 int main() {
 
+    const int num_imgs = 36;
     DataSetReader dsr(std::string(ASSETS_PATH) + "/squirrel");
-    auto ds = dsr.load(36);
+    auto ds = dsr.load(num_imgs);
 
-    for (const auto& cam : ds.getCameras()) {
-        auto pt = cam.getCenter();
-        cv::Vec3d vec(pt.x, pt.y, pt.z);
-        std::cout << cv::norm(pt) << std::endl;
+    for (auto idx = 0; idx < num_imgs; ++idx) {
+        ds.getCamera(idx).setMask(Segmentation::binarize(
+                        ds.getCamera(idx).getImage(), cv::Scalar(0, 0, 30)));
     }
-
-    std::cout << "ds: " << ds.size() << std::endl;
-    cv::imshow("Original", ds.getCamera(0).getImage());
-    auto Binary = Segmentation::binarize(ds.getCamera(0).getImage(),
-                                         cv::Scalar(0, 0, 40));
-    cv::imshow("Binary", Binary);
-    cv::waitKey();
+    BoundingBox bbox =
+                BoundingBox(ds.getCamera(0), ds.getCamera((num_imgs / 4) - 1));
+    auto vc = ret::make_unique<VoxelCarving>(bbox.getBounds(), 128);
+    for (const auto& cam : ds.getCameras()) {
+        vc->carve(cam);
+    }
+    auto visual_hull = vc->createVisualHull();
+    auto coloring = ret::make_unique<MeshColoring>();
+    coloring->colorize(visual_hull, ds.getCameras());
+    exportMesh(visual_hull, "visual_hull.ply");
 
     return 0;
 }
