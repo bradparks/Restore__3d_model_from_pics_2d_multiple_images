@@ -31,8 +31,8 @@
 #include <opencv2/core/core.hpp>
 
 // header files of project libraries
-#include "rendering/cv_utils.hpp"
 #include "common/camera.hpp"
+#include "rendering/cv_utils.hpp"
 
 namespace ret {
 

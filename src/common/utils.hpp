@@ -27,10 +27,10 @@
 // C++ system files
 #include <cmath>
 #include <cstddef>
-#include <vector>
 #include <memory>
 #include <type_traits>
 #include <utility>
+#include <vector>
 
 // header files of other libraries
 #include <opencv2/core/core.hpp>

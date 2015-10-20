@@ -28,15 +28,15 @@
 
 // header files of other libraries
 #include <vtkFloatArray.h>
-#include <vtkStructuredPoints.h>
+#include <vtkMarchingCubes.h>
 #include <vtkPointData.h>
 #include <vtkPolyDataNormals.h>
-#include <vtkMarchingCubes.h>
+#include <vtkStructuredPoints.h>
 
 // header files of project libraries
-#include "rendering/cv_utils.hpp"
-#include "filtering/segmentation.hpp"
 #include "common/utils.hpp"
+#include "filtering/segmentation.hpp"
+#include "rendering/cv_utils.hpp"
 
 using namespace ret;
 using namespace ret::rendering;

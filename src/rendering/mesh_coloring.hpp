@@ -29,8 +29,8 @@
 
 // header files of other libraries
 #include <opencv2/core/core.hpp>
-#include <vtkSmartPointer.h>
 #include <vtkPolyData.h>
+#include <vtkSmartPointer.h>
 #include <vtkUnsignedCharArray.h>
 
 // header files of project libraries

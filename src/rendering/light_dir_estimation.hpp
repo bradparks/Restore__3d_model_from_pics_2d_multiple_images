@@ -29,13 +29,13 @@
 
 // header files of other libraries
 #include <opencv2/core/core.hpp>
-#include <vtkSmartPointer.h>
 #include <vtkPolyData.h>
+#include <vtkSmartPointer.h>
 
 // header files of project libraries
+#include "calibration/ransac.hpp"
 #include "common/camera.hpp"
 #include "common/dataset.hpp"
-#include "calibration/ransac.hpp"
 
 namespace ret {
 

@@ -32,8 +32,8 @@
 #include <opencv2/highgui/highgui.hpp>
 
 // header files of project libraries
-#include "io/dataset_reader.hpp"
 #include "common/dataset.hpp"
+#include "io/dataset_reader.hpp"
 
 namespace fs = boost::filesystem;
 using ret::DataSet;

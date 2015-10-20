@@ -26,17 +26,17 @@
 
 // C++ system files
 #include <memory>
-#include <vector>
 #include <utility>
+#include <vector>
 
 // header files of other libraries
 #include <opencv2/core/core.hpp>
-#include <vtkSmartPointer.h>
 #include <vtkPolyData.h>
+#include <vtkSmartPointer.h>
 
 // header files of project libraries
-#include "rendering/bounding_box.hpp"
 #include "common/camera.hpp"
+#include "rendering/bounding_box.hpp"
 
 namespace ret {
 

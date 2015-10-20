@@ -31,8 +31,8 @@
 #include <opencv2/core/core.hpp>
 
 // header files of project libraries
-#include "common/camera_intrinsics.hpp"
 #include "common/camera_extrinsics.hpp"
+#include "common/camera_intrinsics.hpp"
 
 namespace ret {
 
