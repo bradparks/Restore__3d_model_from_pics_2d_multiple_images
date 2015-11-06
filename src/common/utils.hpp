@@ -103,7 +103,7 @@ namespace ret {
         };
         // clang-format on
 
-        auto type = cv_types.find(imgTypeInt);
+        auto type = cv_types.find(img_type_int);
         return type == cv_types.end() ? "unknown image type" : type->second;
     }
 }
