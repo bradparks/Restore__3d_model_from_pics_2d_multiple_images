@@ -24,6 +24,7 @@
 // none
 
 // C++ system files
+#include <cmath>
 #include <cstdlib>
 #include <ctime>
 #include <limits>

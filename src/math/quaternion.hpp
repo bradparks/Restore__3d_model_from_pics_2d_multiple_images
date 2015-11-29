@@ -25,7 +25,7 @@
 // none
 
 // C++ system files
-// none
+#include <ostream>
 
 // header files of other libraries
 #include <opencv2/core/core.hpp>

@@ -22,7 +22,7 @@
 // none
 
 // C++ system files
-// none
+#include <cassert>
 
 // header files of other libraries
 #include <opencv2/imgproc/imgproc.hpp>

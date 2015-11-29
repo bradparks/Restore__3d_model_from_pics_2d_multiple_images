@@ -24,12 +24,19 @@
 // none
 
 // C++ system files
+#include <cassert>
+#include <cstddef>
 #include <map>
+#include <utility>
 
 // header files of other libraries
+#include <vtkDataArray.h>
+#include <vtkPolyData.h>
 #include <vtkPointData.h>
+#include <vtkUnsignedCharArray.h>
 
 // header files of project libraries
+#include "common/camera.hpp"
 #include "rendering/cv_utils.hpp"
 
 namespace ret {

@@ -24,16 +24,22 @@
 // none
 
 // C++ system files
+#include <algorithm>
+#include <cmath>
 #include <limits>
 
 // header files of other libraries
 #include <vtkFloatArray.h>
 #include <vtkMarchingCubes.h>
 #include <vtkPointData.h>
+#include <vtkPolyData.h>
 #include <vtkPolyDataNormals.h>
 #include <vtkStructuredPoints.h>
+#include <vtkType.h>
+#include <vtkVersionMacros.h>
 
 // header files of project libraries
+#include "common/camera.hpp"
 #include "common/utils.hpp"
 #include "filtering/segmentation.hpp"
 #include "rendering/cv_utils.hpp"

@@ -25,6 +25,7 @@
 // none
 
 // C++ system files
+#include <cstddef>
 #include <vector>
 
 // header files of other libraries

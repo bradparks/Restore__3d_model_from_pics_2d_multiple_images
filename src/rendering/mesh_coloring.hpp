@@ -28,13 +28,16 @@
 #include <vector>
 
 // header files of other libraries
-#include <vtkPolyData.h>
 #include <vtkSmartPointer.h>
-#include <vtkUnsignedCharArray.h>
 #include <opencv2/core/core.hpp>
 
 // header files of project libraries
-#include "common/camera.hpp"
+// none
+
+// forward declarations
+class vtkPolyData;
+class vtkUnsignedCharArray;
+namespace ret { class Camera; }
 
 namespace ret {
 

@@ -24,6 +24,8 @@
 // none
 
 // C++ system files
+#include <cassert>
+#include <cmath>
 #include <limits>
 
 // header files of other libraries

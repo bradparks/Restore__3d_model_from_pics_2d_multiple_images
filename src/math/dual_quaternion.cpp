@@ -24,7 +24,8 @@
 // none
 
 // C++ system files
-// none
+#include <cmath>
+#include <cstddef>
 
 // header files of other libraries
 // none

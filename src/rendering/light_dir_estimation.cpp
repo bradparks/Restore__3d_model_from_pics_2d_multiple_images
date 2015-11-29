@@ -24,13 +24,21 @@
 // none
 
 // C++ system files
+#include <cassert>
+#include <cmath>
+#include <ctime>
 #include <cstdlib>
 
 // header files of other libraries
+#include <vtkDataArray.h>
 #include <vtkPointData.h>
+#include <vtkPolyData.h>
 #include <opencv2/imgproc/imgproc.hpp>
 
 // header files of project libraries
+#include "calibration/light_direction_model.hpp"
+#include "common/camera.hpp"
+#include "common/dataset.hpp"
 #include "rendering/cv_utils.hpp"
 
 namespace ret {

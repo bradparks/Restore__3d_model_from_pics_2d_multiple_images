@@ -24,7 +24,9 @@
 // none
 
 // C++ system files
-#include <utility>
+#include <algorithm>
+#include <cassert>
+#include <type_traits>
 #include <vector>
 
 // header files of other libraries

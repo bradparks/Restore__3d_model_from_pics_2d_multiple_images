@@ -25,18 +25,20 @@
 // none
 
 // C++ system files
+#include <cstddef>
 #include <memory>
 #include <utility>
-#include <vector>
 
 // header files of other libraries
-#include <vtkPolyData.h>
 #include <vtkSmartPointer.h>
 #include <opencv2/core/core.hpp>
 
 // header files of project libraries
-#include "common/camera.hpp"
 #include "rendering/bounding_box.hpp"
+
+// forward declarations
+class vtkPolyData;
+namespace ret { class Camera; }
 
 namespace ret {
 

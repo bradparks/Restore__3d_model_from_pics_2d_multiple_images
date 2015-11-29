@@ -32,7 +32,6 @@
 
 // header files of project libraries
 #include "common/camera.hpp"
-#include "rendering/cv_utils.hpp"
 
 namespace ret {
 
