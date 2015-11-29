@@ -108,9 +108,9 @@ namespace rendering {
         cv::circle(Normals, center, radius, cv::Scalar(255, 0, 0), -1, 8);
         cv::cvtColor(Normals, Normals, CV_BGR2HSV);
         for (std::size_t idx = 0; idx < 75000; ++idx) {
-            auto rnd1 = arc4random() % contour_points_.size();
-            auto rnd2 = arc4random() % contour_points_.size();
-            auto rnd3 = arc4random() % contour_points_.size();
+            auto rnd1 = rand() % contour_points_.size();
+            auto rnd2 = rand() % contour_points_.size();
+            auto rnd3 = rand() % contour_points_.size();
             auto N = createNormalMapFromRandomContourPoints(rnd1, rnd2, rnd3);
             auto I =
                 createIntensityVecFromRandomContourPoints(rnd1, rnd2, rnd3);
@@ -158,7 +158,7 @@ namespace rendering {
         std::vector<calib::contour_point> sample_points;
         const auto cp_size = contour_points_.size();
         for (std::size_t idx = 0; idx < sample_size_; ++idx) {
-            auto rnd = arc4random() % cp_size;
+            auto rnd = rand() % cp_size;
             sample_points.push_back(contour_points_[rnd]);
         }
 
