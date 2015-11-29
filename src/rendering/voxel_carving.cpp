@@ -36,7 +36,6 @@
 #include <vtkPolyDataNormals.h>
 #include <vtkStructuredPoints.h>
 #include <vtkType.h>
-#include <vtkVersionMacros.h>
 
 // header files of project libraries
 #include "common/camera.hpp"
