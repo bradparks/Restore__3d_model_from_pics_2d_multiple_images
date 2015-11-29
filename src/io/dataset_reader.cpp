@@ -24,6 +24,7 @@
 // C++ system files
 #include <algorithm>
 #include <iterator>
+#include <utility>
 
 // header files of other libraries
 #include <boost/filesystem.hpp>
@@ -36,77 +37,83 @@
 #include "io/dataset_reader.hpp"
 
 namespace fs = boost::filesystem;
-using ret::DataSet;
-using ret::io::DataSetReader;
+namespace ret {
 
-DataSetReader::DataSetReader(const std::string& directory)
-    : directory_(directory) {}
+namespace io {
 
-DataSet DataSetReader::load(const std::size_t numImages) const {
+    DataSetReader::DataSetReader(std::string directory)
+        : directory_(std::move(directory)) {}
 
-    cv::Mat K, dist;
-    if (fs::exists(directory_ + "/K.xml")) {
-        K = loadMatrixFromFile("/K.xml", "K_matrix");
-    }
+    DataSet DataSetReader::load(const std::size_t numImages) const {
 
-    if (fs::exists(directory_ + "/dist.xml")) {
-        dist = loadMatrixFromFile("/dist.xml", "dist_coeff");
-    }
-    auto projMats = loadProjectionMatrices(numImages, "/viff.xml");
+        cv::Mat K, dist;
+        if (fs::exists(directory_ + "/K.xml")) {
+            K = loadMatrixFromFile("/K.xml", "K_matrix");
+        }
 
-    fs::path dir(directory_);
-    DataSet ds;
-    if (fs::exists(dir) && fs::is_directory(dir)) {
-        // sorting paths, since directory listing is not sorted under Linux
-        using paths = std::vector<fs::path>;
-        paths stored_paths;
-        std::copy(fs::directory_iterator(dir), fs::directory_iterator(),
-                  std::back_inserter(stored_paths));
-        std::sort(stored_paths.begin(), stored_paths.end());
+        if (fs::exists(directory_ + "/dist.xml")) {
+            dist = loadMatrixFromFile("/dist.xml", "dist_coeff");
+        }
+        auto projMats = loadProjectionMatrices(numImages, "/viff.xml");
 
-        std::size_t camIdx = 0;
-        for (paths::const_iterator iter(stored_paths.begin());
-             iter != stored_paths.end(); ++iter) {
-            if (fs::is_regular_file(*iter) && iter->extension() == ".png") {
-                cv::Mat P = projMats[camIdx++];
-                cv::Mat R, K2, t;
-                cv::decomposeProjectionMatrix(P, K2, R, t);
+        fs::path dir(directory_);
+        DataSet ds;
+        if (fs::exists(dir) && fs::is_directory(dir)) {
+            // sorting paths, since directory listing is not sorted under Linux
+            using paths = std::vector<fs::path>;
+            paths stored_paths;
+            std::copy(fs::directory_iterator(dir), fs::directory_iterator(),
+                      std::back_inserter(stored_paths));
+            std::sort(stored_paths.begin(), stored_paths.end());
 
-                Camera cam(cv::imread(iter->string()));
-                cam.setCalibrationMatrix(K.empty() ? K2 : K);
-                if (!dist.empty()) cam.setDistortionCoeffs(dist);
-                cam.setProjectionMatrix(P);
-                cam.setRotationMatrix(R);
-                cam.setTranslationVector(t);
+            std::size_t camIdx = 0;
+            for (paths::const_iterator iter(stored_paths.begin());
+                 iter != stored_paths.end(); ++iter) {
+                if (fs::is_regular_file(*iter) && iter->extension() == ".png") {
+                    cv::Mat P = projMats[camIdx++];
+                    cv::Mat R, K2, t;
+                    cv::decomposeProjectionMatrix(P, K2, R, t);
 
-                ds.addCamera(cam);
+                    Camera cam(cv::imread(iter->string()));
+                    cam.setCalibrationMatrix(K.empty() ? K2 : K);
+                    if (!dist.empty()) {
+                        cam.setDistortionCoeffs(dist);
+                    }
+                    cam.setProjectionMatrix(P);
+                    cam.setRotationMatrix(R);
+                    cam.setTranslationVector(t);
+
+                    ds.addCamera(cam);
+                }
             }
         }
+
+        assert(ds.size() == numImages);
+        return ds;
     }
 
-    assert(ds.size() == numImages);
-    return ds;
-}
-
-cv::Mat DataSetReader::loadMatrixFromFile(const std::string& filename,
-                                          const std::string& matname) const {
-    cv::Mat M;
-    cv::FileStorage Fs(directory_ + filename, cv::FileStorage::READ);
-    Fs[matname] >> M;
-    return M;
-}
-
-std::vector<cv::Mat> DataSetReader::loadProjectionMatrices(
-    const std::size_t numMatrices, const std::string& filename) const {
-
-    std::vector<cv::Mat> projMats;
-    boost::format fmt("viff%03d_matrix");
-    cv::FileStorage fs(directory_ + filename, cv::FileStorage::READ);
-    for (std::size_t idx = 0; idx < numMatrices; ++idx) {
-        cv::Mat P;
-        fs[(fmt % idx).str()] >> P;
-        projMats.push_back(P);
+    cv::Mat DataSetReader::loadMatrixFromFile(
+        const std::string& filename, const std::string& matname) const {
+        cv::Mat M;
+        cv::FileStorage Fs(directory_ + filename, cv::FileStorage::READ);
+        Fs[matname] >> M;
+        return M;
     }
 
-    return projMats;
-}
+    std::vector<cv::Mat> DataSetReader::loadProjectionMatrices(
+        const std::size_t numMatrices, const std::string& filename) const {
+
+        std::vector<cv::Mat> projMats;
+        boost::format fmt("viff%03d_matrix");
+        cv::FileStorage fs(directory_ + filename, cv::FileStorage::READ);
+        for (std::size_t idx = 0; idx < numMatrices; ++idx) {
+            cv::Mat P;
+            fs[(fmt % idx).str()] >> P;
+            projMats.push_back(P);
+        }
+
+        return projMats;
+    }
+
+} // namespace io
+} // namespace ret

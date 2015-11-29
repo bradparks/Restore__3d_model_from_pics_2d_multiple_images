@@ -32,22 +32,22 @@
 
 namespace ret {
 
-    namespace rendering {
+namespace rendering {
 
-        namespace mc {
+    namespace mc {
 
-            /// The typename grid_cell defines the base type of the grid cells.
-            /// To access the value and the weight of a grid cell, use the
-            /// marcos MC_VALUE and MC_WEIGHT. To change the way of accessing
-            /// value and weight, you only need to modify these marcos.
-            /// Note: The current implemenation uses the data structure
-            /// grid_entry_t and the function convQ15ToFloat from
-            /// "VoxelGridAccessTemp.h".
-            typedef float grid_cell;
+        /// The typename grid_cell defines the base type of the grid cells.
+        /// To access the value and the weight of a grid cell, use the
+        /// marcos MC_VALUE and MC_WEIGHT. To change the way of accessing
+        /// value and weight, you only need to modify these marcos.
+        /// Note: The current implemenation uses the data structure
+        /// grid_entry_t and the function convQ15ToFloat from
+        /// "VoxelGridAccessTemp.h".
+        typedef float grid_cell;
 
-            typedef int int_type;
-        }
+        typedef int int_type;
     }
+}
 }
 
 #endif

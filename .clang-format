@@ -11,5 +11,5 @@ AlignConsecutiveAssignments: true
 SpaceAfterCStyleCast: true
 KeepEmptyLinesAtTheStartOfBlocks: true
 SpacesBeforeTrailingComments: 1
-NamespaceIndentation: All
+NamespaceIndentation: Inner 
 Standard: Cpp11

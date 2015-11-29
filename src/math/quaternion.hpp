@@ -35,67 +35,65 @@
 
 namespace ret {
 
-    namespace math {
+namespace math {
 
-        class Quaternion {
-          public:
-            /// Constructors
-            Quaternion();
-            Quaternion(double s, double x, double y, double z);
-            Quaternion(double s, const cv::Vec3d& vec);
-            Quaternion(const Quaternion& other);
+    class Quaternion {
+      public:
+        /// Constructors
+        Quaternion();
+        Quaternion(double s, double x, double y, double z);
+        Quaternion(double s, const cv::Vec3d& vec);
+        Quaternion(const Quaternion& other) = default;
 
-            /// Operators
-            Quaternion& operator=(const Quaternion& other);
-            bool operator==(const Quaternion& other) const;
-            bool operator!=(const Quaternion& other) const;
-            Quaternion operator+(const Quaternion& other) const;
-            Quaternion& operator+=(const Quaternion& other);
-            Quaternion operator-(const Quaternion& other) const;
-            Quaternion operator*(const Quaternion& other) const;
-            cv::Vec3d operator*(const cv::Vec3d& vec) const;
-            Quaternion operator*(double scalar) const;
-            Quaternion operator/(double scalar) const;
-            Quaternion& operator*=(double scalar);
+        /// Operators
+        Quaternion& operator=(const Quaternion& other) = default;
+        bool operator==(const Quaternion& other) const;
+        bool operator!=(const Quaternion& other) const;
+        Quaternion operator+(const Quaternion& other) const;
+        Quaternion& operator+=(const Quaternion& other);
+        Quaternion operator-(const Quaternion& other) const;
+        Quaternion operator*(const Quaternion& other) const;
+        cv::Vec3d operator*(const cv::Vec3d& vec) const;
+        Quaternion operator*(double scalar) const;
+        Quaternion operator/(double scalar) const;
+        Quaternion& operator*=(double scalar);
 
-            /// functions
-            double dot(Quaternion& other) const;
-            double magnitude() const;
-            Quaternion& normalize();
-            Quaternion conj() const;
-            Quaternion inv() const;
-            cv::Vec3d toEulerAngles() const;
-            cv::Mat toRotMatrix() const;
-            cv::Mat toRotMatrix4x4() const;
-            cv::Vec4d getComponents() const;
-            friend std::ostream& operator<<(std::ostream& os,
-                                            const Quaternion& q) {
-                return os << "[" << q.s_ << ", (" << q.vec_[0] << ", "
-                          << q.vec_[1] << ", " << q.vec_[2] << ")]";
-            }
+        /// functions
+        double dot(Quaternion& other) const;
+        double magnitude() const;
+        Quaternion& normalize();
+        Quaternion conj() const;
+        Quaternion inv() const;
+        cv::Vec3d toEulerAngles() const;
+        cv::Mat toRotMatrix() const;
+        cv::Mat toRotMatrix4x4() const;
+        cv::Vec4d getComponents() const;
+        friend std::ostream& operator<<(std::ostream& os, const Quaternion& q) {
+            return os << "[" << q.s_ << ", (" << q.vec_[0] << ", " << q.vec_[1]
+                      << ", " << q.vec_[2] << ")]";
+        }
 
-            /// static functions
-            static Quaternion fromRotMatrix(const cv::Mat& rotMatrix);
-            static Quaternion fromRodriguesVec(const cv::Vec3d& rodrigues);
-            static Quaternion fromEulerAngles(const cv::Vec3d& eulerAngles);
-            static Quaternion fromAxisAngle(const cv::Vec3d& axis,
-                                            double angle);
-            static Quaternion betweenTwoVecs(const cv::Vec3d& a,
-                                             const cv::Vec3d& b);
-            static Quaternion lookAt(const cv::Vec3d& a, const cv::Vec3d& b);
-            static Quaternion slerp(const Quaternion& q1, const Quaternion& q2,
-                                    double t);
-            static Quaternion log(const Quaternion& q);
-            static Quaternion exp(const Quaternion& q);
-            static Quaternion pow(const Quaternion& q, double t);
+        /// static functions
+        static Quaternion fromRotMatrix(const cv::Mat& rotMatrix);
+        static Quaternion fromRodriguesVec(const cv::Vec3d& rodrigues);
+        static Quaternion fromEulerAngles(const cv::Vec3d& eulerAngles);
+        static Quaternion fromAxisAngle(const cv::Vec3d& axis, double angle);
+        static Quaternion betweenTwoVecs(const cv::Vec3d& a,
+                                         const cv::Vec3d& b);
+        static Quaternion lookAt(const cv::Vec3d& a, const cv::Vec3d& b);
+        static Quaternion slerp(const Quaternion& q1, const Quaternion& q2,
+                                double t);
+        static Quaternion log(const Quaternion& q);
+        static Quaternion exp(const Quaternion& q);
+        static Quaternion pow(const Quaternion& q, double t);
 
-          private:
-            /// real part
-            double s_;
-            /// imaginary parts
-            cv::Vec3d vec_;
-        };
-    }
+      private:
+        /// real part
+        double s_;
+        /// imaginary parts
+        cv::Vec3d vec_;
+    };
+}
 }
 
 #endif

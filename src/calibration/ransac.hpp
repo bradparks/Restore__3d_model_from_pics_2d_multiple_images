@@ -35,89 +35,86 @@
 
 namespace ret {
 
-    namespace calib {
+namespace calib {
 
-        /// @brief Contour point with surface normal and intensity
-        template <typename T, typename Vec>
-        struct contour_point_t {
-            Vec normal;
-            T intensity;
-            contour_point_t(Vec norm, T intens)
-                : normal(norm), intensity(intens) {}
-        };
-        typedef contour_point_t<unsigned char, cv::Vec3f> contour_point;
+    /// @brief Contour point with surface normal and intensity
+    template <typename T, typename Vec>
+    struct contour_point_t {
+        Vec normal;
+        T intensity;
+        contour_point_t(Vec norm, T intens) : normal(norm), intensity(intens) {}
+    };
+    typedef contour_point_t<unsigned char, cv::Vec3f> contour_point;
 
-        /// @brief Implements Random sample consensus (RANSAC) algorithm to
-        /// estimate the parameter of the lambertian reflection model used to
-        /// estimate the light direction for a given @ref Camera image together
-        /// with an already reconstructed visual hull of a photographed object.
-        class Ransac {
-          public:
-            /// @brief Initializes default parameter for estimating light
-            /// direction
-            Ransac();
+    /// @brief Implements Random sample consensus (RANSAC) algorithm to
+    /// estimate the parameter of the lambertian reflection model used to
+    /// estimate the light direction for a given @ref Camera image together
+    /// with an already reconstructed visual hull of a photographed object.
+    class Ransac {
+      public:
+        /// @brief Initializes default parameter for estimating light
+        /// direction
+        Ransac();
 
-            /// @brief Set current obseration set
-            /// @param observation_set Obseration set
-            Ransac& setObservationSet(
-                std::vector<contour_point> observation_set);
+        /// @brief Set current obseration set
+        /// @param observation_set Obseration set
+        Ransac& setObservationSet(std::vector<contour_point> observation_set);
 
-            /// @brief Set current best model for light direction estimation
-            /// @param model Light direction model
-            Ransac& setModel(LightDirectionModel& model);
+        /// @brief Set current best model for light direction estimation
+        /// @param model Light direction model
+        Ransac& setModel(LightDirectionModel& model);
 
-            /// @brief Set threshold for deciding, if light direction votes for
-            /// current model
-            /// @param thresh Threshold value
-            Ransac& setThreshold(const float thresh);
+        /// @brief Set threshold for deciding, if light direction votes for
+        /// current model
+        /// @param thresh Threshold value
+        Ransac& setThreshold(const float thresh);
 
-            /// @brief Set number of iterations
-            /// @param iterations Number of iterations
-            Ransac& setIterations(const std::size_t iterations);
+        /// @brief Set number of iterations
+        /// @param iterations Number of iterations
+        Ransac& setIterations(const std::size_t iterations);
 
-            /// @brief Set number of required inliers
-            /// @param required_inliers Number of required inliers
-            Ransac& setRequiredInliers(const std::size_t required_inliers);
+        /// @brief Set number of required inliers
+        /// @param required_inliers Number of required inliers
+        Ransac& setRequiredInliers(const std::size_t required_inliers);
 
-            /// @brief Returns best model, if one was found
-            /// @param model Best model for light direction
-            bool getBestModel(LightDirectionModel& model);
+        /// @brief Returns best model, if one was found
+        /// @param model Best model for light direction
+        bool getBestModel(LightDirectionModel& model);
 
-            /// @brief Returns light direction model for given contour points
-            /// @param cp1 Contour point 1
-            /// @param cp2 Contour point 2
-            /// @param cp3 Contour point 3
-            LightDirectionModel getModel(const contour_point& cp1,
-                                         const contour_point& cp2,
-                                         const contour_point& cp3) const;
+        /// @brief Returns light direction model for given contour points
+        /// @param cp1 Contour point 1
+        /// @param cp2 Contour point 2
+        /// @param cp3 Contour point 3
+        LightDirectionModel getModel(const contour_point& cp1,
+                                     const contour_point& cp2,
+                                     const contour_point& cp3) const;
 
-            /// @brief Returns light direction model for given set of contour
-            /// points
-            /// @param observation Observation set
-            LightDirectionModel getModel(
-                const std::vector<contour_point>& observation) const;
+        /// @brief Returns light direction model for given set of contour
+        /// points
+        /// @param observation Observation set
+        LightDirectionModel getModel(
+            const std::vector<contour_point>& observation) const;
 
-          private:
-            bool isMember(
-                const contour_point& cp,
-                const std::vector<contour_point>& maybe_inliers) const;
-            bool fitsModel(const contour_point& cp,
-                           const LightDirectionModel& model) const;
-            std::vector<contour_point> getMaybeInliers() const;
-            int getModelError(const std::vector<contour_point>& point_list,
-                              const LightDirectionModel& model) const;
-            float getDistance(const contour_point& cp,
-                              const LightDirectionModel& model) const;
+      private:
+        bool isMember(const contour_point& cp,
+                      const std::vector<contour_point>& maybe_inliers) const;
+        bool fitsModel(const contour_point& cp,
+                       const LightDirectionModel& model) const;
+        std::vector<contour_point> getMaybeInliers() const;
+        int getModelError(const std::vector<contour_point>& point_list,
+                          const LightDirectionModel& model) const;
+        float getDistance(const contour_point& cp,
+                          const LightDirectionModel& model) const;
 
-            std::vector<contour_point> observation_set_;
-            std::vector<contour_point> best_consensus_set_;
-            LightDirectionModel best_model_;
-            std::size_t required_inliers_;
-            std::size_t iterations_;
-            float best_error_;
-            float threshold_;
-        };
-    }
+        std::vector<contour_point> observation_set_;
+        std::vector<contour_point> best_consensus_set_;
+        LightDirectionModel best_model_;
+        std::size_t required_inliers_;
+        std::size_t iterations_;
+        float best_error_;
+        float threshold_;
+    };
+}
 }
 
 #endif

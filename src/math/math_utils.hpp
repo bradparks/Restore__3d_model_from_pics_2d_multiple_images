@@ -35,58 +35,58 @@
 
 namespace ret {
 
-    namespace math {
+namespace math {
 
-        template <typename T>
-        T clamp(T val, T min, T max) {
-            return val < min ? min : (val > max ? max : val);
-        }
-
-        template <typename T>
-        int signum(T val) {
-            return (val > 0.0) - (val < 0.0);
-        }
-
-        template <typename T>
-        double rad2deg(T val) {
-            return val * 180.0 / M_PI;
-        }
-
-        template <typename T>
-        double deg2rad(T val) {
-            return val * M_PI / 180.0;
-        }
-
-        template <typename T>
-        cv::Mat rotMatrix(double angle, T axis, bool rad) {
-            if (!rad) {
-                angle = deg2rad(angle);
-            }
-
-            auto s = sin(angle);
-            auto c = cos(angle);
-            auto mc = 1.0 - c;
-
-            axis /= norm(axis);
-            double x = axis[0];
-            double y = axis[1];
-            double z = axis[2];
-
-            // clang-format off
-            cv::Mat r = (cv::Mat_<double>(3, 3) <<
-                         x*x*mc + c,   x*y*mc - z*s, x*z*mc + y*s,
-                         x*y*mc + z*s, y*y*mc + c,   y*z*mc - x*s,
-                         x*z*mc - y*s, y*z*mc + x*s, z*z*mc + c);
-            // clang-format on
-
-            return r;
-        }
-
-        template <typename T>
-        bool equals(T x, T y) {
-            return fabs(x - y) < std::numeric_limits<T>::epsilon();
-        }
+    template <typename T>
+    T clamp(T val, T min, T max) {
+        return val < min ? min : (val > max ? max : val);
     }
+
+    template <typename T>
+    int signum(T val) {
+        return (val > 0.0) - (val < 0.0);
+    }
+
+    template <typename T>
+    double rad2deg(T val) {
+        return val * 180.0 / M_PI;
+    }
+
+    template <typename T>
+    double deg2rad(T val) {
+        return val * M_PI / 180.0;
+    }
+
+    template <typename T>
+    cv::Mat rotMatrix(double angle, T axis, bool rad) {
+        if (!rad) {
+            angle = deg2rad(angle);
+        }
+
+        auto s  = sin(angle);
+        auto c  = cos(angle);
+        auto mc = 1.0 - c;
+
+        axis /= norm(axis);
+        double x = axis[0];
+        double y = axis[1];
+        double z = axis[2];
+
+        // clang-format off
+        cv::Mat r = (cv::Mat_<double>(3, 3) <<
+                     x*x*mc + c,   x*y*mc - z*s, x*z*mc + y*s,
+                     x*y*mc + z*s, y*y*mc + c,   y*z*mc - x*s,
+                     x*z*mc - y*s, y*z*mc + x*s, z*z*mc + c);
+        // clang-format on
+
+        return r;
+    }
+
+    template <typename T>
+    bool equals(T x, T y) {
+        return fabs(x - y) < std::numeric_limits<T>::epsilon();
+    }
+}
 }
 
 #endif

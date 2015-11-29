@@ -28,43 +28,43 @@
 #include <vector>
 
 // header files of other libraries
-#include <opencv2/core/core.hpp>
 #include <vtkPolyData.h>
 #include <vtkSmartPointer.h>
 #include <vtkUnsignedCharArray.h>
+#include <opencv2/core/core.hpp>
 
 // header files of project libraries
 #include "common/camera.hpp"
 
 namespace ret {
 
-    namespace rendering {
+namespace rendering {
 
-        /// @brief Colorize a given 3D mesh using the surface normal for each
-        /// vertex of the mesh. The color is extracted from the photographs of
-        /// the object. For each vertex, there is a set of @ref Camera images
-        /// to extract the color from.
-        class MeshColoring {
-          public:
-            /// @brief Init the color array used for 3D mesh colorization
-            MeshColoring();
+    /// @brief Colorize a given 3D mesh using the surface normal for each
+    /// vertex of the mesh. The color is extracted from the photographs of
+    /// the object. For each vertex, there is a set of @ref Camera images
+    /// to extract the color from.
+    class MeshColoring {
+      public:
+        /// @brief Init the color array used for 3D mesh colorization
+        MeshColoring();
 
-            MeshColoring(MeshColoring const&) = delete;
-            MeshColoring operator&=(MeshColoring const&) = delete;
+        MeshColoring(MeshColoring const&) = delete;
+        MeshColoring operator&=(MeshColoring const&) = delete;
 
-            /// @brief Extracts color information from the whole dataset and
-            /// colorizes each vertex of the mesh using a robust weighted
-            /// approach where inconsistent surface colors are filtered
-            /// @param mesh 3D reconstructed mesh
-            /// @param dataset Camera dataset for the given mesh
-            void colorize(vtkSmartPointer<vtkPolyData> mesh,
-                          std::vector<Camera> dataset);
+        /// @brief Extracts color information from the whole dataset and
+        /// colorizes each vertex of the mesh using a robust weighted
+        /// approach where inconsistent surface colors are filtered
+        /// @param mesh 3D reconstructed mesh
+        /// @param dataset Camera dataset for the given mesh
+        void colorize(vtkSmartPointer<vtkPolyData> mesh,
+                      std::vector<Camera> dataset);
 
-          private:
-            vtkSmartPointer<vtkUnsignedCharArray> colors_;
-            cv::Size img_size_;
-        };
-    }
+      private:
+        vtkSmartPointer<vtkUnsignedCharArray> colors_;
+        cv::Size img_size_;
+    };
+}
 }
 
 #endif

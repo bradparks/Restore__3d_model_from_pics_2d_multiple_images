@@ -35,42 +35,38 @@
 
 namespace ret {
 
-    class DataSet {
-      public:
-        DataSet() : cameras_() {}
+class DataSet {
+  public:
+    DataSet() : cameras_() {}
 
-        template <typename T>
-        void setCameras(T&& cameras) {
-            this->cameras_ = std::forward<T>(cameras);
-        }
+    template <typename T>
+    void setCameras(T&& cameras) {
+        this->cameras_ = std::forward<T>(cameras);
+    }
 
-        std::vector<Camera> getCameras() const {
-            return cameras_;
-        }
+    std::vector<Camera> getCameras() const { return cameras_; }
 
-        template <typename T>
-        void setCamera(T&& camera, const std::size_t camIdx) {
-            assert(camIdx < cameras_.size());
-            cameras_[camIdx] = std::forward<T>(camera);
-        }
+    template <typename T>
+    void setCamera(T&& camera, const std::size_t camIdx) {
+        assert(camIdx < cameras_.size());
+        cameras_[camIdx] = std::forward<T>(camera);
+    }
 
-        Camera& getCamera(const std::size_t camIdx) {
-            assert(camIdx < cameras_.size());
-            return cameras_[camIdx];
-        }
+    Camera& getCamera(const std::size_t camIdx) {
+        assert(camIdx < cameras_.size());
+        return cameras_[camIdx];
+    }
 
-        template <typename T>
-        void addCamera(T&& camera) {
-            cameras_.push_back(std::forward<T>(camera));
-        }
+    template <typename T>
+    void addCamera(T&& camera) {
+        cameras_.push_back(std::forward<T>(camera));
+    }
 
-        std::size_t size() const {
-            return cameras_.size();
-        }
+    std::size_t size() const { return cameras_.size(); }
 
-      private:
-        std::vector<Camera> cameras_;
-    };
+  private:
+    std::vector<Camera> cameras_;
+};
 }
 
 #endif

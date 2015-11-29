@@ -30,51 +30,56 @@
 // header files of project libraries
 #include "filtering/segmentation.hpp"
 
-using ret::filtering::Segmentation;
+namespace ret {
 
-cv::Mat Segmentation::binarize(const cv::Mat& Image, const cv::Scalar& thresh) {
+namespace filtering {
 
-    assert(Image.channels() == 3);
-    cv::Mat Binary;
-    cv::cvtColor(Image, Binary, CV_BGR2HSV);
-    cv::inRange(Binary, thresh, cv::Scalar(255, 255, 255), Binary);
+    cv::Mat Segmentation::binarize(const cv::Mat& Image,
+                                   const cv::Scalar& thresh) {
 
-    return Binary;
-}
+        assert(Image.channels() == 3);
+        cv::Mat Binary;
+        cv::cvtColor(Image, Binary, CV_BGR2HSV);
+        cv::inRange(Binary, thresh, cv::Scalar(255, 255, 255), Binary);
 
-cv::Mat Segmentation::grabCut(const cv::Mat& Image, unsigned char num_frags,
-                              const cv::Point& w_from_to,
-                              const cv::Point& h_from_to) {
+        return Binary;
+    }
 
-    assert(Image.channels() == 3);
-    assert((num_frags & (num_frags - 1)) == 0);
-    auto w_frag = Image.cols / static_cast<int>(num_frags);
-    auto h_frag = Image.rows / static_cast<int>(num_frags);
-    cv::Mat Result, bgModel, fgModel;
-    cv::Rect area(w_from_to.x * w_frag, w_from_to.y * h_frag,
-                  h_from_to.x * w_frag, h_from_to.y * h_frag);
-    cv::grabCut(Image, Result, area, bgModel, fgModel, 1,
-                cv::GC_INIT_WITH_RECT);
-    cv::compare(Result, cv::GC_PR_FGD, Result, cv::CMP_EQ);
+    cv::Mat Segmentation::grabCut(const cv::Mat& Image, unsigned char num_frags,
+                                  const cv::Point& w_from_to,
+                                  const cv::Point& h_from_to) {
 
-    return Result;
-}
+        assert(Image.channels() == 3);
+        assert((num_frags & (num_frags - 1)) == 0);
+        auto w_frag = Image.cols / static_cast<int>(num_frags);
+        auto h_frag = Image.rows / static_cast<int>(num_frags);
+        cv::Mat Result, bgModel, fgModel;
+        cv::Rect area(w_from_to.x * w_frag, w_from_to.y * h_frag,
+                      h_from_to.x * w_frag, h_from_to.y * h_frag);
+        cv::grabCut(Image, Result, area, bgModel, fgModel, 1,
+                    cv::GC_INIT_WITH_RECT);
+        cv::compare(Result, cv::GC_PR_FGD, Result, cv::CMP_EQ);
 
-cv::Mat Segmentation::createDistMap(const cv::Mat& Mask) {
+        return Result;
+    }
 
-    assert(Mask.channels() == 1);
-    cv::Mat DistImage;
-    cv::distanceTransform(createSilhouette(Mask), DistImage, CV_DIST_L2, 3);
+    cv::Mat Segmentation::createDistMap(const cv::Mat& Mask) {
 
-    return DistImage;
-}
+        assert(Mask.channels() == 1);
+        cv::Mat DistImage;
+        cv::distanceTransform(createSilhouette(Mask), DistImage, CV_DIST_L2, 3);
 
-cv::Mat Segmentation::createSilhouette(const cv::Mat& Mask) {
+        return DistImage;
+    }
 
-    assert(Mask.channels() == 1);
-    cv::Mat Silhouette;
-    cv::Canny(Mask, Silhouette, 0, 255);
-    cv::bitwise_not(Silhouette, Silhouette);
+    cv::Mat Segmentation::createSilhouette(const cv::Mat& Mask) {
 
-    return Silhouette;
-}
+        assert(Mask.channels() == 1);
+        cv::Mat Silhouette;
+        cv::Canny(Mask, Silhouette, 0, 255);
+        cv::bitwise_not(Silhouette, Silhouette);
+
+        return Silhouette;
+    }
+} // namespace filtering
+} // namespace ret

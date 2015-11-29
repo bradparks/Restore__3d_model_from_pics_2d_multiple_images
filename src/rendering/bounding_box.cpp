@@ -24,6 +24,7 @@
 // none
 
 // C++ system files
+#include <utility>
 #include <vector>
 
 // header files of other libraries
@@ -32,81 +33,85 @@
 // header files of project libraries
 // none
 
-using namespace ret::rendering;
+namespace ret {
 
-BoundingBox::BoundingBox(const Camera& cam1, const Camera& cam2)
-    : cam1_(cam1), cam2_(cam2) {}
+namespace rendering {
 
-bb_bounds BoundingBox::getBounds() const {
+    BoundingBox::BoundingBox(Camera cam1, Camera cam2)
+        : cam1_(std::move(cam1)), cam2_(std::move(cam2)) {}
 
-    // TODO: Add assertion, if cams are orthogonal (with quaternions)
-    auto rect1 = getBoundingRect(cam1_.getMask());
-    auto rect2 = getBoundingRect(cam2_.getMask());
+    bb_bounds BoundingBox::getBounds() const {
 
-    // get corners from 2d bounding rects
-    cv::Mat p2 =
-        (cv::Mat_<float>(3, 1) << rect1.x, rect1.y + rect1.height, 1.0f);
-    cv::Mat p4 =
-        (cv::Mat_<float>(3, 1) << rect1.x + rect1.width, rect1.y, 1.0f);
-    cv::Mat p6 =
-        (cv::Mat_<float>(3, 1) << rect2.x, rect2.y + rect2.height, 1.0f);
-    cv::Mat p8 =
-        (cv::Mat_<float>(3, 1) << rect2.x + rect2.width, rect2.y, 1.0f);
+        // TODO(kai): Add assertion, if cams are orthogonal (with quaternions)
+        auto rect1 = getBoundingRect(cam1_.getMask());
+        auto rect2 = getBoundingRect(cam2_.getMask());
 
-    // convert to world points
-    const cv::Mat K1_inv = cam1_.getCalibrationMatrix().inv();
-    const cv::Mat K2_inv = cam2_.getCalibrationMatrix().inv();
-    cv::Mat x2 = K1_inv * p2;
-    cv::Mat x4 = K1_inv * p4;
-    cv::Mat x6 = K2_inv * p6;
-    cv::Mat x8 = K2_inv * p8;
+        // get corners from 2d bounding rects
+        cv::Mat p2 =
+            (cv::Mat_<float>(3, 1) << rect1.x, rect1.y + rect1.height, 1.0f);
+        cv::Mat p4 =
+            (cv::Mat_<float>(3, 1) << rect1.x + rect1.width, rect1.y, 1.0f);
+        cv::Mat p6 =
+            (cv::Mat_<float>(3, 1) << rect2.x, rect2.y + rect2.height, 1.0f);
+        cv::Mat p8 =
+            (cv::Mat_<float>(3, 1) << rect2.x + rect2.width, rect2.y, 1.0f);
 
-    // get world points
-    auto t1 = (K1_inv * cam1_.getProjectionMatrix()).col(3);
-    auto t2 = (K2_inv * cam2_.getProjectionMatrix()).col(3);
+        // convert to world points
+        const cv::Mat K1_inv = cam1_.getCalibrationMatrix().inv();
+        const cv::Mat K2_inv = cam2_.getCalibrationMatrix().inv();
+        cv::Mat x2           = K1_inv * p2;
+        cv::Mat x4           = K1_inv * p4;
+        cv::Mat x6           = K2_inv * p6;
+        cv::Mat x8           = K2_inv * p8;
 
-    // get distance
-    auto t1_norm = cv::norm(t1);
-    auto t2_norm = cv::norm(t2);
+        // get world points
+        auto t1 = (K1_inv * cam1_.getProjectionMatrix()).col(3);
+        auto t2 = (K2_inv * cam2_.getProjectionMatrix()).col(3);
 
-    // get world points of 2d rect
-    x2 = t1_norm * x2 / cv::norm(x2);
-    x4 = t1_norm * x4 / cv::norm(x4);
-    x6 = t2_norm * x6 / cv::norm(x6);
-    x8 = t2_norm * x8 / cv::norm(x8);
+        // get distance
+        auto t1_norm = cv::norm(t1);
+        auto t2_norm = cv::norm(t2);
 
-    bb_bounds bounds;
-    bounds.xmin = x2.at<float>(0, 0);
-    bounds.xmax = x4.at<float>(0, 0);
-    bounds.ymin = x6.at<float>(0, 0);
-    bounds.ymax = x8.at<float>(0, 0);
+        // get world points of 2d rect
+        x2 = t1_norm * x2 / cv::norm(x2);
+        x4 = t1_norm * x4 / cv::norm(x4);
+        x6 = t2_norm * x6 / cv::norm(x6);
+        x8 = t2_norm * x8 / cv::norm(x8);
 
-    if (x2.at<float>(1, 0) - x4.at<float>(1, 0) >
-        x6.at<float>(1, 0) - x8.at<float>(1, 0)) {
-        bounds.zmin = x4.at<float>(1, 0);
-        bounds.zmax = x2.at<float>(1, 0);
-    } else {
-        bounds.zmin = x8.at<float>(1, 0);
-        bounds.zmax = x6.at<float>(1, 0);
+        bb_bounds bounds;
+        bounds.xmin = x2.at<float>(0, 0);
+        bounds.xmax = x4.at<float>(0, 0);
+        bounds.ymin = x6.at<float>(0, 0);
+        bounds.ymax = x8.at<float>(0, 0);
+
+        if (x2.at<float>(1, 0) - x4.at<float>(1, 0) >
+            x6.at<float>(1, 0) - x8.at<float>(1, 0)) {
+            bounds.zmin = x4.at<float>(1, 0);
+            bounds.zmax = x2.at<float>(1, 0);
+        } else {
+            bounds.zmin = x8.at<float>(1, 0);
+            bounds.zmax = x6.at<float>(1, 0);
+        }
+
+        return bounds;
     }
 
-    return bounds;
-}
+    cv::Rect BoundingBox::getBoundingRect(const cv::Mat& Binary) const {
 
-cv::Rect BoundingBox::getBoundingRect(const cv::Mat& Binary) const {
+        assert(Binary.channels() == 1);
+        using Contour = std::vector<cv::Point>;
 
-    assert(Binary.channels() == 1);
-    using Contour = std::vector<cv::Point>;
+        std::vector<Contour> contours;
+        auto hierarchy = std::vector<cv::Vec4i>();
+        cv::findContours(Binary.clone(), contours, hierarchy, CV_RETR_TREE,
+                         CV_CHAIN_APPROX_SIMPLE);
 
-    std::vector<Contour> contours;
-    auto hierarchy = std::vector<cv::Vec4i>();
-    cv::findContours(Binary.clone(), contours, hierarchy, CV_RETR_TREE,
-                     CV_CHAIN_APPROX_SIMPLE);
+        auto result = *std::max_element(
+            contours.begin(), contours.end(), [](Contour a, Contour b) {
+                return cv::contourArea(a) < cv::contourArea(b);
+            });
+        return cv::boundingRect(cv::Mat(result));
+    }
 
-    auto result =
-        *std::max_element(contours.begin(), contours.end(),
-                          [](Contour a, Contour b) {
-                              return cv::contourArea(a) < cv::contourArea(b);
-                          });
-    return cv::boundingRect(cv::Mat(result));
-}
+} // namespace rendering
+} // namespace ret

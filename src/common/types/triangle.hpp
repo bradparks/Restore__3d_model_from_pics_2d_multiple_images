@@ -35,18 +35,18 @@
 
 namespace ret {
 
-    struct triangle {
-        struct {
-            vec3f v1;
-            vec3f v2;
-            vec3f v3;
-        } comp;
+struct triangle {
+    struct {
+        vec3f v1;
+        vec3f v2;
+        vec3f v3;
+    } comp;
 
-        inline bool operator==(const triangle& other) const {
-            return (comp.v1 == other.comp.v1 && comp.v2 == other.comp.v2 &&
-                    comp.v3 == other.comp.v3);
-        }
-    };
+    inline bool operator==(const triangle& other) const {
+        return (comp.v1 == other.comp.v1 && comp.v2 == other.comp.v2 &&
+                comp.v3 == other.comp.v3);
+    }
+};
 }
 
 #endif

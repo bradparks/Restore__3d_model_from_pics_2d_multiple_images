@@ -35,24 +35,24 @@
 
 namespace ret {
 
-    struct vec3f {
-        float x;
-        float y;
-        float z;
+struct vec3f {
+    float x;
+    float y;
+    float z;
 
-        vec3f() = default;
+    vec3f() = default;
 
-        vec3f(float x1, float y1, float z1) : x(x1), y(y1), z(z1) {}
+    vec3f(float x1, float y1, float z1) : x(x1), y(y1), z(z1) {}
 
-        inline bool operator==(const vec3f& other) const {
-            return (x == other.x && y == other.y && z == other.z);
-        }
+    inline bool operator==(const vec3f& other) const {
+        return (x == other.x && y == other.y && z == other.z);
+    }
 
-        inline vec3f cross(const vec3f& other) const {
-            return vec3f(y * other.z - z * other.y, z * other.x - x * other.z,
-                         x * other.y - y * other.x);
-        }
-    };
+    inline vec3f cross(const vec3f& other) const {
+        return vec3f(y * other.z - z * other.y, z * other.x - x * other.z,
+                     x * other.y - y * other.x);
+    }
+};
 }
 
 #endif

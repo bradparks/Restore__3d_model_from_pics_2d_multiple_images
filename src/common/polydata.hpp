@@ -37,32 +37,28 @@
 
 namespace ret {
 
-    class PolyData {
-      public:
-        PolyData() : triangles_(), normals_() {}
+class PolyData {
+  public:
+    PolyData() : triangles_(), normals_() {}
 
-        template <typename T>
-        void setTriangles(T&& triangles) {
-            triangles_ = std::forward<T>(triangles);
-        }
+    template <typename T>
+    void setTriangles(T&& triangles) {
+        triangles_ = std::forward<T>(triangles);
+    }
 
-        std::vector<triangle> getTriangles() const {
-            return triangles_;
-        }
+    std::vector<triangle> getTriangles() const { return triangles_; }
 
-        template <typename T>
-        void setNormals(T&& normals) {
-            normals_ = std::forward<T>(normals);
-        }
+    template <typename T>
+    void setNormals(T&& normals) {
+        normals_ = std::forward<T>(normals);
+    }
 
-        std::vector<vec3f> getNormals() const {
-            return normals_;
-        }
+    std::vector<vec3f> getNormals() const { return normals_; }
 
-      private:
-        std::vector<triangle> triangles_;
-        std::vector<vec3f> normals_;
-    };
+  private:
+    std::vector<triangle> triangles_;
+    std::vector<vec3f> normals_;
+};
 }
 
 #endif

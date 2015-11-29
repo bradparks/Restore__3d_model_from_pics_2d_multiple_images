@@ -35,60 +35,59 @@
 
 namespace ret {
 
-    namespace math {
+namespace math {
 
-        class DualQuaternion {
+    class DualQuaternion {
 
-          public:
-            DualQuaternion();
-            DualQuaternion(const DualQuaternion& other);
-            DualQuaternion(const Quaternion& real, const Quaternion& dual);
-            DualQuaternion(const Quaternion& real, const cv::Vec3d vec);
-            DualQuaternion(const cv::Vec3d rodrigues, const cv::Vec3d vec);
-            DualQuaternion(const cv::Mat& Rot, const cv::Vec3d vec);
-            explicit DualQuaternion(const cv::Mat& Pose);
-            DualQuaternion(const cv::Vec3d axis, double angle,
-                           const cv::Vec3d vec);
+      public:
+        DualQuaternion();
+        DualQuaternion(const DualQuaternion& other) = default;
+        DualQuaternion(const Quaternion& real, const Quaternion& dual);
+        DualQuaternion(const Quaternion& real, const cv::Vec3d vec);
+        DualQuaternion(const cv::Vec3d rodrigues, const cv::Vec3d vec);
+        DualQuaternion(const cv::Mat& Rot, const cv::Vec3d vec);
+        explicit DualQuaternion(const cv::Mat& Pose);
+        DualQuaternion(const cv::Vec3d axis, double angle, const cv::Vec3d vec);
 
-            Quaternion getRotation() const;
-            cv::Vec3d getTranslation() const;
-            cv::Mat getPose() const;
+        Quaternion getRotation() const;
+        cv::Vec3d getTranslation() const;
+        cv::Mat getPose() const;
 
-            bool operator==(const DualQuaternion& other) const;
-            bool operator!=(const DualQuaternion& other) const;
-            DualQuaternion operator+(const DualQuaternion& other) const;
-            DualQuaternion& operator+=(const DualQuaternion& other);
-            DualQuaternion operator-(const DualQuaternion& other) const;
-            DualQuaternion& operator-=(const DualQuaternion& other);
-            DualQuaternion operator*(double scale) const;
-            DualQuaternion operator*=(double scale);
-            DualQuaternion operator/(double scale) const;
-            DualQuaternion& operator/=(double scale);
-            DualQuaternion operator*(const DualQuaternion& other) const;
-            DualQuaternion& operator*=(DualQuaternion& other);
+        bool operator==(const DualQuaternion& other) const;
+        bool operator!=(const DualQuaternion& other) const;
+        DualQuaternion operator+(const DualQuaternion& other) const;
+        DualQuaternion& operator+=(const DualQuaternion& other);
+        DualQuaternion operator-(const DualQuaternion& other) const;
+        DualQuaternion& operator-=(const DualQuaternion& other);
+        DualQuaternion operator*(double scale) const;
+        DualQuaternion operator*=(double scale);
+        DualQuaternion operator/(double scale) const;
+        DualQuaternion& operator/=(double scale);
+        DualQuaternion operator*(const DualQuaternion& other) const;
+        DualQuaternion& operator*=(DualQuaternion& other);
 
-            DualQuaternion conj() const;
-            DualQuaternion inv() const;
-            DualQuaternion& normalize();
-            double dot(DualQuaternion& other) const;
-            double magnitude() const;
+        DualQuaternion conj() const;
+        DualQuaternion inv() const;
+        DualQuaternion& normalize();
+        double dot(DualQuaternion& other) const;
+        double magnitude() const;
 
-            static DualQuaternion sclerp(const DualQuaternion& dq1,
-                                         const DualQuaternion& dq2, double t);
-            static DualQuaternion log(DualQuaternion& dq);
-            static DualQuaternion exp(DualQuaternion& dq);
-            static DualQuaternion pow(DualQuaternion& dq, double t);
-            static DualQuaternion dlb(const std::vector<DualQuaternion>& dqs);
-            static DualQuaternion dlb(const std::vector<DualQuaternion>& dqs,
-                                      const std::vector<double>& weights);
+        static DualQuaternion sclerp(const DualQuaternion& dq1,
+                                     const DualQuaternion& dq2, double t);
+        static DualQuaternion log(DualQuaternion& dq);
+        static DualQuaternion exp(DualQuaternion& dq);
+        static DualQuaternion pow(DualQuaternion& dq, double t);
+        static DualQuaternion dlb(const std::vector<DualQuaternion>& dqs);
+        static DualQuaternion dlb(const std::vector<DualQuaternion>& dqs,
+                                  const std::vector<double>& weights);
 
-          private:
-            Quaternion initRealPart(const Quaternion& real);
-            Quaternion initDualPart(const cv::Vec3d& vec);
-            Quaternion real_;
-            Quaternion dual_;
-        };
-    }
+      private:
+        Quaternion initRealPart(const Quaternion& real);
+        Quaternion initDualPart(const cv::Vec3d& vec);
+        Quaternion real_;
+        Quaternion dual_;
+    };
+}
 }
 
 #endif

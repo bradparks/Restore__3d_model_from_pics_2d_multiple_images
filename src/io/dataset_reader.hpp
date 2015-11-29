@@ -36,22 +36,21 @@
 
 namespace ret {
 
-    namespace io {
+namespace io {
 
-        class DataSetReader {
-          public:
-            explicit DataSetReader(const std::string& directory);
-            DataSet load(const std::size_t numImages) const;
+    class DataSetReader {
+      public:
+        explicit DataSetReader(std::string directory);
+        DataSet load(const std::size_t numImages) const;
 
-          private:
-            cv::Mat loadMatrixFromFile(const std::string& filename,
-                                       const std::string& matname) const;
-            std::vector<cv::Mat> loadProjectionMatrices(
-                const std::size_t numMatrices,
-                const std::string& filename) const;
-            std::string directory_;
-        };
-    }
+      private:
+        cv::Mat loadMatrixFromFile(const std::string& filename,
+                                   const std::string& matname) const;
+        std::vector<cv::Mat> loadProjectionMatrices(
+            const std::size_t numMatrices, const std::string& filename) const;
+        std::string directory_;
+    };
+}
 }
 
 #endif

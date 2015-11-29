@@ -25,16 +25,16 @@
 #include <iostream>
 
 // header files of other libraries
-#include <opencv2/highgui/highgui.hpp>
-#include <vtkPolyData.h>
 #include <vtkPLYWriter.h>
+#include <vtkPolyData.h>
+#include <opencv2/highgui/highgui.hpp>
 
 // header files of project libraries
 #include "common/dataset.hpp"
 #include "common/utils.hpp"
-#include "io/dataset_reader.hpp"
-#include "io/assets_path.hpp"
 #include "filtering/segmentation.hpp"
+#include "io/assets_path.hpp"
+#include "io/dataset_reader.hpp"
 #include "rendering/bounding_box.hpp"
 #include "rendering/mesh_coloring.hpp"
 #include "rendering/voxel_carving.hpp"
@@ -70,16 +70,16 @@ int main() {
 
     for (auto idx = 0; idx < num_imgs; ++idx) {
         ds.getCamera(idx).setMask(Segmentation::binarize(
-                        ds.getCamera(idx).getImage(), cv::Scalar(0, 0, 30)));
+            ds.getCamera(idx).getImage(), cv::Scalar(0, 0, 30)));
     }
     BoundingBox bbox =
-                BoundingBox(ds.getCamera(0), ds.getCamera((num_imgs / 4) - 1));
+        BoundingBox(ds.getCamera(0), ds.getCamera((num_imgs / 4) - 1));
     auto vc = ret::make_unique<VoxelCarving>(bbox.getBounds(), 128);
     for (const auto& cam : ds.getCameras()) {
         vc->carve(cam);
     }
     auto visual_hull = vc->createVisualHull();
-    auto coloring = ret::make_unique<MeshColoring>();
+    auto coloring    = ret::make_unique<MeshColoring>();
     coloring->colorize(visual_hull, ds.getCameras());
     exportMesh(visual_hull, "visual_hull.ply");
 

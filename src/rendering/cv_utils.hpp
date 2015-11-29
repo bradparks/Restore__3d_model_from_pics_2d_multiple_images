@@ -35,27 +35,27 @@
 
 namespace ret {
 
-    template <typename coord, typename point>
-    coord project(const Camera& cam, const point& v) {
+template <typename coord, typename point>
+coord project(const Camera& cam, const point& v) {
 
-        coord im;
+    coord im;
 
-        // project voxel into camera image coords
-        auto P = cam.getProjectionMatrix();
+    // project voxel into camera image coords
+    auto P = cam.getProjectionMatrix();
 
-        auto z = P.at<float>(2, 0) * v.x + P.at<float>(2, 1) * v.y +
-                 P.at<float>(2, 2) * v.z + P.at<float>(2, 3);
+    auto z = P.at<float>(2, 0) * v.x + P.at<float>(2, 1) * v.y +
+             P.at<float>(2, 2) * v.z + P.at<float>(2, 3);
 
-        im.y = (P.at<float>(1, 0) * v.x + P.at<float>(1, 1) * v.y +
-                P.at<float>(1, 2) * v.z + P.at<float>(1, 3)) /
-               z;
+    im.y = (P.at<float>(1, 0) * v.x + P.at<float>(1, 1) * v.y +
+            P.at<float>(1, 2) * v.z + P.at<float>(1, 3)) /
+           z;
 
-        im.x = (P.at<float>(0, 0) * v.x + P.at<float>(0, 1) * v.y +
-                P.at<float>(0, 2) * v.z + P.at<float>(0, 3)) /
-               z;
+    im.x = (P.at<float>(0, 0) * v.x + P.at<float>(0, 1) * v.y +
+            P.at<float>(0, 2) * v.z + P.at<float>(0, 3)) /
+           z;
 
-        return im;
-    }
+    return im;
+}
 }
 
 #endif
