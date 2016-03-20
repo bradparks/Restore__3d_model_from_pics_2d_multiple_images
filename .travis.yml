@@ -24,7 +24,7 @@ install:
   # install latest CMake 3.2.3
   - wget --no-check-certificate https://cmake.org/files/v3.5/cmake-3.5.0-Linux-x86_64.tar.gz
     && tar -xzf cmake-3.5.0-Linux-x86_64.tar.gz
-    && sudo cp -fR cmake-3.5.0-Linux-x86_64.tar.gz/* /usr
+    && sudo cp -fR cmake-3.5.0-Linux-x86_64/* /usr
   - sudo apt-get install -qq gcc-4.9 g++-4.9
   - sudo apt-get install -qq libboost1.55-all-dev libopencv-dev libvtk5-dev
   - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 90
