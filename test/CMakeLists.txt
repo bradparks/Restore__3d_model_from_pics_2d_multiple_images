@@ -19,28 +19,43 @@
 # SOFTWARE.
 
 # Aggregate all test sources
-FILE(GLOB_RECURSE TEST_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+file(GLOB_RECURSE TEST_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+set(TEST_SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/sanity_check.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/calib/light_direction_model_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/calib/ransac_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/camera_extrinsics_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/camera_intrinsics_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/camera_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/dataset_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/polydata_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/filtering/segmentation_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/io/dataset_reader_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/math/dual_quaternion_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/math/quaternion_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/math/utils_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/rendering/voxel_carving_test.cpp)
 
 # Add coverage flags for test executable, if enabled
-IF(USE_CODE_COVERAGE AND CMAKE_COMPILER_IS_GNUCXX)
-    SET(CMAKE_CXX_FLAGS 
+if(USE_CODE_COVERAGE AND CMAKE_COMPILER_IS_GNUCXX)
+    set(CMAKE_CXX_FLAGS
         "${CMAKE_CXX_FLAGS} -g -O0 -fprofile-arcs -ftest-coverage")
-ENDIF()
+endif()
 
 # Build test executables
-INCLUDE_DIRECTORIES(SYSTEM "${gtest_SOURCE_DIR}/include")
-SET(TEST_BIN "${PROJECT_NAME}-unittests")
-ADD_EXECUTABLE(${TEST_BIN} ${TEST_SOURCES})
-ENABLE_CXX_11(${TEST_BIN})
-INCLUDE_DIRECTORIES(SYSTEM ${VTK_INCLUDE_DIRS})
-SET_PROPERTY(DIRECTORY APPEND PROPERTY COMPILE_DEFINITIONS ${VTK_DEFINITIONS})
-TARGET_LINK_LIBRARIES(${TEST_BIN} gtest_main ${RESTORE_LIB})
+include_directories(SYSTEM "${gtest_SOURCE_DIR}/include")
+set(TEST_BIN "${PROJECT_NAME}-unittests")
+add_executable(${TEST_BIN} ${TEST_SOURCES})
+enable_cxx_11(${TEST_BIN})
+include_directories(SYSTEM ${VTK_INCLUDE_DIRS})
+set_property(DIRECTORY APPEND PROPERTY COMPILE_DEFINITIONS ${VTK_DEFINITIONS})
+target_link_libraries(${TEST_BIN} gtest_main ${RESTORE_LIB})
 
 # Setup unit testing
-ADD_CUSTOM_TARGET(tests ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TEST_BIN}
+add_custom_target(tests ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TEST_BIN}
     DEPENDS ${TEST_BIN} COMMENT "Executing unit tests..."
     SOURCES ${TEST_SOURCES})
 
-IF(USE_CODE_COVERAGE AND CMAKE_COMPILER_IS_GNUCXX)
-    SETUP_TARGET_FOR_COVERAGE(${PROJECT_NAME}-coverage ${TEST_BIN} coverage)
-ENDIF()
+if(USE_CODE_COVERAGE AND CMAKE_COMPILER_IS_GNUCXX)
+    setup_target_for_coverage(${PROJECT_NAME}-coverage ${TEST_BIN} coverage)
+endif()

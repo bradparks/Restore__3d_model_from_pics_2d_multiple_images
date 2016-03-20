@@ -1,23 +1,23 @@
 # Code Coverage using gcc features
-FIND_PROGRAM(GCOV_PATH gcov)
-FIND_PROGRAM(LCOV_PATH lcov)
-FIND_PROGRAM(GENHTML_PATH genhtml)
-FIND_PROGRAM(GCOVR_PATH gcovr PATHS ${CMAKE_SOURCE_DIR}/test)
+find_program(GCOV_PATH gcov)
+find_program(LCOV_PATH lcov)
+find_program(GENHTML_PATH genhtml)
+find_program(GCOVR_PATH gcovr PATHS ${CMAKE_SOURCE_DIR}/test)
 
-IF(NOT GCOV_PATH)
-    MESSAGE(FATAL_ERROR "gcov not found! Aborting...")
-ENDIF()
+if(NOT GCOV_PATH)
+    message(FATAL_ERROR "gcov not found! Aborting...")
+endif()
 
-IF(NOT CMAKE_COMPILER_IS_GNUCXX)
-    IF(NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-        MESSAGE(FATAL_ERROR "Compiler is not GNU gcc! Aborting...")
-    ENDIF()
-ENDIF() 
+if(NOT CMAKE_COMPILER_IS_GNUCXX)
+    if(NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        message(FATAL_ERROR "Compiler is not GNU gcc! Aborting...")
+    endif()
+endif()
 
-IF(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
-    MESSAGE(WARNING "Code coverage results with an optimized (non-Debug) \
+if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
+    message(WARNING "Code coverage results with an optimized (non-Debug) \
     build may be misleading")
-ENDIF() 
+endif()
 
 # Param _targetname     The name of new the custom make target
 # Param _testrunner     The name of the target which runs the tests.
@@ -25,22 +25,22 @@ ENDIF()
 #                       If not, no coverage report will be created!
 # Param _outputname     lcov output is generated as _outputname.info
 #                       HTML report is generated in _outputname/index.html
-FUNCTION(SETUP_TARGET_FOR_COVERAGE _targetname _testrunner _outputname)
-    IF(NOT LCOV_PATH)
-        MESSAGE(FATAL_ERROR "lcov not found! Aborting...")
-    ENDIF()
+function(setup_target_for_coverage _targetname _testrunner _outputname)
+    if(NOT LCOV_PATH)
+        message(FATAL_ERROR "lcov not found! Aborting...")
+    endif()
 
-    IF(NOT GENHTML_PATH)
-        MESSAGE(FATAL_ERROR "genhtml not found! Aborting...")
-    ENDIF() 
+    if(NOT GENHTML_PATH)
+        message(FATAL_ERROR "genhtml not found! Aborting...")
+    endif()
 
     # Remove and system headers and sources
-    SET(LCOV_REMOVE ${_outputname}.info '/usr/*' 'test/*' 'tools/*')
+    set(LCOV_REMOVE ${_outputname}.info '/usr/*' 'test/*' 'tools/*')
     # Remove thirdparty software
-    SET(LCOV_REMOVE ${LCOV_REMOVE} 'thirdparty/*')
+    set(LCOV_REMOVE ${LCOV_REMOVE} 'thirdparty/*')
 
     # Setup target
-    ADD_CUSTOM_TARGET(${_targetname}
+    add_custom_target(${_targetname}
         # Cleanup lcov
         ${LCOV_PATH} --directory . --zerocounters
         # Run tests
@@ -59,27 +59,27 @@ FUNCTION(SETUP_TARGET_FOR_COVERAGE _targetname _testrunner _outputname)
     )
 
     # Show info where to find the report
-    ADD_CUSTOM_COMMAND(TARGET ${_targetname} POST_BUILD
+    add_custom_command(TARGET ${_targetname} POST_BUILD
         COMMAND ;
         COMMENT "Open ./${_outputname}/index.html in your browser to view the \
         coverage report."
     )
 
-ENDFUNCTION() # SETUP_TARGET_FOR_COVERAGE
+endfunction() # setup_target_for_coverage
 
 # Param _targetname     The name of new the custom make target
 # Param _testrunner     The name of the target which runs the tests
 # Param _outputname     cobertura output is generated as _outputname.xml
-FUNCTION(SETUP_TARGET_FOR_COVERAGE_COBERTURA _targetname _testrunner _outputname)
-    IF(NOT PYTHON_EXECUTABLE)
-        MESSAGE(FATAL_ERROR "Python not found! Aborting...")
-    ENDIF()
+function(setup_target_for_coverage_cobertura _targetname _testrunner _outputname)
+    if(NOT PYTHON_EXECUTABLE)
+        message(FATAL_ERROR "Python not found! Aborting...")
+    endif()
 
-    IF(NOT GCOVR_PATH)
-        MESSAGE(FATAL_ERROR "gcovr not found! Aborting...")
-    ENDIF()
+    if(NOT GCOVR_PATH)
+        message(FATAL_ERROR "gcovr not found! Aborting...")
+    endif()
 
-    ADD_CUSTOM_TARGET(${_targetname}
+    add_custom_target(${_targetname}
         # Run tests
         ${_testrunner} ${ARGV3}
         # Running gcovr
@@ -90,8 +90,8 @@ FUNCTION(SETUP_TARGET_FOR_COVERAGE_COBERTURA _targetname _testrunner _outputname
     )
 
     # Show info where to find the report
-    ADD_CUSTOM_COMMAND(TARGET ${_targetname} POST_BUILD
+    add_custom_command(TARGET ${_targetname} POST_BUILD
         COMMAND ;
         COMMENT "Cobertura code coverage report saved in ${_outputname}.xml."
     )
-ENDFUNCTION()
+endfunction()

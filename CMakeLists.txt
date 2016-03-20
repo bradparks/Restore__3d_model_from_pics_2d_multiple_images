@@ -18,25 +18,25 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-CMAKE_MINIMUM_REQUIRED(VERSION 3.2 FATAL_ERROR)
-PROJECT(restore LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.4 FATAL_ERROR)
+project(restore VERSION LANGUAGES CXX)
 
-INCLUDE(cmake/versions.cmake REQUIRED)
-INCLUDE(cmake/options.cmake REQUIRED)
-INCLUDE(cmake/compiler_options.cmake REQUIRED)
-INCLUDE(cmake/documentation_targets.cmake REQUIRED)
-INCLUDE(cmake/macros.cmake REQUIRED)
-INCLUDE(cmake/ide_project_layout.cmake REQUIRED)
+include(cmake/versions.cmake REQUIRED)
+include(cmake/options.cmake REQUIRED)
+include(cmake/compiler_options.cmake REQUIRED)
+include(cmake/documentation_targets.cmake REQUIRED)
+include(cmake/macros.cmake REQUIRED)
+include(cmake/ide_project_layout.cmake REQUIRED)
 
 # Required packages
-FIND_PACKAGE(OpenCV REQUIRED core imgproc calib3d highgui)
-FIND_PACKAGE(Boost COMPONENTS filesystem system REQUIRED)
-FIND_PACKAGE(VTK REQUIRED NO_MODULE)
+find_package(OpenCV REQUIRED core imgproc calib3d highgui)
+find_package(Boost COMPONENTS filesystem system REQUIRED)
+find_package(VTK REQUIRED NO_MODULE)
 
 # Add build targets
-INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/src")
-SET(RESTORE_LIB ${PROJECT_NAME}_lib)
-ADD_SUBDIRECTORY(src)        # Resore modules, each with separate CMakeLists.txt
-ADD_SUBDIRECTORY(thirdparty) # Gtest, etc.
-ADD_SUBDIRECTORY(test)       # Tests
-ADD_SUBDIRECTORY(tools)      # Small helper tools, etc.
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/src")
+set(RESTORE_LIB ${PROJECT_NAME}_lib)
+add_subdirectory(src)        # Restore modules, each with separate CMakeLists.txt
+add_subdirectory(thirdparty) # googletest
+add_subdirectory(test)       # Tests
+add_subdirectory(tools)      # Small helper tools, etc.
