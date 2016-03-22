@@ -35,10 +35,12 @@ using ret::filtering::Segmentation;
 
 TEST(SegmentationTest, BinarizeImage) {
 
-    cv::Mat Original(240, 320, CV_8UC3, cv::Scalar::all(17));
-    cv::Mat Binary = Segmentation::binarize(Original, cv::Scalar(200));
-    int size = Binary.rows * Binary.cols;
-    ASSERT_EQ(size, size - cv::countNonZero(Binary));
+    cv::Mat Original(240, 320, CV_8UC3, cv::Scalar::all(255));
+    const unsigned rg_size = 50;
+    cv::Mat Region = Original(cv::Rect(rg_size, rg_size, rg_size, rg_size));
+    Region.setTo(0);
+    cv::Mat Binary = Segmentation::binarize(Original, cv::Scalar(0, 0, 30));
+    ASSERT_EQ(rg_size * rg_size, cv::countNonZero(Binary));
 }
 
 TEST(SegmentationTest, AssertColorImageWhenBinarizing) {

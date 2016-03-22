@@ -41,6 +41,7 @@ namespace filtering {
         cv::Mat Binary;
         cv::cvtColor(Image, Binary, CV_BGR2HSV);
         cv::inRange(Binary, thresh, cv::Scalar(255, 255, 255), Binary);
+        cv::bitwise_not(Binary, Binary);
 
         return Binary;
     }
