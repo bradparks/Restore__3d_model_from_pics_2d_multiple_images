@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Kai Wolf
+// Copyright (c) 2015-2016, Kai Wolf
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,16 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-// C system files
-// none
-
-// C++ system files
-// none
-
-// header files of other libraries
 #include <gtest/gtest.h>
 
-// header files of project libraries
 #include "math/quaternion.hpp"
 #include "math/math_utils.hpp"
 

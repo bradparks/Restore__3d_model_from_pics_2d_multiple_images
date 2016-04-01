@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Kai Wolf
+// Copyright (c) 2015-2016, Kai Wolf
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,18 +20,13 @@
 
 #include "math/quaternion.hpp"
 
-// C system files
-// none
-
-// C++ system files
 #include <cassert>
 #include <cmath>
 #include <limits>
 
-// header files of other libraries
-// none
+#include <opencv2/core/types_c.h>
+#include <opencv2/core/mat.hpp>
 
-// header files of project libraries
 #include "math/math_utils.hpp"
 
 namespace ret {

@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Kai Wolf
+// Copyright (c) 2015-2016, Kai Wolf
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,25 +18,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef RESTORE_RENDERING_LIGHT_DIR_ESTIMATION_HPP
-#define RESTORE_RENDERING_LIGHT_DIR_ESTIMATION_HPP
+#ifndef RENDERING_LIGHT_DIR_ESTIMATION_HPP
+#define RENDERING_LIGHT_DIR_ESTIMATION_HPP
 
-// C system files
-// none
-
-// C++ system files
 #include <cstddef>
 #include <vector>
 
-// header files of other libraries
 #include <vtkSmartPointer.h>
 #include <vtkType.h>
 #include <opencv2/core/core.hpp>
 
-// header files of project libraries
 #include "calibration/ransac.hpp"
 
-// forward declarations
 class vtkPolyData;
 namespace ret { class Camera; }
 namespace ret { class DataSet; }
@@ -45,13 +38,14 @@ namespace ret {
 
 namespace rendering {
 
-    /// @brief Calculates light directions for each @ref Camera image based
-    /// on the visual hull of an oject. Light directions are estimated using
-    /// the reconstructed surface normals for each vertex using lambertian
-    /// illumination model and a robust @ref Ransac scheme for estimation
+    /** @brief Calculates light directions for each @ref Camera image based
+      * on the visual hull of an oject.
+      * Light directions are estimated using the reconstructed surface normals
+      * for each vertex using lambertian illumination model and a robust
+      * @ref Ransac scheme for estimation */
     class LightDirEstimation {
       public:
-        explicit LightDirEstimation(const double vis_angle_thresh = 0.5,
+        explicit LightDirEstimation(const double vis_angle_thresh    = 0.5,
                                     const std::size_t sample_size    = 1000,
                                     const std::size_t num_iterations = 2000);
         cv::Vec3f execute(Camera& cam,

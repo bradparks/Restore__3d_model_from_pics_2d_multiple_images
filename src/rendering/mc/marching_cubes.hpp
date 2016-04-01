@@ -10,19 +10,11 @@
  *                                                                            *
  ******************************************************************************/
 
-#ifndef RESTORE_RENDERING_MC_MARCHING_CUBES_HPP
-#define RESTORE_RENDERING_MC_MARCHING_CUBES_HPP
+#ifndef RENDERING_MC_MARCHING_CUBES_HPP
+#define RENDERING_MC_MARCHING_CUBES_HPP
 
-// C system files
-// none
-
-// C++ system files
 #include <vector>
 
-// header files of other libraries
-// none
-
-// header files of project libraries
 #include "common/types/triangle.hpp"
 #include "common/types/vec3f.hpp"
 #include "rendering/mc/basedef.hpp"
@@ -107,6 +99,6 @@ namespace rendering {
 }
 }
 
-#include "marching_cubes.inl"
+#include "marching_cubes.inl"  // IWYU pragma: export
 
 #endif

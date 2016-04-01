@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Kai Wolf
+// Copyright (c) 2015-2016, Kai Wolf
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,27 +18,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef RESTORE_CALIBRATION_LIGHT_DIRECTION_MODEL_HPP
-#define RESTORE_CALIBRATION_LIGHT_DIRECTION_MODEL_HPP
+#ifndef CALIBRATION_LIGHT_DIRECTION_MODEL_HPP
+#define CALIBRATION_LIGHT_DIRECTION_MODEL_HPP
 
-// C system files
-// none
-
-// C++ system files
-// none
-
-// header files of other libraries
 #include <opencv2/core/core.hpp>
-
-// header files of project libraries
-// none
 
 namespace ret {
 
 namespace calib {
 
-    /// @brief Light direction model used for estimating a light direction
-    /// for a given @ref Camera image
+    /** @brief Light direction model used for estimating a light direction
+      * for a given @ref Camera image */
     template <typename T, typename Vec>
     class LightDirectionModel_ {
       public:

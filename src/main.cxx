@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Kai Wolf
+// Copyright (c) 2015-2016, Kai Wolf
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,21 +18,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-// C system files
-// none
-
-// C++ system files
 #include <iostream>
 
-// header files of other libraries
 #include <vtkPLYWriter.h>
 #include <vtkPolyData.h>
 #include <opencv2/highgui/highgui.hpp>
+#include <QApplication>
 
-// header files of project libraries
 #include "common/dataset.hpp"
 #include "common/utils.hpp"
 #include "filtering/segmentation.hpp"
+#include "gui/main_window.hpp"
 #include "io/assets_path.hpp"
 #include "io/dataset_reader.hpp"
 #include "rendering/bounding_box.hpp"
@@ -62,8 +58,13 @@ void exportMesh(vtkSmartPointer<vtkPolyData> mesh,
     plyExporter->Write();
 }
 
-int main() {
+int main(int argc, char *argv[]) {
 
+    /*QApplication app(argc, argv);
+    app.setApplicationName("Restore");
+    ret::MainWindow main_win;
+    main_win.show();
+    return app.exec();*/
     const int num_imgs = 36;
     DataSetReader dsr(std::string(ASSETS_PATH) + "/squirrel");
     auto ds = dsr.load(num_imgs);
@@ -79,9 +80,9 @@ int main() {
         vc->carve(cam);
     }
     auto visual_hull = vc->createVisualHull();
-    auto coloring    = ret::make_unique<MeshColoring>();
-    coloring->colorize(visual_hull, ds.getCameras());
-    exportMesh(visual_hull, "visual_hull.ply");
+    //auto coloring    = ret::make_unique<MeshColoring>();
+    //coloring->colorize(visual_hull, ds.getCameras());
+    //exportMesh(visual_hull, "visual_hull.ply");
 
     return 0;
 }

@@ -12,10 +12,6 @@
 
 #include "rendering/mc/marching_cubes.hpp"
 
-// C system files
-// none
-
-// C++ system files
 #include <cassert>
 #include <cmath>
 #include <cstdint>
@@ -23,10 +19,6 @@
 #include <fstream>
 #include <iostream>
 
-// header files of other libraries
-// none
-
-// header files of project libraries
 #include "common/types/triangle.hpp"
 #include "common/types/vec3f.hpp"
 #include "rendering/mc/basedef.hpp"

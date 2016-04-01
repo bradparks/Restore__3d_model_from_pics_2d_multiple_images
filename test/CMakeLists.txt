@@ -1,4 +1,4 @@
-# Copyright (c) 2015, Kai Wolf
+# Copyright (c) 2015-2016, Kai Wolf
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -19,7 +19,6 @@
 # SOFTWARE.
 
 # Aggregate all test sources
-file(GLOB_RECURSE TEST_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 set(TEST_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/sanity_check.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/calib/light_direction_model_test.cpp
@@ -43,6 +42,7 @@ if(USE_CODE_COVERAGE AND CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 # Build test executables
+include_directories("${PROJECT_SOURCE_DIR}/src")
 include_directories(SYSTEM "${gtest_SOURCE_DIR}/include")
 set(TEST_BIN "${PROJECT_NAME}-unittests")
 add_executable(${TEST_BIN} ${TEST_SOURCES})

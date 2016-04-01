@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Kai Wolf
+// Copyright (c) 2015-2016, Kai Wolf
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef RESTORE_IO_ASSETS_PATH_HPP
-#define RESTORE_IO_ASSETS_PATH_HPP
+#ifndef IO_ASSETS_PATH_HPP
+#define IO_ASSETS_PATH_HPP
 
 // AUTO-GENERATION WARNING:
 // This file has been automatically generated from test_path.hpp.in.cmake.

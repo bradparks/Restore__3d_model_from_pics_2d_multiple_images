@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Kai Wolf
+// Copyright (c) 2015-2016, Kai Wolf
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,22 +20,18 @@
 
 #include "rendering/mesh_coloring.hpp"
 
-// C system files
-// none
-
-// C++ system files
 #include <cassert>
 #include <cstddef>
 #include <map>
 #include <utility>
 
-// header files of other libraries
 #include <vtkDataArray.h>
-#include <vtkPolyData.h>
 #include <vtkPointData.h>
+#include <vtkPolyData.h>
 #include <vtkUnsignedCharArray.h>
+#include <opencv2/core/mat.hpp>
+#include <opencv2/core/operations.hpp>
 
-// header files of project libraries
 #include "common/camera.hpp"
 #include "rendering/cv_utils.hpp"
 
@@ -65,7 +61,7 @@ namespace rendering {
                 (cv::Mat_<float>(3, 1) << normal[0], normal[1], normal[2]);
             std::map<double, std::size_t> angles;
             for (std::size_t j = 0; j < dataset.size(); ++j) {
-                cv::Mat cam_normal = dataset[j].getDirection();
+                cv::Mat cam_normal                = dataset[j].getDirection();
                 angles[sf_normal.dot(cam_normal)] = j;
             }
 

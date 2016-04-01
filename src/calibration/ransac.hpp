@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Kai Wolf
+// Copyright (c) 2015-2016, Kai Wolf
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,20 +18,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef RESTORE_CALIBRATION_RANSAC_HPP
-#define RESTORE_CALIBRATION_RANSAC_HPP
+#ifndef CALIBRATION_RANSAC_HPP
+#define CALIBRATION_RANSAC_HPP
 
-// C system files
-// none
-
-// C++ system files
 #include <cstddef>
 #include <vector>
 
-// header files of other libraries
 #include <opencv2/core/core.hpp>
+#include <opencv2/core/operations.hpp>
 
-// header files of project libraries
 #include "calibration/light_direction_model.hpp"
 
 namespace ret {
@@ -47,52 +42,52 @@ namespace calib {
     };
     typedef contour_point_t<unsigned char, cv::Vec3f> contour_point;
 
-    /// @brief Implements Random sample consensus (RANSAC) algorithm to
-    /// estimate the parameter of the lambertian reflection model used to
-    /// estimate the light direction for a given @ref Camera image together
-    /// with an already reconstructed visual hull of a photographed object.
+    /** @brief Implements Random sample consensus (RANSAC) algorithm to
+      * estimate the parameter of the lambertian reflection model used to
+      * estimate the light direction for a given @ref Camera image together
+      * with an already reconstructed visual hull of a photographed object. */
     class Ransac {
       public:
-        /// @brief Initializes default parameter for estimating light
-        /// direction
+        /** @brief Initializes default parameter for estimating light
+          * direction */
         Ransac();
 
-        /// @brief Set current obseration set
-        /// @param observation_set Obseration set
+        /** @brief Set current obseration set
+          * @param observation_set Obseration set */
         Ransac& setObservationSet(std::vector<contour_point> observation_set);
 
-        /// @brief Set current best model for light direction estimation
-        /// @param model Light direction model
+        /** @brief Set current best model for light direction estimation
+          * @param model Light direction model */
         Ransac& setModel(LightDirectionModel& model);
 
-        /// @brief Set threshold for deciding, if light direction votes for
-        /// current model
-        /// @param thresh Threshold value
+        /** @brief Set threshold for deciding, if light direction votes for
+          * current model
+          * @param thresh Threshold value */
         Ransac& setThreshold(const float thresh);
 
-        /// @brief Set number of iterations
-        /// @param iterations Number of iterations
+        /** @brief Set number of iterations
+          * @param iterations Number of iterations */
         Ransac& setIterations(const std::size_t iterations);
 
-        /// @brief Set number of required inliers
-        /// @param required_inliers Number of required inliers
+        /** @brief Set number of required inliers
+          * @param required_inliers Number of required inliers */
         Ransac& setRequiredInliers(const std::size_t required_inliers);
 
-        /// @brief Returns best model, if one was found
-        /// @param model Best model for light direction
+        /** @brief Returns best model, if one was found
+          * @param model Best model for light direction */
         bool getBestModel(LightDirectionModel& model);
 
-        /// @brief Returns light direction model for given contour points
-        /// @param cp1 Contour point 1
-        /// @param cp2 Contour point 2
-        /// @param cp3 Contour point 3
+        /** @brief Returns light direction model for given contour points
+          * @param cp1 Contour point 1
+          * @param cp2 Contour point 2
+          * @param cp3 Contour point 3 */
         LightDirectionModel getModel(const contour_point& cp1,
                                      const contour_point& cp2,
                                      const contour_point& cp3) const;
 
-        /// @brief Returns light direction model for given set of contour
-        /// points
-        /// @param observation Observation set
+        /** @brief Returns light direction model for given set of contour
+          * points
+          * @param observation Observation set */
         LightDirectionModel getModel(
             const std::vector<contour_point>& observation) const;
 

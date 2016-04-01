@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Kai Wolf
+// Copyright (c) 2015-2016, Kai Wolf
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,25 +18,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef RESTORE_RENDERING_VOXEL_CARVING_HPP
-#define RESTORE_RENDERING_VOXEL_CARVING_HPP
+#ifndef RENDERING_VOXEL_CARVING_HPP
+#define RENDERING_VOXEL_CARVING_HPP
 
-// C system files
-// none
-
-// C++ system files
 #include <cstddef>
 #include <memory>
 #include <utility>
 
-// header files of other libraries
 #include <vtkSmartPointer.h>
 #include <opencv2/core/core.hpp>
 
-// header files of project libraries
 #include "rendering/bounding_box.hpp"
 
-// forward declarations
 class vtkPolyData;
 namespace ret { class Camera; }
 
@@ -44,8 +37,8 @@ namespace ret {
 
 namespace rendering {
 
-    /// @brief Start parameter used to calculate the offset when carving
-    /// the visual hull
+    /** @brief Start parameter used to calculate the offset when carving
+      * the visual hull */
     template <typename T>
     struct start_params_t {
         T start_x, start_y, start_z;
@@ -53,49 +46,49 @@ namespace rendering {
     };
     typedef start_params_t<float> start_params;
 
-    /// @brief Creates a rough 3D reconstruction (so called visual hull)
-    /// from a set of @ref Camera. The physical dimension of the object is
-    /// defined through a @ref BoundingBox. The visual hull is created piece
-    /// by piece through calling carve for each camera in the set.
-    /// @image html voxelcarving-squirrel.gif
+    /** @brief Creates a rough 3D reconstruction (so called visual hull)
+      * from a set of @ref Camera. The physical dimension of the object is
+      * defined through a @ref BoundingBox. The visual hull is created piece
+      * by piece through calling carve for each camera in the set.
+      * @image html voxelcarving-squirrel.gif */
     class VoxelCarving {
       public:
-        /// @brief Given the voxel grid dimension this constructor fills up
-        /// a voxel grid ready to be used for carving out a reconstruction
-        /// @param bbox Dimensions of the bounding box
-        /// @param voxel_grid_dim Dimension of the voxel grid
+        /** @brief Given the voxel grid dimension this constructor fills up
+          * a voxel grid ready to be used for carving out a reconstruction
+          + @param bbox Dimensions of the bounding box
+          * @param voxel_grid_dim Dimension of the voxel grid */
         VoxelCarving(const bb_bounds bbox, const std::size_t voxel_dim);
 
-        VoxelCarving(VoxelCarving const&) = delete;
+        VoxelCarving(VoxelCarving const&)            = delete;
         VoxelCarving operator&=(VoxelCarving const&) = delete;
 
-        /// @brief Creates a silhouette from the object, projects each
-        /// voxel from the voxel grid into the the given camera and
-        /// calculates the distance to the edge of the silhouette. Must be
-        /// called for every @ref Camera in a set in order to create a
-        /// visual hull
-        /// @param cam current @ref Camera
+        /** @brief Creates a silhouette from the object, projects each
+          * voxel from the voxel grid into the the given camera and
+          * calculates the distance to the edge of the silhouette. Must be
+          * called for every @ref Camera in a set in order to create a
+          * visual hull
+          * @param cam current @ref Camera */
         void carve(const Camera& cam);
 
-        /// @brief Creates a visual hull from a camera set
-        /// @param isolevel threshold used for surface extraction
-        /// @return visual hull
+        /** @brief Creates a visual hull from a camera set
+          * @param isolevel threshold used for surface extraction
+          * @return visual hull */
         vtkSmartPointer<vtkPolyData> createVisualHull(
             const double isolevel = 0.0) const;
 
-        /// @brief Manually adjust the binary image-based bounding box
-        /// calculation in x and y direction
-        /// @param margin_xy offset for x and y direction
+        /** @brief Manually adjust the binary image-based bounding box
+          * calculation in x and y direction
+          * @param margin_xy offset for x and y direction */
         void setBoundingBoxMargin(const std::pair<float, float>& margin_xy);
 
-        /// @brief Manually adjust the binary image-based bounding box
-        /// calculation in x direction
-        /// @param margin_x offset for x direction
+        /** @brief Manually adjust the binary image-based bounding box
+          * calculation in x direction
+          * @param margin_x offset for x direction */
         void setBoundingBoxXMargin(const float margin_x);
 
-        /// @brief Manually adjust the binary image-based bounding box
-        /// calculation in y direction
-        /// @param margin_y offset for y direction
+        /** @brief Manually adjust the binary image-based bounding box
+          * calculation in y direction
+          * @param margin_y offset for y direction */
         void setBoundingBoxYMargin(const float margin_y);
 
       private:

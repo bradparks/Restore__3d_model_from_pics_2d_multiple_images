@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Kai Wolf
+// Copyright (c) 2015-2016, Kai Wolf
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,22 +20,21 @@
 
 #include "rendering/light_dir_estimation.hpp"
 
-// C system files
-// none
-
-// C++ system files
 #include <cassert>
 #include <cmath>
-#include <ctime>
 #include <cstdlib>
+#include <ctime>
 
-// header files of other libraries
+#include <opencv2/core/core_c.h>
+#include <opencv2/core/types_c.h>
+#include <opencv2/imgproc/types_c.h>
 #include <vtkDataArray.h>
 #include <vtkPointData.h>
 #include <vtkPolyData.h>
+#include <opencv2/core/mat.hpp>
+#include <opencv2/core/operations.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-// header files of project libraries
 #include "calibration/light_direction_model.hpp"
 #include "common/camera.hpp"
 #include "common/dataset.hpp"

@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Kai Wolf
+// Copyright (c) 2015-2016, Kai Wolf
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,21 +18,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef RESTORE_IO_DATASET_READER_HPP
-#define RESTORE_IO_DATASET_READER_HPP
+#ifndef IO_DATASET_READER_HPP
+#define IO_DATASET_READER_HPP
 
-// C system files
-// none
-
-// C++ system files
 #include <cstddef>
-#include <string>
+#include <iosfwd>
+#include <string> // IWYU pragma: export
 #include <vector>
 
-// header files of other libraries
 #include <opencv2/core/core.hpp>
 
-// header files of project libraries
 #include "common/dataset.hpp"
 
 namespace ret {

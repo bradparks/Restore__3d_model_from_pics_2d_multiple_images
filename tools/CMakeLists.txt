@@ -1,4 +1,4 @@
-# Copyright (c) 2015, Kai Wolf
+# Copyright (c) 2015-2016, Kai Wolf
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,6 +21,7 @@
 # Project tools binaries dir
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/tools/bin)
 
+include_directories(${PROJECT_SOURCE_DIR}/src)
 include_directories(SYSTEM ${VTK_INCLUDE_DIRS})
 set_property(DIRECTORY APPEND PROPERTY COMPILE_DEFINITIONS ${VTK_DEFINITIONS})
 

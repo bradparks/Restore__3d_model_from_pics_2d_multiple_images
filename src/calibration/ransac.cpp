@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Kai Wolf
+// Copyright (c) 2015-2016, Kai Wolf
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,20 +20,12 @@
 
 #include "calibration/ransac.hpp"
 
-// C system files
-// none
-
-// C++ system files
 #include <cmath>
 #include <cstdlib>
 #include <ctime>
 #include <limits>
 
-// header files of other libraries
-// none
-
-// header files of project libraries
-// none
+#include <opencv2/core/mat.hpp>
 
 namespace ret {
 
@@ -162,9 +154,8 @@ namespace calib {
     std::vector<contour_point> Ransac::getMaybeInliers() const {
         std::vector<contour_point> maybe_inliers;
         for (std::size_t i = 0; i < 3; ++i) {
-            maybe_inliers.push_back(
-                observation_set_.at(static_cast<std::size_t>(rand()) %
-                                    observation_set_.size()));
+            maybe_inliers.push_back(observation_set_.at(
+                static_cast<std::size_t>(rand()) % observation_set_.size()));
         }
 
         return maybe_inliers;

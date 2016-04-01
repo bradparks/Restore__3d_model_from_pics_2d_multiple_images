@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Kai Wolf
+// Copyright (c) 2015-2016, Kai Wolf
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,15 +20,10 @@
 
 #include "rendering/voxel_carving.hpp"
 
-// C system files
-// none
-
-// C++ system files
 #include <algorithm>
 #include <cmath>
 #include <limits>
 
-// header files of other libraries
 #include <vtkFloatArray.h>
 #include <vtkMarchingCubes.h>
 #include <vtkPointData.h>
@@ -36,8 +31,11 @@
 #include <vtkPolyDataNormals.h>
 #include <vtkStructuredPoints.h>
 #include <vtkType.h>
+#include <vtkVersionMacros.h>
+#include <opencv2/core/types_c.h>
+#include <opencv2/core/mat.hpp>
+#include <opencv2/core/operations.hpp>
 
-// header files of project libraries
 #include "common/camera.hpp"
 #include "common/utils.hpp"
 #include "filtering/segmentation.hpp"
@@ -59,15 +57,21 @@ namespace rendering {
                     std::numeric_limits<float>::max());
     }
 
+    template <typename T>
+    constexpr T voxelIdx(T x, T y, T z, T dim, T slice) {
+        return z + y * dim + x * slice;
+    }
+
     void VoxelCarving::carve(const Camera& cam) {
 
         const auto Mask      = cam.getMask();
         const auto DistImage = filtering::Segmentation::createDistMap(Mask);
         const auto img_size  = Mask.size();
 
-        for (auto i = 0; i < voxel_dim_; ++i) {
-            for (auto j = 0; j < voxel_dim_; ++j) {
-                for (auto k = 0; k < voxel_dim_; ++k) {
+        std::size_t i, j, k;
+        for (i = 0; i < voxel_dim_; ++i) {
+            for (j = 0; j < voxel_dim_; ++j) {
+                for (k = 0; k < voxel_dim_; ++k) {
 
                     auto voxel = calcVoxelPosInCamViewFrustum(i, j, k);
                     auto coord = project<cv::Point2f, cv::Point3f>(cam, voxel);
@@ -79,7 +83,7 @@ namespace rendering {
                         }
                     }
 
-                    const auto idx = k + j * voxel_dim_ + i * voxel_slice_;
+                    auto idx = voxelIdx(i, j, k, voxel_dim_, voxel_slice_);
                     if (dist < vox_array_[idx]) {
                         vox_array_[idx] = dist;
                     }

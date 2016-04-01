@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Kai Wolf
+// Copyright (c) 2015-2016, Kai Wolf
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,13 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef RESTORE_COMMON_UTILS_HPP
-#define RESTORE_COMMON_UTILS_HPP
+#ifndef COMMON_UTILS_HPP
+#define COMMON_UTILS_HPP
 
-// C system files
-// none
-
-// C++ system files
 #include <cmath>
 #include <cstddef>
 #include <map>
@@ -33,11 +29,7 @@
 #include <utility>
 #include <vector>
 
-// header files of other libraries
 #include <opencv2/core/core.hpp>
-
-// header files of project libraries
-// none
 
 namespace ret {
 
@@ -87,20 +79,20 @@ inline T median(std::vector<T>& v) {
 inline std::string getImgType(int img_type_int) {
     // 7 base types, with five channel options each (none or C1, ..., C4)
     // clang-format off
-        std::map<int, std::string> cv_types{
-            {CV_8U,    "CV_8U"},    {CV_8UC1,  "CV_8UC1"},  {CV_8UC2,  "CV_8UC2"},
-            {CV_8UC3,  "CV_8UC3"},  {CV_8UC4,  "CV_8UC4"},  {CV_8S,    "CV_8S"},
-            {CV_8SC1,  "CV_8SC1"},  {CV_8SC2,  "CV_8SC2"},  {CV_8SC3,  "CV_8SC3"}, 
-            {CV_8SC4,  "CV_8SC4"},  {CV_16U,   "CV_16U"},   {CV_16UC1, "CV_16UC1"},
-            {CV_16UC2, "CV_16UC2"}, {CV_16UC3, "CV_16UC3"}, {CV_16UC4, "CV_16UC4"},
-            {CV_16S,   "CV_16S"},   {CV_16SC1, "CV_16SC1"}, {CV_16SC2, "CV_16SC2"},
-            {CV_16SC3, "CV_16SC3"}, {CV_16SC4, "CV_16SC4"}, {CV_32S,   "CV_32S"},
-            {CV_32SC1, "CV_32SC1"}, {CV_32SC2, "CV_32SC2"}, {CV_32SC3, "CV_32SC3"},
-            {CV_32SC4, "CV_32SC4"}, {CV_32F,   "CV_32F"},   {CV_32FC1, "CV_32FC1"},
-            {CV_32FC2, "CV_32FC2"}, {CV_32FC3, "CV_32FC3"}, {CV_32FC4, "CV_32FC4"},
-            {CV_64F,   "CV_64F"},   {CV_64FC1, "CV_64FC1"}, {CV_64FC2, "CV_64FC2"},
-            {CV_64FC3, "CV_64FC3"}, {CV_64FC4, "CV_64FC4"},
-        };
+    std::map<int, std::string> cv_types{
+        {CV_8U,    "CV_8U"},    {CV_8UC1,  "CV_8UC1"},  {CV_8UC2,  "CV_8UC2"},
+        {CV_8UC3,  "CV_8UC3"},  {CV_8UC4,  "CV_8UC4"},  {CV_8S,    "CV_8S"},
+        {CV_8SC1,  "CV_8SC1"},  {CV_8SC2,  "CV_8SC2"},  {CV_8SC3,  "CV_8SC3"},
+        {CV_8SC4,  "CV_8SC4"},  {CV_16U,   "CV_16U"},   {CV_16UC1, "CV_16UC1"},
+        {CV_16UC2, "CV_16UC2"}, {CV_16UC3, "CV_16UC3"}, {CV_16UC4, "CV_16UC4"},
+        {CV_16S,   "CV_16S"},   {CV_16SC1, "CV_16SC1"}, {CV_16SC2, "CV_16SC2"},
+        {CV_16SC3, "CV_16SC3"}, {CV_16SC4, "CV_16SC4"}, {CV_32S,   "CV_32S"},
+        {CV_32SC1, "CV_32SC1"}, {CV_32SC2, "CV_32SC2"}, {CV_32SC3, "CV_32SC3"},
+        {CV_32SC4, "CV_32SC4"}, {CV_32F,   "CV_32F"},   {CV_32FC1, "CV_32FC1"},
+        {CV_32FC2, "CV_32FC2"}, {CV_32FC3, "CV_32FC3"}, {CV_32FC4, "CV_32FC4"},
+        {CV_64F,   "CV_64F"},   {CV_64FC1, "CV_64FC1"}, {CV_64FC2, "CV_64FC2"},
+        {CV_64FC3, "CV_64FC3"}, {CV_64FC4, "CV_64FC4"},
+    };
     // clang-format on
 
     auto type = cv_types.find(img_type_int);

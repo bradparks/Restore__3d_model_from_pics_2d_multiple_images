@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Kai Wolf
+// Copyright (c) 2015-2016, Kai Wolf
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,20 +20,15 @@
 
 #include "rendering/bounding_box.hpp"
 
-// C system files
-// none
-
-// C++ system files
 #include <algorithm>
 #include <cassert>
 #include <type_traits>
 #include <vector>
 
-// header files of other libraries
+#include <opencv2/imgproc/types_c.h>
+#include <opencv2/core/mat.hpp>
+#include <opencv2/core/operations.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-
-// header files of project libraries
-// none
 
 namespace ret {
 

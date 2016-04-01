@@ -10,8 +10,8 @@
  *                                                                            *
  ******************************************************************************/
 
-#ifndef RESTORE_RENDERING_MC_BASEDEF_HPP
-#define RESTORE_RENDERING_MC_BASEDEF_HPP
+#ifndef RENDERING_MC_BASEDEF_HPP
+#define RENDERING_MC_BASEDEF_HPP
 
 #define MC_GRID_SIZE_UNIT 32
 #define MC_REVERSE_TRIANGLES false

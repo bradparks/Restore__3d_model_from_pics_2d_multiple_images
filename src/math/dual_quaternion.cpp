@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Kai Wolf
+// Copyright (c) 2015-2016, Kai Wolf
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,17 +20,12 @@
 
 #include "math/dual_quaternion.hpp"
 
-// C system files
-// none
-
-// C++ system files
 #include <cmath>
 #include <cstddef>
 
-// header files of other libraries
-// none
+#include <opencv2/core/mat.hpp>
+#include <opencv2/core/operations.hpp>
 
-// header files of project libraries
 #include "math/math_utils.hpp"
 
 namespace ret {
@@ -72,7 +67,7 @@ namespace math {
     Quaternion DualQuaternion::getRotation() const { return real_; }
 
     cv::Vec3d DualQuaternion::getTranslation() const {
-        auto q = (dual_ * real_.conj()) * 2.0;
+        auto q     = (dual_ * real_.conj()) * 2.0;
         auto comps = q.getComponents();
         return cv::Vec3d(comps[1], comps[2], comps[3]);
     }

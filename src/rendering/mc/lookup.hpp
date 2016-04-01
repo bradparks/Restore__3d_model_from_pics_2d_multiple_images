@@ -10,20 +10,8 @@
  *                                                                            *
  ******************************************************************************/
 
-#ifndef RESTORE_RENDERING_MC_LOOKUP_HPP
-#define RESTORE_RENDERING_MC_LOOKUP_HPP
-
-// C system files
-// none
-
-// C++ system files
-// none
-
-// header files of other libraries
-// none
-
-// header files of project libraries
-// none
+#ifndef RENDERING_MC_LOOKUP_HPP
+#define RENDERING_MC_LOOKUP_HPP
 
 namespace ret {
 
