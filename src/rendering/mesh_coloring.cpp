@@ -28,9 +28,9 @@
 #include <vtkDataArray.h>
 #include <vtkPointData.h>
 #include <vtkPolyData.h>
-#include <vtkUnsignedCharArray.h>
 #include <opencv2/core/mat.hpp>
 #include <opencv2/core/operations.hpp>
+#include <vtkUnsignedCharArray.h>
 
 #include "common/camera.hpp"
 #include "rendering/cv_utils.hpp"

@@ -26,9 +26,9 @@ namespace rendering {
             extern const lut_type edge_table[256];
             extern const lut_type triangle_table[256][16];
             extern const lut_type alt_triangle_table[256][16];
-        }
-    }
-}
-}
+        } // namespace lookup
+    }     // namespace mc
+} // namespace rendering
+} // namespace ret
 
 #endif

@@ -154,8 +154,9 @@ namespace calib {
     std::vector<contour_point> Ransac::getMaybeInliers() const {
         std::vector<contour_point> maybe_inliers;
         for (std::size_t i = 0; i < 3; ++i) {
-            maybe_inliers.push_back(observation_set_.at(
-                static_cast<std::size_t>(rand()) % observation_set_.size()));
+            maybe_inliers.push_back(
+                observation_set_.at(static_cast<std::size_t>(arc4random()) %
+                                    observation_set_.size()));
         }
 
         return maybe_inliers;

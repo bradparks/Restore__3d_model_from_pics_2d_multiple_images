@@ -25,8 +25,8 @@
 #include <vector>
 
 #include <vtkSmartPointer.h>
-#include <vtkType.h>
 #include <opencv2/core/core.hpp>
+#include <vtkType.h>
 
 #include "calibration/ransac.hpp"
 
@@ -74,7 +74,7 @@ namespace rendering {
         std::size_t num_iterations_;
         std::vector<calib::contour_point> contour_points_;
     };
-}
-}
+} // namespace rendering
+}  // namespace ret
 
 #endif

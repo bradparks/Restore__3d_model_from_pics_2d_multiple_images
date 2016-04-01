@@ -46,7 +46,7 @@ namespace io {
             const std::size_t numMatrices, const std::string& filename) const;
         std::string directory_;
     };
-}
-}
+}  // namespace io
+}  // namespace ret
 
 #endif

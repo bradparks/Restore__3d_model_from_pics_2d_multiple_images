@@ -21,9 +21,9 @@
 #include <cassert>
 
 #include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/imgproc/types_c.h>
 #include <opencv2/core/mat.hpp>
 #include <opencv2/core/operations.hpp>
+#include <opencv2/imgproc/types_c.h>
 
 #include "filtering/segmentation.hpp"
 

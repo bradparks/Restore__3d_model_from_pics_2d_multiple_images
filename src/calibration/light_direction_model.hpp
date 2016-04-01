@@ -39,7 +39,7 @@ namespace calib {
         T x, y, z;
     };
     typedef LightDirectionModel_<float, cv::Vec3f> LightDirectionModel;
-}
-}
+}  // namespace calib
+}  // namespace ret
 
 #endif

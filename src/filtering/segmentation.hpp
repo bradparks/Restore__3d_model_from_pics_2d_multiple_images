@@ -36,7 +36,7 @@ namespace filtering {
         static cv::Mat createDistMap(const cv::Mat& Mask);
         static cv::Mat createSilhouette(const cv::Mat& Mask);
     };
-}
-}
+}  // namespace filtering
+}  // namespace ret
 
 #endif

@@ -98,6 +98,6 @@ inline std::string getImgType(int img_type_int) {
     auto type = cv_types.find(img_type_int);
     return type == cv_types.end() ? "unknown image type" : type->second;
 }
-}
+} // namespace ret
 
 #endif

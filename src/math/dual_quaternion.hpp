@@ -81,7 +81,7 @@ namespace math {
         Quaternion real_;
         Quaternion dual_;
     };
-}
-}
+} // namespace math
+}  // namespace ret
 
 #endif

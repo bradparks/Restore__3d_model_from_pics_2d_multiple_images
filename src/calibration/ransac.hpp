@@ -110,7 +110,7 @@ namespace calib {
         float best_error_;
         float threshold_;
     };
-}
-}
+}  // namespace calib
+}  // namespace ret
 
 #endif

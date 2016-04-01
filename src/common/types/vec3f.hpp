@@ -41,6 +41,6 @@ struct vec3f {
                      x * other.y - y * other.x);
     }
 };
-}
+}  // namespace ret
 
 #endif

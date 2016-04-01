@@ -37,6 +37,6 @@ struct triangle {
                 comp.v3 == other.comp.v3);
     }
 };
-}
+}  // namespace ret
 
 #endif

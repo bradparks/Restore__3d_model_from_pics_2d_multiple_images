@@ -95,10 +95,10 @@ namespace rendering {
             result.y = p1.y + mu * (p2.y - p1.y);
             result.z = p1.z + mu * (p2.z - p1.z);
         }
-    }
-}
-}
+    } // namespace mc
+} // namespace rendering
+} // namespace ret
 
-#include "marching_cubes.inl"  // IWYU pragma: export
+#include "marching_cubes.inl" // IWYU pragma: export
 
 #endif

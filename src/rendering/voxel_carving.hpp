@@ -108,7 +108,7 @@ namespace rendering {
         start_params params_;
         std::pair<float, float> bb_margin_;
     };
-}
-}
+} // namespace rendering
+} // namespace ret
 
 #endif

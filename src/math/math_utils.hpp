@@ -78,7 +78,7 @@ namespace math {
     bool equals(T x, T y) {
         return fabs(x - y) < std::numeric_limits<T>::epsilon();
     }
-}
-}
+} // namespace math
+}  // namespace ret
 
 #endif

@@ -61,6 +61,6 @@ class DataSet {
   private:
     std::vector<Camera> cameras_;
 };
-}
+}  // namespace ret
 
 #endif

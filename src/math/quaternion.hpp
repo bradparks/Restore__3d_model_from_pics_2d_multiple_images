@@ -86,7 +86,7 @@ namespace math {
         /// imaginary parts
         cv::Vec3d vec_;
     };
-}
-}
+}  // namespace math
+} // namespace ret
 
 #endif

@@ -74,7 +74,7 @@ namespace rendering {
 
         cv::Rect getBoundingRect(const cv::Mat& Binary) const;
     };
-}
-}
+}  // namespace rendering
+}  // namespace ret
 
 #endif

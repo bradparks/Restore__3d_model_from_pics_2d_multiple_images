@@ -42,13 +42,9 @@ class CameraIntrinsics {
     virtual ~CameraIntrinsics() = default;
 
     CameraIntrinsics(const CameraIntrinsics& other)
-        : K_(other.K_), dist_(other.dist_) {}
+        = default;
 
-    CameraIntrinsics& operator=(const CameraIntrinsics& other) {
-        this->K_    = other.K_;
-        this->dist_ = other.dist_;
-        return *this;
-    }
+    CameraIntrinsics& operator=(const CameraIntrinsics& other) = default;
 
     friend bool operator==(const CameraIntrinsics& c1,
                            const CameraIntrinsics& c2) {
@@ -87,6 +83,6 @@ class CameraIntrinsics {
     cv::Mat K_;
     cv::Mat dist_;
 };
-}
+} // namespace ret
 
 #endif

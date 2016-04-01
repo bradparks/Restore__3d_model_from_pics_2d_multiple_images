@@ -30,11 +30,11 @@
 #include <vtkPolyData.h>
 #include <vtkPolyDataNormals.h>
 #include <vtkStructuredPoints.h>
-#include <vtkType.h>
-#include <vtkVersionMacros.h>
-#include <opencv2/core/types_c.h>
 #include <opencv2/core/mat.hpp>
 #include <opencv2/core/operations.hpp>
+#include <opencv2/core/types_c.h>
+#include <vtkType.h>
+#include <vtkVersionMacros.h>
 
 #include "common/camera.hpp"
 #include "common/utils.hpp"

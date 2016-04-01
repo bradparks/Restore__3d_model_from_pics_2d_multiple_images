@@ -10,8 +10,8 @@
  *                                                                            *
  ******************************************************************************/
 
-#include "rendering/mc/marching_cubes.hpp" // IWYU pragma: export
 #include "rendering/mc/basedef.hpp"
+#include "rendering/mc/marching_cubes.hpp" // IWYU pragma: export
 
 namespace ret {
 
@@ -34,6 +34,6 @@ namespace rendering {
         inline int_type MarchingCubes::getGridDimZ() const {
             return grid_dim_z_;
         }
-    }
-}
-}
+    } // namespace mc
+} // namespace rendering
+} // namespace ret

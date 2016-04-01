@@ -18,7 +18,7 @@
 #define MC_CUBE_ALIGN true
 
 #define COMPUTE_INDEX(dim_x, dim_xz, x, z, y) \
-    (x) + ((z) * (dim_x) + ((y) * (dim_xz)))
+    ((x) + ((z) * (dim_x) + ((y) * (dim_xz))))
 
 #define MC_VALUE(raw) raw
 
@@ -46,8 +46,8 @@ namespace rendering {
         typedef float grid_cell;
 
         typedef int int_type;
-    }
-}
-}
+    } // namespace mc
+} // namespace rendering
+} // namespace ret
 
 #endif

@@ -24,8 +24,8 @@
 #include <cmath>
 #include <limits>
 
-#include <opencv2/core/types_c.h>
 #include <opencv2/core/mat.hpp>
+#include <opencv2/core/types_c.h>
 
 #include "math/math_utils.hpp"
 

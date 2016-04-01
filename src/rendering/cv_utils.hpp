@@ -48,6 +48,6 @@ coord project(const Camera& cam, const point& v) {
 
     return im;
 }
-}
+}  // namespace ret
 
 #endif

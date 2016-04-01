@@ -58,7 +58,7 @@ namespace rendering {
         vtkSmartPointer<vtkUnsignedCharArray> colors_;
         cv::Size img_size_;
     };
-}
-}
+} // namespace rendering
+} // namespace ret
 
 #endif

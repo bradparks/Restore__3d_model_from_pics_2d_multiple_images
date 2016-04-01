@@ -107,6 +107,6 @@ class Camera : public CameraIntrinsics, public CameraExtrinsics {
     cv::Mat Mask_;
     cv::Mat Direction_;
 };
-}
+} // namespace ret
 
 #endif
