@@ -42,8 +42,8 @@ DataSet loadDataSet(const std::string& path, const std::size_t num_imgs) {
     DataSetReader dsr(path);
     DataSet ds = dsr.load(num_imgs);
     for (std::size_t i = 0; i < num_imgs; ++i) {
-        ds.getCamera(i).setMask(Segmentation::binarize(
-            ds.getCamera(i).getImage(), cv::Scalar(0, 0, 30)));
+        ds.getCamera(i).setMask(
+            Binarize(ds.getCamera(i).getImage(), cv::Scalar(0, 0, 30)));
     }
 
     return ds;
