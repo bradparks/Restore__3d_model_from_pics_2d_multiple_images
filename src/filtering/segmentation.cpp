@@ -21,9 +21,6 @@
 #include <cassert>
 
 #include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/core/mat.hpp>
-#include <opencv2/core/operations.hpp>
-#include <opencv2/imgproc/types_c.h>
 
 #include "filtering/segmentation.hpp"
 
@@ -31,8 +28,7 @@ namespace ret {
 
 namespace filtering {
 
-    cv::Mat Segmentation::binarize(const cv::Mat& Image,
-                                   const cv::Scalar& thresh) {
+    cv::Mat Binarize(const cv::Mat &Image, const cv::Scalar &thresh) {
 
         assert(Image.channels() == 3);
         cv::Mat Binary;
@@ -43,9 +39,8 @@ namespace filtering {
         return Binary;
     }
 
-    cv::Mat Segmentation::grabCut(const cv::Mat& Image, unsigned char num_frags,
-                                  const cv::Point& w_from_to,
-                                  const cv::Point& h_from_to) {
+    cv::Mat GrabCut(const cv::Mat &Image, unsigned char num_frags,
+                    const cv::Point &w_from_to, const cv::Point &h_from_to) {
 
         assert(Image.channels() == 3);
         assert((num_frags & (num_frags - 1)) == 0);
@@ -61,16 +56,16 @@ namespace filtering {
         return Result;
     }
 
-    cv::Mat Segmentation::createDistMap(const cv::Mat& Mask) {
+    cv::Mat CreateDistMap(const cv::Mat &Mask) {
 
         assert(Mask.channels() == 1);
         cv::Mat DistImage;
-        cv::distanceTransform(createSilhouette(Mask), DistImage, CV_DIST_L2, 3);
+        cv::distanceTransform(CreateSilhouette(Mask), DistImage, CV_DIST_L2, 3);
 
         return DistImage;
     }
 
-    cv::Mat Segmentation::createSilhouette(const cv::Mat& Mask) {
+    cv::Mat CreateSilhouette(const cv::Mat &Mask) {
 
         assert(Mask.channels() == 1);
         cv::Mat Silhouette;

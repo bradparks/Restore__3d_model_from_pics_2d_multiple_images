@@ -1,8 +1,3 @@
-# Build type
-#if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "Release")
-#endif()
-
 # Project configuration
 set(CMAKE_VERBOSE_MAKEFILE                                            FALSE)
 set(CMAKE_AUTOMOC                                                        ON)

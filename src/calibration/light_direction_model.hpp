@@ -30,8 +30,7 @@ namespace calib {
     /** @brief Light direction model used for estimating a light direction
       * for a given @ref Camera image */
     template <typename T, typename Vec>
-    class LightDirectionModel_ {
-      public:
+    struct LightDirectionModel_ {
         LightDirectionModel_() : x(0), y(0), z(0) {}
         LightDirectionModel_(T x1, T y1, T z1) : x(x1), y(y1), z(z1) {}
         explicit LightDirectionModel_(const Vec l)

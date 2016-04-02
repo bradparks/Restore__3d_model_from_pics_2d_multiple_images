@@ -65,7 +65,7 @@ namespace rendering {
     void VoxelCarving::carve(const Camera& cam) {
 
         const auto Mask      = cam.getMask();
-        const auto DistImage = filtering::Segmentation::createDistMap(Mask);
+        const auto DistImage = filtering::CreateDistMap(Mask);
         const auto img_size  = Mask.size();
 
         std::size_t i, j, k;

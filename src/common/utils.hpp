@@ -76,7 +76,7 @@ inline T median(std::vector<T>& v) {
     return v[n];
 }
 
-inline std::string getImgType(int img_type_int) {
+inline std::string GetCVImageType(int img_type_int) {
     // 7 base types, with five channel options each (none or C1, ..., C4)
     // clang-format off
     std::map<int, std::string> cv_types{

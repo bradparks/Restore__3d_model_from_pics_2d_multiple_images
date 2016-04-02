@@ -23,7 +23,7 @@
 
 #include "filtering/segmentation.hpp"
 
-using ret::filtering::Segmentation;
+using namespace ret::filtering;
 
 TEST(SegmentationTest, BinarizeImage) {
 
@@ -31,14 +31,14 @@ TEST(SegmentationTest, BinarizeImage) {
     const unsigned rg_size = 50;
     cv::Mat Region = Original(cv::Rect(rg_size, rg_size, rg_size, rg_size));
     Region.setTo(0);
-    cv::Mat Binary = Segmentation::binarize(Original, cv::Scalar(0, 0, 30));
+    cv::Mat Binary = Binarize(Original, cv::Scalar(0, 0, 30));
     ASSERT_EQ(rg_size * rg_size, cv::countNonZero(Binary));
 }
 
 TEST(SegmentationTest, AssertColorImageWhenBinarizing) {
 
     cv::Mat Original(240, 320, CV_8U, cv::Scalar::all(17));
-    ASSERT_DEATH(Segmentation::binarize(Original, cv::Scalar(200)), "");
+    ASSERT_DEATH(Binarize(Original, cv::Scalar(200)), "");
 }
 
 TEST(SegmentationTest, CreateSilhouetteMask) {
@@ -47,7 +47,7 @@ TEST(SegmentationTest, CreateSilhouetteMask) {
     cv::Mat Black(20, 20, CV_8U, cv::Scalar::all(0));
     cv::Mat SubRegion = Original(cv::Rect(100, 100, Black.cols, Black.rows));
     Black.copyTo(SubRegion);
-    ASSERT_GT(cv::countNonZero(Segmentation::createSilhouette(Original)),
+    ASSERT_GT(cv::countNonZero(CreateSilhouette(Original)),
               cv::countNonZero(Original));
 }
 
@@ -57,7 +57,7 @@ TEST(SegmentationTest, CreateDistMap) {
     cv::Mat Black(20, 1, CV_8U, cv::Scalar::all(0));
     cv::Mat SubRegion = Original(cv::Rect(100, 100, Black.cols, Black.rows));
     Black.copyTo(SubRegion);
-    cv::Mat Distmap = Segmentation::createDistMap(Original);
+    cv::Mat Distmap = CreateDistMap(Original);
     ASSERT_TRUE(Distmap.type() == CV_32F);
 
     ASSERT_LT(Distmap.at<float>(100, 99), Distmap.at<float>(100, 100));
@@ -67,7 +67,7 @@ TEST(SegmentationTest, CreateDistMap) {
 TEST(SegmentationTest, GrabCutWithNotPowerOf2NumFrags) {
 
     cv::Mat Tmp(240, 320, CV_8UC3, cv::Scalar::all(255));
-    ASSERT_DEATH(Segmentation::grabCut(Tmp, 15, cv::Point(), cv::Point()), "");
+    ASSERT_DEATH(GrabCut(Tmp, 15, cv::Point(), cv::Point()), "");
 }
 
 TEST(SegmentationTest, GrabCutImage) {
@@ -77,8 +77,7 @@ TEST(SegmentationTest, GrabCutImage) {
     cv::Mat SubRegion = Original(cv::Rect(100, 100, Black.cols, Black.rows));
     Black.copyTo(SubRegion);
 
-    cv::Mat Segmented =
-        Segmentation::grabCut(Original, 16, cv::Point(0, 0), cv::Point(8, 8));
+    cv::Mat Segmented = GrabCut(Original, 16, cv::Point(0, 0), cv::Point(8, 8));
     ASSERT_TRUE(Segmented.at<uchar>(110, 110) == 255);
     ASSERT_TRUE(Segmented.at<uchar>(200, 200) == 0);
 }

@@ -43,7 +43,7 @@ class VoxelCarvingTest : public testing::Test {
         DataSetReader dsr(std::string(ASSETS_PATH) + "/squirrel");
         ds = dsr.load(NUM_IMGS);
         for (std::size_t i = 0; i < NUM_IMGS; ++i) {
-            ds.getCamera(i).setMask(Segmentation::binarize(
+            ds.getCamera(i).setMask(Binarize(
                 ds.getCamera(i).getImage(), cv::Scalar(0, 0, 30)));
         }
         BoundingBox bbox =
