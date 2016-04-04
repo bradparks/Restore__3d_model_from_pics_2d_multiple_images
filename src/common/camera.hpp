@@ -57,9 +57,11 @@ class Camera : public CameraIntrinsics, public CameraExtrinsics {
 
         cv::Mat P_023;
         for (auto idx : {0, 2, 3}) { P_023.push_back(P_.col(idx));
+
 }
         cv::Mat P_013;
         for (auto idx : {0, 1, 3}) { P_013.push_back(P_.col(idx));
+
 }
 
         auto x = cv::determinant(P_(cv::Range(0, 3), cv::Range(1, 4)));

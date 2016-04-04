@@ -22,12 +22,11 @@
 #define MAIN_WINDOW_HPP
 
 #include <QMainWindow>
-#include <QAction>
-#include <QListWidget>
 
 class QAction;
 class QMenu;
 class QWidget;
+class QListWidget;
 
 namespace ret {
 class MainWindow : public QMainWindow {
