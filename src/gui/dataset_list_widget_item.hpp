@@ -18,35 +18,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef IO_DATASET_READER_HPP
-#define IO_DATASET_READER_HPP
+#ifndef DATASETLISTWIDGETITEM_HPP
+#define DATASETLISTWIDGETITEM_HPP
 
-#include <cstddef>
-#include <iosfwd>
-#include <string> // IWYU pragma: export
-#include <vector>
+#include <QListWidget>
+#include <memory>
+#include <string>
 
-#include <opencv2/core/core.hpp>
-
-#include "common/dataset.hpp"
+namespace ret {
+class DataSet;
+}
 
 namespace ret {
 
-namespace io {
+class DataSetListWidgetItem : public QListWidgetItem {
 
-    class DataSetReader {
-      public:
-        explicit DataSetReader(std::string directory);
-        std::shared_ptr<DataSet> load(const std::size_t numImages) const;
+  public:
+    DataSetListWidgetItem(QListWidget *parent, std::shared_ptr<DataSet> dataset,
+                          const std::string path);
+    void setDataset(std::shared_ptr<DataSet> dataset);
+    std::shared_ptr<DataSet> getDataset() const;
+    std::string getPath() const;
 
-      private:
-        cv::Mat loadMatrixFromFile(const std::string& filename,
-                                   const std::string& matname) const;
-        std::vector<cv::Mat> loadProjectionMatrices(
-            const std::size_t numMatrices, const std::string& filename) const;
-        std::string directory_;
-    };
-}  // namespace io
-}  // namespace ret
+  private:
+    std::shared_ptr<DataSet> dataset_;
+    std::string path_;
+};
+}
 
 #endif

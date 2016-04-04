@@ -1,4 +1,4 @@
-// Copyright (c) 2015-2016, Kai Wolf
+// Copyright (c) 2016, Kai Wolf
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,35 +18,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef IO_DATASET_READER_HPP
-#define IO_DATASET_READER_HPP
+#include "gui/dataset_list_widget_item.hpp"
 
-#include <cstddef>
-#include <iosfwd>
-#include <string> // IWYU pragma: export
-#include <vector>
-
-#include <opencv2/core/core.hpp>
+#include <QFileInfo>
+#include <opencv2/imgproc/imgproc.hpp>
 
 #include "common/dataset.hpp"
 
 namespace ret {
 
-namespace io {
+DataSetListWidgetItem::DataSetListWidgetItem(
+    QListWidget *parent, const std::shared_ptr<DataSet> dataset,
+    std::string path)
+    : QListWidgetItem(parent), dataset_(dataset), path_(path) {
+    setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+    QFileInfo fi(QString::fromStdString(path));
+    setText(fi.fileName());
 
-    class DataSetReader {
-      public:
-        explicit DataSetReader(std::string directory);
-        std::shared_ptr<DataSet> load(const std::size_t numImages) const;
+    // set first image as icon
+    cv::Mat tmp = dataset_->getCamera(0).getImage();
+    cv::cvtColor(tmp, tmp, CV_BGR2RGB);
+    QImage img(static_cast<uchar*>(tmp.data), tmp.cols, tmp.rows,
+               static_cast<int>(tmp.step), QImage::Format_RGB888);
+    setIcon(QIcon(QPixmap::fromImage(img)));
+}
 
-      private:
-        cv::Mat loadMatrixFromFile(const std::string& filename,
-                                   const std::string& matname) const;
-        std::vector<cv::Mat> loadProjectionMatrices(
-            const std::size_t numMatrices, const std::string& filename) const;
-        std::string directory_;
-    };
-}  // namespace io
-}  // namespace ret
+void DataSetListWidgetItem::setDataset(std::shared_ptr<DataSet> dataset) {
+    dataset_ = dataset;
+}
 
-#endif
+std::shared_ptr<DataSet> DataSetListWidgetItem::getDataset() const {
+    return dataset_;
+}
+
+std::string DataSetListWidgetItem::getPath() const {
+    return path_;
+}
+
+}

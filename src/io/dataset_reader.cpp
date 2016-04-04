@@ -40,7 +40,8 @@ namespace io {
     DataSetReader::DataSetReader(std::string directory)
         : directory_(std::move(directory)) {}
 
-    DataSet DataSetReader::load(const std::size_t numImages) const {
+    std::shared_ptr<DataSet> DataSetReader::load(
+        const std::size_t numImages) const {
 
         cv::Mat K, dist;
         if (fs::exists(directory_ + "/K.xml")) {
@@ -53,7 +54,7 @@ namespace io {
         auto projMats = loadProjectionMatrices(numImages, "/viff.xml");
 
         fs::path dir(directory_);
-        DataSet ds;
+        auto ds = std::make_shared<DataSet>();
         if (fs::exists(dir) && fs::is_directory(dir)) {
             // sorting paths, since directory listing is not sorted under Linux
             using paths = std::vector<fs::path>;
@@ -79,12 +80,12 @@ namespace io {
                     cam.setRotationMatrix(R);
                     cam.setTranslationVector(t);
 
-                    ds.addCamera(cam);
+                    ds->addCamera(cam);
                 }
             }
         }
 
-        assert(ds.size() == numImages);
+        assert(ds->size() == numImages);
         return ds;
     }
 

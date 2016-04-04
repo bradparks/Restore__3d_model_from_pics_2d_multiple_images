@@ -18,35 +18,43 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef IO_DATASET_READER_HPP
-#define IO_DATASET_READER_HPP
+#ifndef MAIN_WINDOW_HPP
+#define MAIN_WINDOW_HPP
 
-#include <cstddef>
-#include <iosfwd>
-#include <string> // IWYU pragma: export
-#include <vector>
+#include <QMainWindow>
+#include <QAction>
+#include <QListWidget>
 
-#include <opencv2/core/core.hpp>
-
-#include "common/dataset.hpp"
+class QAction;
+class QMenu;
+class QWidget;
 
 namespace ret {
+class MainWindow : public QMainWindow {
 
-namespace io {
+    Q_OBJECT
 
-    class DataSetReader {
-      public:
-        explicit DataSetReader(std::string directory);
-        std::shared_ptr<DataSet> load(const std::size_t numImages) const;
+  public:
+    explicit MainWindow(QWidget *parent = nullptr);
 
-      private:
-        cv::Mat loadMatrixFromFile(const std::string& filename,
-                                   const std::string& matname) const;
-        std::vector<cv::Mat> loadProjectionMatrices(
-            const std::size_t numMatrices, const std::string& filename) const;
-        std::string directory_;
-    };
-}  // namespace io
+  private:
+    void createInterface();
+    void createMenu();
+    void createToolBar();
+    void createActions();
+
+    void openDataset();
+
+    QMenu *file_menu_;
+    QMenu *view_menu_;
+    QMenu *settings_menu_;
+    QMenu *export_menu_;
+
+    QListWidget* dataset_widget_;
+
+    QAction *open_dataset_action_;
+    QAction *exit_action_;
+};
 }  // namespace ret
 
 #endif

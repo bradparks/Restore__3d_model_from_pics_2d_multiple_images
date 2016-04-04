@@ -61,7 +61,9 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/rendering/mc/marching_cubes.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/rendering/mc/marching_cubes.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/gui/main_window.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/gui/main_window.hpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/gui/main_window.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/gui/dataset_list_widget_item.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/gui/dataset_list_widget_item.hpp)
 
 add_library(${RESTORE_LIB} SHARED ${SOURCE_FILES})
 include_directories(${PROJECT_SOURCE_DIR}/src)
@@ -74,5 +76,5 @@ enable_cxx_11(${RESTORE_LIB})
 
 add_executable(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/main.cxx)
 enable_cxx_11(${PROJECT_NAME})
-target_link_libraries(${PROJECT_NAME} ${RESTORE_LIB})
+target_link_libraries(${PROJECT_NAME} ${RESTORE_LIB} Qt5::Widgets)
 install(TARGETS ${PROJECT_BIN} DESTINATION bin)
