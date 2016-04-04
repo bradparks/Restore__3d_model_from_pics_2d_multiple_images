@@ -55,4 +55,4 @@ std::string DataSetListWidgetItem::getPath() const {
     return path_;
 }
 
-}
+} // namespace ret

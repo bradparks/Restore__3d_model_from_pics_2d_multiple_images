@@ -27,7 +27,7 @@
 
 namespace ret {
 class DataSet;
-}
+} // namespace ret
 
 namespace ret {
 
@@ -44,6 +44,6 @@ class DataSetListWidgetItem : public QListWidgetItem {
     std::shared_ptr<DataSet> dataset_;
     std::string path_;
 };
-}
+} // namespace ret
 
 #endif

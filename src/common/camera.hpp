@@ -56,9 +56,11 @@ class Camera : public CameraIntrinsics, public CameraExtrinsics {
     cv::Point3d getCenter() const {
 
         cv::Mat P_023;
-        for (auto idx : {0, 2, 3}) P_023.push_back(P_.col(idx));
+        for (auto idx : {0, 2, 3}) { P_023.push_back(P_.col(idx));
+}
         cv::Mat P_013;
-        for (auto idx : {0, 1, 3}) P_013.push_back(P_.col(idx));
+        for (auto idx : {0, 1, 3}) { P_013.push_back(P_.col(idx));
+}
 
         auto x = cv::determinant(P_(cv::Range(0, 3), cv::Range(1, 4)));
         auto y = -cv::determinant(P_023.reshape(0, 3).t());
@@ -69,7 +71,8 @@ class Camera : public CameraIntrinsics, public CameraExtrinsics {
     }
 
     cv::Mat getDirection() {
-        if (!Direction_.empty()) return Direction_;
+        if (!Direction_.empty()) { return Direction_;
+}
 
         const auto img_size = Image_.size();
         cv::Mat Center      = (cv::Mat_<float>(3, 1) << img_size.width / 2.0f,

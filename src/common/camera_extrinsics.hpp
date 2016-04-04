@@ -22,8 +22,8 @@
 #define COMMON_CAMERA_EXTRINSICS_HPP
 
 #include <cstring>
-#include <ostream>
 #include <iostream>
+#include <ostream>
 
 #include <opencv2/core/core.hpp>
 
