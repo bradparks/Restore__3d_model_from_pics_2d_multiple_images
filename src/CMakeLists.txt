@@ -21,7 +21,7 @@
 # Configure CMake generated files
 set(ASSETS_PATH "${PROJECT_SOURCE_DIR}/assets")
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/io/assets_path.hpp.in.cmake"
-    "${CMAKE_CURRENT_SOURCE_DIR}/io/assets_path.hpp")
+               "${CMAKE_CURRENT_SOURCE_DIR}/io/assets_path.hpp")
 
 # Build lib from Restore sources
 set(SOURCE_FILES
@@ -71,8 +71,13 @@ include_directories(SYSTEM ${VTK_INCLUDE_DIRS})
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 set_property(DIRECTORY APPEND PROPERTY COMPILE_DEFINITIONS ${VTK_DEFINITIONS})
 target_link_libraries(${RESTORE_LIB} PUBLIC ${OpenCV_LIBS} ${VTK_LIBRARIES}
-    ${Boost_LIBRARIES})
+                      ${Boost_LIBRARIES})
 enable_cxx_11(${RESTORE_LIB})
+
+if (USE_IWYU AND iwyu_path)
+    set_property(TARGET ${RESTORE_LIB} PROPERTY CXX_INCLUDE_WHAT_YOU_USE
+                 ${iwyu_path})
+endif ()
 
 add_executable(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/main.cxx)
 enable_cxx_11(${PROJECT_NAME})

@@ -33,6 +33,7 @@ find_package(OpenCV REQUIRED core imgproc calib3d highgui)
 find_package(Boost COMPONENTS filesystem system REQUIRED)
 find_package(VTK REQUIRED NO_MODULE)
 find_package(Qt5Widgets REQUIRED QUIET)
+find_program(iwyu_path NAMES include-what-you-use iwyu)
 
 # Add build targets
 set(RESTORE_LIB ${PROJECT_NAME}_lib)

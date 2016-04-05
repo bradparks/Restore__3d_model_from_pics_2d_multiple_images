@@ -24,17 +24,17 @@
 #include <cmath>
 #include <limits>
 
+#include <opencv2/core/types_c.h>
 #include <vtkFloatArray.h>
 #include <vtkMarchingCubes.h>
 #include <vtkPointData.h>
 #include <vtkPolyData.h>
 #include <vtkPolyDataNormals.h>
 #include <vtkStructuredPoints.h>
-#include <opencv2/core/mat.hpp>
-#include <opencv2/core/operations.hpp>
-#include <opencv2/core/types_c.h>
 #include <vtkType.h>
 #include <vtkVersionMacros.h>
+#include <opencv2/core/mat.hpp>
+#include <opencv2/core/operations.hpp>
 
 #include "common/camera.hpp"
 #include "common/utils.hpp"
