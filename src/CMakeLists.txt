@@ -63,7 +63,7 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/gui/main_window.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/gui/main_window.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/gui/dataset_list_widget_item.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/gui/dataset_list_widget_item.hpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/gui/dataset_list_widget_item.hpp gui/model_widget.cpp gui/model_widget.hpp)
 
 add_library(${RESTORE_LIB} SHARED ${SOURCE_FILES})
 include_directories(${PROJECT_SOURCE_DIR}/src)
@@ -76,7 +76,7 @@ enable_cxx_11(${RESTORE_LIB})
 
 if (USE_IWYU AND iwyu_path)
     set_property(TARGET ${RESTORE_LIB} PROPERTY CXX_INCLUDE_WHAT_YOU_USE
-                 ${iwyu_path})
+                 ${iwyu_path} -Xiwyu --no_comments)
 endif ()
 
 add_executable(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/main.cxx)

@@ -20,12 +20,21 @@
 
 #include "gui/main_window.hpp"
 
-#include <QMenu>
-#include <QMenuBar>
-#include <QFileDialog>
+#include <qaction.h>
+#include <qfiledialog.h>
+#include <qflags.h>
+#include <qgridlayout.h>
+#include <qkeysequence.h>
+#include <qlistwidget.h>
+#include <qmenu.h>
+#include <qmenubar.h>
+#include <qnamespace.h>
+#include <qsizepolicy.h>
+#include <qwidget.h>
 
 #include "io/dataset_reader.hpp"
 #include "gui/dataset_list_widget_item.hpp"
+#include "gui/model_widget.hpp"
 
 namespace ret {
 
@@ -41,12 +50,18 @@ void MainWindow::createInterface() {
 
     setWindowTitle(tr("Restore"));
 
-    // main window takes ownership of central widget
+    // QObjects include ownership semantics, QMainwindow deletes all children,
+    // when its parent is deleted
     auto central_widget = new QWidget(this);
     setCentralWidget(central_widget);
+    auto grid_layout = new QGridLayout(central_widget);
 
     dataset_widget_ = new QListWidget(central_widget);
     dataset_widget_->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    grid_layout->addWidget(dataset_widget_, 0, 0, Qt::AlignLeft);
+
+    model_widget_ = new ModelWidget(central_widget);
+    grid_layout->addWidget(model_widget_, 0, 1);
 }
 
 void MainWindow::createActions() {

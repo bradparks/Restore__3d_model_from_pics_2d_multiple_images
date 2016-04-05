@@ -18,48 +18,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef MAIN_WINDOW_HPP
-#define MAIN_WINDOW_HPP
+#ifndef MODEL_WIDGET_HPP
+#define MODEL_WIDGET_HPP
 
-#include <qmainwindow.h>
+#include <QVTKWidget.h>
 #include <qobjectdefs.h>
 #include <qstring.h>
 
-class QAction;
-class QListWidget;
-class QMenu;
 class QObject;
 class QWidget;
-namespace ret { class ModelWidget; }
 
 namespace ret {
-class MainWindow : public QMainWindow {
 
-    Q_OBJECT
+    class ModelWidget: public QVTKWidget {
 
-  public:
-    explicit MainWindow(QWidget *parent = nullptr);
+      Q_OBJECT
 
-  private:
-    void createInterface();
-    void createMenu();
-    void createToolBar();
-    void createActions();
+      public:
+        explicit ModelWidget(QWidget *parent = nullptr);
 
-    void openDataset();
-
-    QMenu *file_menu_;
-    QMenu *view_menu_;
-    QMenu *settings_menu_;
-    QMenu *export_menu_;
-
-    QListWidget* dataset_widget_;
-
-    QAction *open_dataset_action_;
-    QAction *exit_action_;
-
-    ModelWidget *model_widget_;
-};
-}  // namespace ret
+      private:
+        void initRenderPipeline();
+    };
+} // namespace ret
 
 #endif
