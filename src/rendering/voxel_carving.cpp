@@ -25,6 +25,8 @@
 #include <limits>
 
 #include <opencv2/core/types_c.h>
+#include <opencv2/core/mat.hpp>
+#include <opencv2/core/operations.hpp>
 #include <vtkFloatArray.h>
 #include <vtkMarchingCubes.h>
 #include <vtkPointData.h>
@@ -32,9 +34,7 @@
 #include <vtkPolyDataNormals.h>
 #include <vtkStructuredPoints.h>
 #include <vtkType.h>
-#include <vtkVersionMacros.h>
-#include <opencv2/core/mat.hpp>
-#include <opencv2/core/operations.hpp>
+#include <vtkVersion.h>
 
 #include "common/camera.hpp"
 #include "common/utils.hpp"
