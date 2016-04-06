@@ -29,7 +29,7 @@ install:
     && sudo cp -fR cmake-3.5.0-Linux-x86_64/* /usr
   - sudo apt-get install -qq gcc-4.9 g++-4.9
   - sudo apt-get install -qq libboost1.55-all-dev libopencv-dev libvtk5-dev
-    qt5-qmake qtbase5-dev qtdeclarative5-dev libqt5webkit5-dev
+    qt5-qmake qtbase5-dev qtdeclarative5-dev libqt5webkit5-dev libbsd-dev
   - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 90
   - sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-4.9 90
   # install latest LCOV
