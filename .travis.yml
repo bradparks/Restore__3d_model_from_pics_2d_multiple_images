@@ -30,7 +30,7 @@ install:
   - wget --no-check-certificate http://www.vtk.org/files/release/7.0/VTK-7.0.0.tar.gz
     && tar -xzf VTK-7.0.0.tar.gz && cd VTK-7.0.0/ && mkdir build && cd build
   - cmake -DVTK_QT_VERSION:STRING=5 -DQT_QMAKE_EXECUTABLE:PATH=$(which qmake) -DVTK_Group_Qt:BOOL=ON -DBUILD_SHARED_LIBS:BOOL=ON ..
-  - make 2>&1 > /dev/null
+  - make
   - cd ${TRAVIS_BUILD_DIR}
   # install latest LCOV
   - wget --no-check-certificate http://ftp.de.debian.org/debian/pool/main/l/lcov/lcov_1.11.orig.tar.gz
