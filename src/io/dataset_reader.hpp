@@ -24,12 +24,11 @@
 #include <cstddef>
 #include <iosfwd>
 #include <memory>
-#include <string> // IWYU pragma: export
+#include <opencv2/core/core.hpp>
+#include <string>
 #include <vector>
 
-#include <opencv2/core/core.hpp>
-
-#include "common/dataset.hpp"
+namespace ret { class DataSet; }
 
 namespace ret {
 

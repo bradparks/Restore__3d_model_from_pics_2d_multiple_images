@@ -20,12 +20,40 @@
 
 #include "model_widget.hpp"
 
+#include <vtkActor.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkRenderWindow.h>
+#include <vtkRenderer.h>
+#include <vtkSphereSource.h>
+
 namespace ret {
 
     ModelWidget::ModelWidget(QWidget *parent) : QVTKWidget(parent) {
 
         initRenderPipeline();
+        setBackgroundColor();
     }
 
-    void ModelWidget::initRenderPipeline() { }
+    void ModelWidget::initRenderPipeline() {
+
+        vtkSmartPointer<vtkSphereSource> sphereSource =
+            vtkSmartPointer<vtkSphereSource>::New();
+        sphereSource->Update();
+        model_mapper_ = vtkSmartPointer<vtkPolyDataMapper>::New();
+        model_mapper_->SetInputConnection(sphereSource->GetOutputPort());
+        model_actor_ = vtkSmartPointer<vtkActor>::New();
+        model_actor_->SetMapper(model_mapper_);
+        renderer_ = vtkSmartPointer<vtkRenderer>::New();
+        render_window_ = GetRenderWindow();
+        render_window_->AddRenderer(renderer_);
+        renderer_->AddActor(model_actor_);
+    }
+
+    void ModelWidget::setBackgroundColor() {
+
+        renderer_->SetBackground(.45, .45, .9);
+        renderer_->SetBackground2(.0, .0, .0);
+        renderer_->GradientBackgroundOn();
+
+    }
 } // namespace ret

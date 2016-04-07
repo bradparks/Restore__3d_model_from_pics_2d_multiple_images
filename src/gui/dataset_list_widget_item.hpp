@@ -21,13 +21,11 @@
 #ifndef DATASETLISTWIDGETITEM_HPP
 #define DATASETLISTWIDGETITEM_HPP
 
-#include <QListWidget>
+#include <qlistwidget.h>
+#include <iosfwd>
 #include <memory>
-#include <string>
 
-namespace ret {
-class DataSet;
-} // namespace ret
+namespace ret { class DataSet; }
 
 namespace ret {
 

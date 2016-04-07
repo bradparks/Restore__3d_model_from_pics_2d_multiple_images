@@ -18,11 +18,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#include "io/dataset_reader.hpp"
+
 #include <algorithm>
 #include <cassert>
 #include <iterator>
-#include <utility>
-
+#include <ostream>
+#include <type_traits>
 #include <boost/filesystem.hpp>
 #include <boost/format.hpp>
 #include <opencv2/calib3d/calib3d.hpp>
@@ -30,7 +32,6 @@
 
 #include "common/camera.hpp"
 #include "common/dataset.hpp"
-#include "io/dataset_reader.hpp"
 
 namespace fs = boost::filesystem;
 namespace ret {

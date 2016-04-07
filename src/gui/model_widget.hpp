@@ -24,9 +24,13 @@
 #include <QVTKWidget.h>
 #include <qobjectdefs.h>
 #include <qstring.h>
-
+#include <vtkSmartPointer.h>
 class QObject;
 class QWidget;
+class vtkActor;
+class vtkPolyDataMapper;
+class vtkRenderWindow;
+class vtkRenderer;
 
 namespace ret {
 
@@ -39,6 +43,16 @@ namespace ret {
 
       private:
         void initRenderPipeline();
+        void setBackgroundColor();
+
+        vtkSmartPointer<vtkPolyDataMapper> model_mapper_;
+
+        vtkSmartPointer<vtkActor> model_actor_;
+
+        vtkSmartPointer<vtkRenderer> renderer_;
+
+        vtkSmartPointer<vtkRenderWindow> render_window_;
+
     };
 } // namespace ret
 

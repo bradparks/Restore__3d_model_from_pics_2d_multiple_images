@@ -20,9 +20,21 @@
 
 #include "gui/dataset_list_widget_item.hpp"
 
-#include <QFileInfo>
+#include <opencv2/core/types_c.h>
+#include <opencv2/imgproc/types_c.h>
+#include <qfileinfo.h>
+#include <qflags.h>
+#include <qicon.h>
+#include <qimage.h>
+#include <qnamespace.h>
+#include <qpixmap.h>
+#include <qsize.h>
+#include <qstring.h>
+#include <opencv2/core/core.hpp>
+#include <opencv2/core/mat.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
+#include "common/camera.hpp"
 #include "common/dataset.hpp"
 
 namespace ret {
@@ -40,6 +52,7 @@ DataSetListWidgetItem::DataSetListWidgetItem(
     cv::cvtColor(tmp, tmp, CV_BGR2RGB);
     QImage img(static_cast<uchar*>(tmp.data), tmp.cols, tmp.rows,
                static_cast<int>(tmp.step), QImage::Format_RGB888);
+    parent->setIconSize(QSize(80, 60));
     setIcon(QIcon(QPixmap::fromImage(img)));
 }
 
