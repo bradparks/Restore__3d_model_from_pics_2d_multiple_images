@@ -71,6 +71,7 @@ add_library(${RESTORE_LIB} SHARED ${SOURCE_FILES})
 include_directories(${PROJECT_SOURCE_DIR}/src)
 include_directories(SYSTEM ${VTK_INCLUDE_DIRS})
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
+include_directories(SYSTEM ${Qt5Widgets_INCLUDE_DIRS})
 set_property(DIRECTORY APPEND PROPERTY COMPILE_DEFINITIONS ${VTK_DEFINITIONS})
 target_link_libraries(${RESTORE_LIB} PUBLIC ${OpenCV_LIBS} ${VTK_LIBRARIES}
                       ${Boost_LIBRARIES})

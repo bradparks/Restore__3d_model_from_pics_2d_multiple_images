@@ -1,5 +1,6 @@
+sudo: required
+dist: trusty
 language: cpp
-
 os:
   - linux
 
@@ -8,30 +9,29 @@ compiler:
 
 branches:
   only:
-    - develop
     - master
 
 before_install:
-  # update to gcc with c++11 support
+  # update to gcc5 with c++11/14 support
   - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-  # backport of opencv 2.4.8 to Ubuntu 12.04
-  - sudo add-apt-repository -y ppa:yjwong/opencv2
-  # backport of boost 1.55 to Ubuntu 12.04
-  - sudo add-apt-repository -y ppa:boost-latest/ppa
-  # backport of qt5 to Ubuntu 12.04
-  - sudo add-apt-repository -y ppa:ubuntu-sdk-team/ppa
   - sudo apt-get update -qq
 
 install:
-  # install latest CMake 3.2.3
+  # install latest CMake 3.5.0
   - wget --no-check-certificate https://cmake.org/files/v3.5/cmake-3.5.0-Linux-x86_64.tar.gz
     && tar -xzf cmake-3.5.0-Linux-x86_64.tar.gz
     && sudo cp -fR cmake-3.5.0-Linux-x86_64/* /usr
-  - sudo apt-get install -qq gcc-4.9 g++-4.9
-  - sudo apt-get install -qq libboost1.55-all-dev libopencv-dev libvtk5-dev
-    qt5-qmake qtbase5-dev qtdeclarative5-dev libqt5webkit5-dev libbsd-dev
-  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 90
-  - sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-4.9 90
+  # install project dependencies
+  - sudo apt-get install -qq gcc-5 g++-5 libboost1.55-all-dev libopencv-dev git
+    qt5-qmake qtbase5-dev qt5-default qttools5-dev libxt-dev
+  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 90
+  - sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-5 90
+  # install VTK from source, since there exists no release version
+  - wget --no-check-certificate http://www.vtk.org/files/release/7.0/VTK-7.0.0.tar.gz
+    && tar -xzf VTK-7.0.0.tar.gz && cd VTK-7.0.0/ && mkdir build && cd build
+  - cmake -DVTK_QT_VERSION:STRING=5 -DQT_QMAKE_EXECUTABLE:PATH=$(which qmake) -DVTK_Group_Qt:BOOL=ON -DBUILD_SHARED_LIBS:BOOL=ON ..
+  - make 2>&1 > /dev/null
+  - cd ${TRAVIS_BUILD_DIR}
   # install latest LCOV
   - wget --no-check-certificate http://ftp.de.debian.org/debian/pool/main/l/lcov/lcov_1.11.orig.tar.gz
   - tar -xf lcov_1.11.orig.tar.gz
@@ -41,8 +41,7 @@ install:
 before_script:
   - mkdir build
   - cd build
-  - export QMAKE=/usr/lib/x86_64-linux-gnu/qt5/bin/qmake
-  - cmake -DCMAKE_BUILD_TYPE=Debug -DUSE_CODE_COVERAGE=ON ..
+  - cmake -DCMAKE_BUILD_TYPE=Debug -DUSE_CODE_COVERAGE=ON -DCMAKE_PREFIX_PATH=${TRAVIS_BUILD_DIR}/VTK-7.0.0/build/ ..
 
 script:
   - make

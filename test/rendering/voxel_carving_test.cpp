@@ -41,18 +41,17 @@ class VoxelCarvingTest : public testing::Test {
   public:
     virtual void SetUp() {
         DataSetReader dsr(std::string(ASSETS_PATH) + "/squirrel");
-        ds = dsr.load(NUM_IMGS);
+        auto ds = dsr.load(NUM_IMGS);
         for (std::size_t i = 0; i < NUM_IMGS; ++i) {
-            ds.getCamera(i).setMask(Binarize(
-                ds.getCamera(i).getImage(), cv::Scalar(0, 0, 30)));
+            ds->getCamera(i).setMask(Binarize(
+                ds->getCamera(i).getImage(), cv::Scalar(0, 0, 30)));
         }
         BoundingBox bbox =
-            BoundingBox(ds.getCamera(0), ds.getCamera((NUM_IMGS / 4) - 1));
+            BoundingBox(ds->getCamera(0), ds->getCamera((NUM_IMGS / 4) - 1));
         vc = ret::make_unique<VoxelCarving>(bbox.getBounds(), VOXEL_DIM);
     }
 
     std::unique_ptr<VoxelCarving> vc;
-    ret::DataSet ds;
     const std::size_t VOXEL_DIM = 128;
     const std::size_t NUM_IMGS = 36;
 };

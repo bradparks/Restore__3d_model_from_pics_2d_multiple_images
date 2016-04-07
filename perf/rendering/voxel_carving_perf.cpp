@@ -22,6 +22,7 @@
 #include <opencv2/core/core.hpp>
 
 #include <cmath>
+#include <memory>
 
 #include "common/dataset.hpp"
 #include "common/utils.hpp"
@@ -47,8 +48,8 @@ static void BM_ImageSegmentation(benchmark::State& state) {
 
         state.ResumeTiming();
         for (auto idx = 0; idx < num_imgs; ++idx) {
-            ds.getCamera(idx).setMask(Binarize(
-                ds.getCamera(idx).getImage(), cv::Scalar(0, 0, 30)));
+            ds->getCamera(idx).setMask(Binarize(
+                ds->getCamera(idx).getImage(), cv::Scalar(0, 0, 30)));
         }
     }
 }
@@ -62,12 +63,12 @@ static void BM_BoundingBox(benchmark::State& state) {
         auto ds = dsr.load(num_imgs);
 
         for (auto idx = 0; idx < num_imgs; ++idx) {
-            ds.getCamera(idx).setMask(Binarize(
-                ds.getCamera(idx).getImage(), cv::Scalar(0, 0, 30)));
+            ds->getCamera(idx).setMask(Binarize(
+                ds->getCamera(idx).getImage(), cv::Scalar(0, 0, 30)));
         }
         state.ResumeTiming();
         BoundingBox bbox =
-            BoundingBox(ds.getCamera(0), ds.getCamera((num_imgs / 4) - 1));
+            BoundingBox(ds->getCamera(0), ds->getCamera((num_imgs / 4) - 1));
         auto vc = ret::make_unique<VoxelCarving>(bbox.getBounds(), 128);
     }
 }
@@ -81,14 +82,14 @@ static void BM_VoxelCarving(benchmark::State& state) {
         auto ds = dsr.load(num_imgs);
 
         for (auto idx = 0; idx < num_imgs; ++idx) {
-            ds.getCamera(idx).setMask(Binarize(
-                ds.getCamera(idx).getImage(), cv::Scalar(0, 0, 30)));
+            ds->getCamera(idx).setMask(Binarize(
+                ds->getCamera(idx).getImage(), cv::Scalar(0, 0, 30)));
         }
         BoundingBox bbox =
-            BoundingBox(ds.getCamera(0), ds.getCamera((num_imgs / 4) - 1));
+            BoundingBox(ds->getCamera(0), ds->getCamera((num_imgs / 4) - 1));
         auto vc = ret::make_unique<VoxelCarving>(bbox.getBounds(), 128);
         state.ResumeTiming();
-        for (const auto& cam : ds.getCameras()) vc->carve(cam);
+        for (const auto &cam : ds->getCameras()) vc->carve(cam);
     }
 }
 BENCHMARK(BM_VoxelCarving);
@@ -101,19 +102,19 @@ static void BM_ColorMesh(benchmark::State& state) {
         auto ds = dsr.load(num_imgs);
 
         for (auto idx = 0; idx < num_imgs; ++idx) {
-            ds.getCamera(idx).setMask(Binarize(
-                ds.getCamera(idx).getImage(), cv::Scalar(0, 0, 30)));
+            ds->getCamera(idx).setMask(Binarize(
+                ds->getCamera(idx).getImage(), cv::Scalar(0, 0, 30)));
         }
         BoundingBox bbox =
-            BoundingBox(ds.getCamera(0), ds.getCamera((num_imgs / 4) - 1));
+            BoundingBox(ds->getCamera(0), ds->getCamera((num_imgs / 4) - 1));
         auto vc = ret::make_unique<VoxelCarving>(bbox.getBounds(), 128);
-        for (const auto& cam : ds.getCameras()) {
+        for (const auto &cam : ds->getCameras()) {
             vc->carve(cam);
         }
         auto visual_hull = vc->createVisualHull();
         auto coloring    = ret::make_unique<MeshColoring>();
         state.ResumeTiming();
-        coloring->colorize(visual_hull, ds.getCameras());
+        coloring->colorize(visual_hull, ds->getCameras());
     }
 }
 BENCHMARK(BM_ColorMesh);

@@ -23,6 +23,7 @@
 
 #include <cstddef>
 #include <iosfwd>
+#include <memory>
 #include <string> // IWYU pragma: export
 #include <vector>
 

@@ -32,11 +32,11 @@ TEST(DataSetReaderTest, ReadDirectory) {
     const std::string assetsPath(ASSETS_PATH);
     DataSetReader dsr(assetsPath + "/squirrel");
     const int numImages = 36;
-    DataSet ds = dsr.load(numImages);
-    ASSERT_EQ(ds.size(), numImages);
+    auto ds = dsr.load(numImages);
+    ASSERT_EQ(ds->size(), numImages);
 
-    for (std::size_t i = 0; i < ds.size(); ++i) {
-        ret::Camera cam = ds.getCamera(i);
+    for (std::size_t i = 0; i < ds->size(); ++i) {
+        ret::Camera cam = ds->getCamera(i);
         ASSERT_TRUE(cam.getCalibrationMatrix().size() == cv::Size(3, 3));
         ASSERT_TRUE(cam.getDistortionCoeffs().size() == cv::Size(4, 1));
         ASSERT_TRUE(cam.getProjectionMatrix().size() == cv::Size(4, 3));

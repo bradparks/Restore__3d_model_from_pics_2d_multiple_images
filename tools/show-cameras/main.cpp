@@ -19,6 +19,7 @@
 // SOFTWARE.
 
 #include <string>
+#include <memory>
 
 #include <vtkVersion.h>
 #include <vtkConeSource.h>
@@ -54,13 +55,14 @@ using namespace ret::filtering;
 
 enum class Axis { X, Y, Z };
 
-DataSet loadDataSet(const std::string& path, const std::size_t num_imgs) {
+std::shared_ptr<DataSet> loadDataSet(const std::string &path,
+                                     const std::size_t num_imgs) {
 
     DataSetReader dsr(path);
-    DataSet ds = dsr.load(num_imgs);
+    auto ds = dsr.load(num_imgs);
     for (std::size_t i = 0; i < num_imgs; ++i) {
-        ds.getCamera(i).setMask(Binarize(
-            ds.getCamera(i).getImage(), cv::Scalar(0, 0, 30)));
+        ds->getCamera(i).setMask(Binarize(
+            ds->getCamera(i).getImage(), cv::Scalar(0, 0, 30)));
     }
 
     return ds;
@@ -172,7 +174,7 @@ int main() {
     const std::size_t NUM_IMGS = 36;
     std::string model("squirrel");
 
-    DataSet ds = loadDataSet(std::string(ASSETS_PATH) + "/" + model, NUM_IMGS);
+    auto ds = loadDataSet(std::string(ASSETS_PATH) + "/" + model, NUM_IMGS);
 
     // setup vtk renderer
     auto renderer = vtkSmartPointer<vtkRenderer>::New();
@@ -185,13 +187,13 @@ int main() {
         vtkSmartPointer<vtkRenderWindowInteractor>::New();
     render_window_interactor->SetRenderWindow(render_window);
 
-    BoundingBox bbox(ds.getCamera(0), ds.getCamera((NUM_IMGS / 4) - 1));
+    BoundingBox bbox(ds->getCamera(0), ds->getCamera((NUM_IMGS / 4) - 1));
     auto bb_bounds = bbox.getBounds();
     auto vc = ret::make_unique<VoxelCarving>(bb_bounds, VOXEL_DIM);
     displayBoundingBox(bb_bounds, renderer);
 
     double cam_color = 1.0;
-    for (auto& camera : ds.getCameras()) {
+    for (auto &camera : ds->getCameras()) {
         vc->carve(camera);
         displayCamera(camera, renderer, cam_color);
     }

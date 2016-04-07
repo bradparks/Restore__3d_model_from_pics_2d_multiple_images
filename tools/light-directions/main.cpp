@@ -19,6 +19,7 @@
 // SOFTWARE.
 
 #include <string>
+#include <memory>
 
 #include <opencv2/highgui/highgui.hpp>
 
@@ -37,13 +38,14 @@ using namespace ret::calib;
 using namespace ret::filtering;
 using namespace ret::rendering;
 
-DataSet loadDataSet(const std::string& path, const std::size_t num_imgs) {
+std::shared_ptr<DataSet> loadDataSet(const std::string &path,
+                                     const std::size_t num_imgs) {
 
     DataSetReader dsr(path);
-    DataSet ds = dsr.load(num_imgs);
+    auto ds = dsr.load(num_imgs);
     for (std::size_t i = 0; i < num_imgs; ++i) {
-        ds.getCamera(i).setMask(
-            Binarize(ds.getCamera(i).getImage(), cv::Scalar(0, 0, 30)));
+        ds->getCamera(i).setMask(Binarize(
+            ds->getCamera(i).getImage(), cv::Scalar(0, 0, 30)));
     }
 
     return ds;
@@ -53,20 +55,20 @@ int main() {
 
     const std::size_t VOXEL_DIM = 128;
     const std::size_t NUM_IMGS = 36;
-    DataSet ds = loadDataSet(std::string(ASSETS_PATH) + "/squirrel", NUM_IMGS);
-    BoundingBox bbox(ds.getCamera(0), ds.getCamera((NUM_IMGS / 4) - 1));
+    auto ds = loadDataSet(std::string(ASSETS_PATH) + "/squirrel", NUM_IMGS);
+    BoundingBox bbox(ds->getCamera(0), ds->getCamera((NUM_IMGS / 4) - 1));
     auto bb_bounds = bbox.getBounds();
     auto vc = ret::make_unique<VoxelCarving>(bb_bounds, VOXEL_DIM);
-    for (const auto& cam : ds.getCameras()) {
+    for (const auto &cam : ds->getCameras()) {
         vc->carve(cam);
     }
     auto mesh = vc->createVisualHull();
 
     LightDirEstimation light;
     for (auto idx = 0; idx < NUM_IMGS; ++idx) {
-        auto light_dir = light.execute(ds.getCamera(idx), mesh);
+        auto light_dir = light.execute(ds->getCamera(idx), mesh);
         cv::Mat light_dirs = light.displayLightDirections(
-            ds.getCamera(idx), light_dir);
+            ds->getCamera(idx), light_dir);
         cv::imwrite("light_dir" + std::to_string(idx) + ".png", light_dirs);
     }
 
