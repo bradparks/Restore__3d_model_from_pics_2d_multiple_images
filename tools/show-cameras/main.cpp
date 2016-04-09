@@ -46,6 +46,7 @@
 #include "io/assets_path.hpp"
 #include "filtering/segmentation.hpp"
 #include "rendering/bounding_box.hpp"
+#include "rendering/mesh_coloring.hpp"
 #include "rendering/voxel_carving.hpp"
 
 using namespace ret;
@@ -124,7 +125,6 @@ void displayGridAxis(const Axis axis, vtkSmartPointer<vtkRenderer> renderer) {
             axis_line->SetPoint2(0.0, LINE_LENGTH, 0.0);
             axis_actor->GetProperty()->SetColor(0.0, 1.0, 0.0);
             break;
-        default:
         case Axis::Z:
             axis_line->SetPoint2(0.0, 0.0, LINE_LENGTH);
             axis_actor->GetProperty()->SetColor(0.0, 0.0, 1.0);
@@ -199,6 +199,8 @@ int main() {
     }
 
     auto mesh = vc->createVisualHull();
+    Colorize(mesh, ds->getCameras());
+    exportMesh(mesh, "squirrel.ply");
     displayVisualHull(mesh, renderer);
 
     // setup lighting

@@ -29,6 +29,7 @@
 #include <qmenu.h>
 #include <qmenubar.h>
 #include <qnamespace.h>
+#include <qpushbutton.h>
 #include <qsizepolicy.h>
 #include <qwidget.h>
 
@@ -61,7 +62,11 @@ void MainWindow::createInterface() {
     grid_layout->addWidget(dataset_widget_, 0, 0, Qt::AlignLeft);
 
     model_widget_ = new ModelWidget(central_widget);
+    model_widget_->setMinimumSize(320, 240);
     grid_layout->addWidget(model_widget_, 0, 1);
+
+    scan_button_ = new QPushButton(tr("Scan"), central_widget);
+    grid_layout->addWidget(scan_button_, 1, 0);
 }
 
 void MainWindow::createActions() {

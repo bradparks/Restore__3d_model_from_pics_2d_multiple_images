@@ -21,10 +21,10 @@
 #include "model_widget.hpp"
 
 #include <vtkActor.h>
+#include <vtkPolyData.h>
 #include <vtkPolyDataMapper.h>
 #include <vtkRenderWindow.h>
 #include <vtkRenderer.h>
-#include <vtkSphereSource.h>
 
 namespace ret {
 
@@ -34,13 +34,13 @@ namespace ret {
         setBackgroundColor();
     }
 
+    void ModelWidget::render(vtkSmartPointer<vtkPolyData> model) { }
+
     void ModelWidget::initRenderPipeline() {
 
-        vtkSmartPointer<vtkSphereSource> sphereSource =
-            vtkSmartPointer<vtkSphereSource>::New();
-        sphereSource->Update();
         model_mapper_ = vtkSmartPointer<vtkPolyDataMapper>::New();
-        model_mapper_->SetInputConnection(sphereSource->GetOutputPort());
+        model_data_ = vtkSmartPointer<vtkPolyData>::New();
+        model_mapper_->SetInputData(model_data_);
         model_actor_ = vtkSmartPointer<vtkActor>::New();
         model_actor_->SetMapper(model_mapper_);
         renderer_ = vtkSmartPointer<vtkRenderer>::New();
@@ -54,6 +54,5 @@ namespace ret {
         renderer_->SetBackground(.45, .45, .9);
         renderer_->SetBackground2(.0, .0, .0);
         renderer_->GradientBackgroundOn();
-
     }
 } // namespace ret

@@ -25,9 +25,11 @@
 #include <qobjectdefs.h>
 #include <qstring.h>
 #include <vtkSmartPointer.h>
+
 class QObject;
 class QWidget;
 class vtkActor;
+class vtkPolyData;
 class vtkPolyDataMapper;
 class vtkRenderWindow;
 class vtkRenderer;
@@ -41,18 +43,22 @@ namespace ret {
       public:
         explicit ModelWidget(QWidget *parent = nullptr);
 
+      public slots:
+        void render(vtkSmartPointer<vtkPolyData> model);
+
       private:
         void initRenderPipeline();
         void setBackgroundColor();
 
         vtkSmartPointer<vtkPolyDataMapper> model_mapper_;
 
+        vtkSmartPointer<vtkPolyData> model_data_;
+
         vtkSmartPointer<vtkActor> model_actor_;
 
         vtkSmartPointer<vtkRenderer> renderer_;
 
         vtkSmartPointer<vtkRenderWindow> render_window_;
-
     };
 } // namespace ret
 

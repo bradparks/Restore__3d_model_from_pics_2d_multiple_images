@@ -29,6 +29,7 @@ class QAction;
 class QListWidget;
 class QMenu;
 class QObject;
+class QPushButton;
 class QWidget;
 namespace ret { class ModelWidget; }
 
@@ -52,6 +53,8 @@ class MainWindow : public QMainWindow {
     QMenu *view_menu_;
     QMenu *settings_menu_;
     QMenu *export_menu_;
+
+    QPushButton *scan_button_;
 
     QListWidget* dataset_widget_;
 

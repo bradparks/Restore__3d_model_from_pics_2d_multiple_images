@@ -23,14 +23,17 @@
 #include <cassert>
 #include <cstddef>
 #include <map>
+#include <type_traits>
 #include <utility>
 
 #include <vtkDataArray.h>
 #include <vtkPointData.h>
 #include <vtkPolyData.h>
+#include <vtkUnsignedCharArray.h>
+#include <opencv2/core/core.hpp>
 #include <opencv2/core/mat.hpp>
 #include <opencv2/core/operations.hpp>
-#include <vtkUnsignedCharArray.h>
+#include <opencv2/imgproc/imgproc.hpp>
 
 #include "common/camera.hpp"
 #include "rendering/cv_utils.hpp"
@@ -39,30 +42,47 @@ namespace ret {
 
 namespace rendering {
 
-    MeshColoring::MeshColoring()
-        : colors_(vtkSmartPointer<vtkUnsignedCharArray>::New()),
-          img_size_(cv::Size(0, 0)) {
+    template<typename T>
+    struct Color {
+        Color() : r(0), g(0), b(0) { }
+        Color<T> &operator+=(cv::Vec3b rhs) {
+            r += rhs[2];
+            g += rhs[1];
+            b += rhs[0];
+            return *this;
+        }
+        Color<T> &operator/=(std::size_t rhs) {
+            r /= rhs;
+            g /= rhs;
+            b /= rhs;
+            return *this;
+        }
 
-        colors_->SetNumberOfComponents(3);
-        colors_->SetName("Colors");
+        T r, g, b;
+    };
+    static_assert(std::is_standard_layout<Color<double>>::value,
+                  "Color isn't standard layout");
+
+    cv::Vec3b getColor(const cv::Mat &img, cv::Point2f pt) {
+        return img.at<cv::Vec3b>(pt.y, pt.x);
     }
 
-    void MeshColoring::colorize(vtkSmartPointer<vtkPolyData> mesh,
-                                std::vector<Camera> dataset) {
+    void Colorize(vtkSmartPointer<vtkPolyData> mesh,
+                  std::vector<Camera> dataset) {
 
-        assert(dataset.size() > 0);
-        colors_->Reset();
-        img_size_ = dataset[0].getImage().size();
+        assert(not dataset.empty());
+        auto colors = vtkSmartPointer<vtkUnsignedCharArray>::New();
+        colors->SetNumberOfComponents(3);
+        colors->SetName("Colors");
+        auto *const meshNormals = mesh->GetPointData()->GetNormals();
         for (auto idx = 0; idx < mesh->GetNumberOfPoints(); ++idx) {
 
-            double normal[3];
-            mesh->GetPointData()->GetNormals()->GetTuple(idx, normal);
-            cv::Mat sf_normal =
-                (cv::Mat_<float>(3, 1) << normal[0], normal[1], normal[2]);
+            auto normal = cv::Mat(3, 1, CV_64F, meshNormals->GetTuple(idx));
+            normal.convertTo(normal, CV_32F);
+
             std::map<double, std::size_t> angles;
             for (std::size_t j = 0; j < dataset.size(); ++j) {
-                cv::Mat cam_normal                = dataset[j].getDirection();
-                angles[sf_normal.dot(cam_normal)] = j;
+                angles[normal.dot(dataset[j].getDirection())] = j;
             }
 
             // camera image indexes and appropriate dot product
@@ -82,29 +102,22 @@ namespace rendering {
             }
 
             // get average color
-            double r = 0, g = 0, b = 0;
+            Color<double> color;
             for (std::size_t j = 0; j < indexes.size(); ++j) {
                 double v[3];
                 mesh->GetPoint(idx, v);
-                Camera curr_cam     = dataset[indexes[j]];
-                cv::Point2i col_pix = project<cv::Point2f, cv::Point3d>(
-                    curr_cam, cv::Point3d(v[0], v[1], v[2]));
-                auto rgb =
-                    curr_cam.getImage().at<cv::Vec3b>(col_pix.y, col_pix.x);
-                r += rgb[2] * indexed_angles[j];
-                g += rgb[1] * indexed_angles[j];
-                b += rgb[0] * indexed_angles[j];
+                Camera cam = dataset[indexes[j]];
+                auto col_pix = project<cv::Point2f, cv::Point3d>(
+                    cam, cv::Point3d(v[0], v[1], v[2]));
+
+                color += getColor(cam.getImage(), col_pix) * indexed_angles[j];
             }
 
-            // weighted mean average color
-            r = (r / indexes.size()) / 255.0;
-            g = (g / indexes.size()) / 255.0;
-            b = (b / indexes.size()) / 255.0;
-
-            // color each vertex according to pixel value
-            colors_->InsertNextTuple3(r * 255.0, g * 255.0, b * 255.0);
+            // weighted mean average color for each vertex
+            color /= indexes.size();
+            colors->InsertNextTuple(reinterpret_cast<double *>(&color));
         }
-        mesh->GetPointData()->SetScalars(colors_);
+        mesh->GetPointData()->SetScalars(colors);
     }
 
 } // namespace rendering
