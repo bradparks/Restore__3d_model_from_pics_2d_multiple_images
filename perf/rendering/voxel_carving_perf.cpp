@@ -112,9 +112,8 @@ static void BM_ColorMesh(benchmark::State& state) {
             vc->carve(cam);
         }
         auto visual_hull = vc->createVisualHull();
-        auto coloring    = ret::make_unique<MeshColoring>();
         state.ResumeTiming();
-        coloring->colorize(visual_hull, ds->getCameras());
+        Colorize(visual_hull, ds->getCameras());
     }
 }
 BENCHMARK(BM_ColorMesh);
