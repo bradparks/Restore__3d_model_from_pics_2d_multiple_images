@@ -33,7 +33,7 @@ set(TEST_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/math/dual_quaternion_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/math/quaternion_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/math/utils_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/rendering/voxel_carving_test.cpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/rendering/voxel_carving_test.cpp common/utils_test.cpp.cpp)
 
 # Add coverage flags for test executable, if enabled
 if(USE_CODE_COVERAGE AND CMAKE_COMPILER_IS_GNUCXX)

@@ -36,6 +36,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 
 #include "common/camera.hpp"
+#include "common/utils.hpp"
 #include "rendering/cv_utils.hpp"
 
 namespace ret {
@@ -67,6 +68,24 @@ namespace rendering {
         return img.at<cv::Vec3b>(pt.y, pt.x);
     }
 
+    Color<double> getAverageColor(vtkSmartPointer<vtkPolyData> &mesh,
+                                  const std::vector<Camera> &dataset, int idx,
+                                  const std::map<size_t, double> &angles) {
+        Color<double> color;
+        for (const auto &angle : angles) {
+            double v[3];
+            mesh->GetPoint(idx, v);
+            Camera cam = dataset[angle.first];
+            auto col_pix = project<cv::Point2f, cv::Point3d>(
+                cam, cv::Point3d(v[0], v[1], v[2]));
+            color += getColor(cam.getImage(), col_pix) * angle.second;
+        }
+
+        // weighted mean average color for each vertex
+        color /= angles.size();
+        return color;
+    }
+
     void Colorize(vtkSmartPointer<vtkPolyData> mesh,
                   std::vector<Camera> dataset) {
 
@@ -80,41 +99,17 @@ namespace rendering {
             auto normal = cv::Mat(3, 1, CV_64F, meshNormals->GetTuple(idx));
             normal.convertTo(normal, CV_32F);
 
-            std::map<double, std::size_t> angles;
-            for (std::size_t j = 0; j < dataset.size(); ++j) {
-                angles[normal.dot(dataset[j].getDirection())] = j;
-            }
-
             // camera image indexes and appropriate dot product
-            std::vector<std::size_t> indexes;
-            std::vector<double> indexed_angles;
-            for (const auto angle_idx : angles) {
-                if (angle_idx.first >= 0.5) {
-                    indexes.push_back(angle_idx.second);
-                    indexed_angles.push_back(angle_idx.first);
+            std::map<std::size_t, double> angles;
+            angles[0] = normal.dot(dataset[0].getDirection());
+            for (std::size_t j = 1; j < dataset.size(); ++j) {
+                auto angle = normal.dot(dataset[j].getDirection());
+                if (angle >= 0.5) {
+                    angles[j] = angle;
                 }
             }
 
-            // assert at least one camera image for color estimation
-            if (indexes.empty()) {
-                indexes.push_back(angles.rbegin()->second);
-                indexed_angles.push_back(angles.rbegin()->first);
-            }
-
-            // get average color
-            Color<double> color;
-            for (std::size_t j = 0; j < indexes.size(); ++j) {
-                double v[3];
-                mesh->GetPoint(idx, v);
-                Camera cam = dataset[indexes[j]];
-                auto col_pix = project<cv::Point2f, cv::Point3d>(
-                    cam, cv::Point3d(v[0], v[1], v[2]));
-
-                color += getColor(cam.getImage(), col_pix) * indexed_angles[j];
-            }
-
-            // weighted mean average color for each vertex
-            color /= indexes.size();
+            Color<double> color = getAverageColor(mesh, dataset, idx, angles);
             colors->InsertNextTuple(reinterpret_cast<double *>(&color));
         }
         mesh->GetPointData()->SetScalars(colors);

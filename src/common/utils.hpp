@@ -21,6 +21,7 @@
 #ifndef COMMON_UTILS_HPP
 #define COMMON_UTILS_HPP
 
+#include <algorithm>
 #include <cmath>
 #include <cstddef>
 #include <map>
@@ -75,6 +76,14 @@ inline T median(std::vector<T>& v) {
     std::nth_element(v.begin(), v.begin() + n, v.end());
     return v[n];
 }
+
+    template<typename Container, typename Predicate>
+    inline void erase_if(Container &items, const Predicate &pred) {
+        auto it = items.begin();
+        while ((it = std::find_if(it, items.end(), pred)) != items.end()) {
+            items.erase(it++);
+        }
+    };
 
 inline std::string GetCVImageType(int img_type_int) {
     // 7 base types, with five channel options each (none or C1, ..., C4)
