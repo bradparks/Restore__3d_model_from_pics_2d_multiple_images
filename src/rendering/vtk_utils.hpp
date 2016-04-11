@@ -18,22 +18,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef RENDERING_MESH_REFINEMENT_HPP
-#define RENDERING_MESH_REFINEMENT_HPP
+#ifndef RENDERING_VTK_UTILS_HPP
+#define RENDERING_VTK_UTILS_HPP
 
-#include <vtkSmartPointer.h>
-#include <vector>
-
-class vtkPolyData;
-namespace ret { class Camera; }
+#include <vtkDataArray.h>
+#include <opencv2/core/core.hpp>
 
 namespace ret {
 
-    namespace rendering {
-
-        void RefineMesh(vtkSmartPointer<vtkPolyData> mesh,
-                        const std::vector<Camera> &dataset);
+    inline cv::Vec3d GetNormal(vtkDataArray *const meshNormals,
+                               std::size_t idx) {
+        double n[3];
+        meshNormals->GetTuple(idx, n);
+        return cv::Vec3d(n[0], n[1], n[2]);
     }
-} // namespace ret;
+
+    inline cv::Vec3d GetNormal(const vtkSmartPointer<vtkPolyData> &mesh,
+                               std::size_t idx) {
+        double n[3];
+        mesh->GetPointData()->GetNormals()->GetTuple(idx, n);
+        return cv::Vec3d(n[0], n[1], n[2]);
+    }
+
+    inline cv::Point3d GetVertex(const vtkSmartPointer<vtkPolyData> &mesh,
+                                 size_t idx) {
+        double v[3];
+        mesh->GetPoint(idx, v);
+        return cv::Point3d(v[0], v[1], v[2]);
+    }
+}
 
 #endif

@@ -67,7 +67,7 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/gui/model_widget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/gui/model_widget.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/rendering/mesh_refinement.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/rendering/mesh_refinement.hpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/rendering/mesh_refinement.hpp rendering/vtk_utils.hpp)
 
 add_library(${RESTORE_LIB} SHARED ${SOURCE_FILES})
 include_directories(${PROJECT_SOURCE_DIR}/src)

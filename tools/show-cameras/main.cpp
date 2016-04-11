@@ -47,6 +47,7 @@
 #include "filtering/segmentation.hpp"
 #include "rendering/bounding_box.hpp"
 #include "rendering/mesh_coloring.hpp"
+#include "rendering/mesh_refinement.hpp"
 #include "rendering/voxel_carving.hpp"
 
 using namespace ret;
@@ -200,6 +201,7 @@ int main() {
 
     auto mesh = vc->createVisualHull();
     Colorize(mesh, ds->getCameras());
+    RefineMesh(mesh, ds->getCameras());
     exportMesh(mesh, "squirrel.ply");
     displayVisualHull(mesh, renderer);
 

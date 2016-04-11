@@ -20,30 +20,20 @@
 
 #include "mesh_refinement.hpp"
 
-#include <vtkDataArray.h>
+#include <cstddef>
 #include <vtkPointData.h>
 #include <vtkPolyData.h>
-#include <vtkUnsignedCharArray.h>
+#include <opencv2/core/core.hpp>
+#include <opencv2/core/mat.hpp>
+#include <opencv2/core/operations.hpp>
+#include "common/camera.hpp"
+#include "rendering/vtk_utils.hpp"
 
 namespace ret {
 
     namespace rendering {
 
-        cv::Mat GetNormal(vtkDataArray *const meshNormals, std::size_t idx) {
-            auto normal = cv::Mat(3, 1, CV_64F, meshNormals->GetTuple(idx));
-            normal.convertTo(normal, CV_32F);
-            return normal;
-        }
-
-        cv::Point3d GetVertex(vtkSmartPointer<vtkPolyData> &mesh, size_t idx) {
-            double v[3];
-            mesh->GetPoint(idx, v);
-            auto vertex = cv::Point3d(v[0], v[1], v[2]);
-            mesh->GetPoints()->SetPoint(idx, vertex.x, vertex.y, vertex.z);
-            return vertex;
-        }
-
-        std::size_t GetMiddleCamera(cv::Mat normal,
+        std::size_t GetMiddleCamera(cv::Vec3d normal,
                                     const std::vector<Camera> &dataset) {
 
             auto best_angle = -1.0;

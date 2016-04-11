@@ -38,6 +38,7 @@
 #include "common/camera.hpp"
 #include "common/utils.hpp"
 #include "rendering/cv_utils.hpp"
+#include "rendering/vtk_utils.hpp"
 
 namespace ret {
 
@@ -96,11 +97,9 @@ namespace rendering {
         auto *const meshNormals = mesh->GetPointData()->GetNormals();
         for (auto idx = 0; idx < mesh->GetNumberOfPoints(); ++idx) {
 
-            auto normal = cv::Mat(3, 1, CV_64F, meshNormals->GetTuple(idx));
-            normal.convertTo(normal, CV_32F);
-
             // camera image indexes and appropriate dot product
             std::map<std::size_t, double> angles;
+            auto normal = GetNormal(meshNormals, idx);
             angles[0] = normal.dot(dataset[0].getDirection());
             for (std::size_t j = 1; j < dataset.size(); ++j) {
                 auto angle = normal.dot(dataset[j].getDirection());

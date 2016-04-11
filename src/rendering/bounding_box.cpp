@@ -56,10 +56,10 @@ namespace rendering {
         // convert to world points
         const cv::Mat K1_inv = cam1_.getCalibrationMatrix().inv();
         const cv::Mat K2_inv = cam2_.getCalibrationMatrix().inv();
-        cv::Mat x2           = K1_inv * p2;
-        cv::Mat x4           = K1_inv * p4;
-        cv::Mat x6           = K2_inv * p6;
-        cv::Mat x8           = K2_inv * p8;
+        cv::Mat x2 = K1_inv * p2;
+        cv::Mat x4 = K1_inv * p4;
+        cv::Mat x6 = K2_inv * p6;
+        cv::Mat x8 = K2_inv * p8;
 
         // get world points
         auto t1 = (K1_inv * cam1_.getProjectionMatrix()).col(3);

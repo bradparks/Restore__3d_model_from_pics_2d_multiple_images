@@ -22,23 +22,24 @@
 
 #include <cassert>
 #include <cmath>
-#include <cstdlib>
 #include <ctime>
+#include <cstdlib>
 
-#include <opencv2/core/core_c.h>
-#include <opencv2/core/types_c.h>
-#include <opencv2/imgproc/types_c.h>
 #include <vtkDataArray.h>
 #include <vtkPointData.h>
 #include <vtkPolyData.h>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/core/core_c.h>
+#include <opencv2/core/types_c.h>
+#include <opencv2/imgproc/types_c.h>
 #include <opencv2/core/mat.hpp>
 #include <opencv2/core/operations.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
 
 #include "calibration/light_direction_model.hpp"
 #include "common/camera.hpp"
 #include "common/dataset.hpp"
 #include "rendering/cv_utils.hpp"
+#include "rendering/vtk_utils.hpp"
 
 namespace ret {
 
@@ -64,8 +65,8 @@ namespace rendering {
         cv::cvtColor(cam.getImage(), Grayscale, CV_BGR2GRAY);
         // get points on visual hull and corresponding surface normals
         for (vtkIdType idx = 0; idx < visual_hull->GetNumberOfPoints(); ++idx) {
-            auto pt_vishull = getVertex(visual_hull, idx);
-            auto normal     = getNormal(visual_hull, idx);
+            auto pt_vishull = GetVertex(visual_hull, idx);
+            auto normal = GetNormal(visual_hull, idx);
             auto cam_normal = cam.getDirection();
             auto angle      = normal.dot(cam_normal);
             if (angle >= vis_angle_thresh_) {
@@ -184,20 +185,6 @@ namespace rendering {
             (cv::Mat_<float>(3, 1) << contour_points_[rnd1].intensity,
              contour_points_[rnd2].intensity, contour_points_[rnd3].intensity);
         return I;
-    }
-
-    cv::Vec3d LightDirEstimation::getVertex(
-        vtkSmartPointer<vtkPolyData> visual_hull, const vtkIdType id) const {
-        double v[3];
-        visual_hull->GetPoint(id, v);
-        return cv::Vec3d(v[0], v[1], v[2]);
-    }
-
-    cv::Vec3d LightDirEstimation::getNormal(
-        vtkSmartPointer<vtkPolyData> visual_hull, const vtkIdType id) const {
-        double n[3];
-        visual_hull->GetPointData()->GetNormals()->GetTuple(id, n);
-        return cv::Vec3d(n[0], n[1], n[2]);
     }
 
 } // namespace rendering

@@ -64,10 +64,6 @@ namespace rendering {
         cv::Mat createIntensityVecFromRandomContourPoints(
             const std::size_t rnd1, const std::size_t rnd2,
             const std::size_t rnd3) const;
-        cv::Vec3d getVertex(vtkSmartPointer<vtkPolyData> visual_hull,
-                            const vtkIdType id) const;
-        cv::Vec3d getNormal(vtkSmartPointer<vtkPolyData> visual_hull,
-                            const vtkIdType id) const;
 
         double vis_angle_thresh_;
         std::size_t sample_size_;
