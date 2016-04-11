@@ -68,7 +68,7 @@ namespace rendering {
         return img.at<cv::Vec3b>(pt.y, pt.x);
     }
 
-    Color<double> getAverageColor(vtkSmartPointer<vtkPolyData> &mesh,
+    Color<double> getAverageColor(const vtkSmartPointer<vtkPolyData> &mesh,
                                   const std::vector<Camera> &dataset, int idx,
                                   const std::map<size_t, double> &angles) {
         Color<double> color;

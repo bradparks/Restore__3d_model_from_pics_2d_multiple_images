@@ -78,7 +78,7 @@ class Camera : public CameraIntrinsics, public CameraExtrinsics {
         }
 
         const auto img_size = Image_.size();
-        cv::Mat Center      = (cv::Mat_<float>(3, 1) << img_size.width / 2.0f,
+        cv::Mat Center = (cv::Mat_<float>(3, 1) << img_size.width / 2.0f,
                           img_size.height / 2.0f, 1.0f);
 
         cv::Mat X;
@@ -111,7 +111,8 @@ class Camera : public CameraIntrinsics, public CameraExtrinsics {
     cv::Mat P_;
     cv::Mat Image_;
     cv::Mat Mask_;
-    cv::Mat Direction_;
+
+    mutable cv::Mat Direction_;
 };
 } // namespace ret
 
