@@ -72,7 +72,7 @@ class Camera : public CameraIntrinsics, public CameraExtrinsics {
         return cv::Point3d(x / t, y / t, z / t);
     }
 
-    cv::Mat getDirection() {
+    cv::Mat getDirection() const {
         if (!Direction_.empty()) {
             return Direction_;
         }
